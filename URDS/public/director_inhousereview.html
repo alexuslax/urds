@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Director Final Review</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { urds: { 900:'#172033', 800:'#1f2b3a', accent:'#0ea5a4' } },
+          boxShadow: { card: '0 6px 20px rgba(18,26,40,0.06)' }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-gray-50 font-inter antialiased">
+  <div class="min-h-screen flex">
+    <aside id="sidebar" class="w-72 bg-urds-900 text-white shrink-0"></aside>
+
+    <div class="flex-1">
+      <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <button id="hamburger" class="md:hidden flex items-center justify-center w-10 h-10 bg-gray-100 rounded-md">☰</button>
+          <input id="search" type="search" placeholder="Search..." class="w-64 bg-gray-50 border border-gray-200 px-4 py-2 rounded-lg text-sm">
+        </div>
+        <div class="flex items-center gap-3">
+          <a href="profile.html" class="flex items-center gap-3">
+            <div class="text-right">
+              <div class="text-sm font-medium user-name">User</div>
+              <div class="text-xs text-gray-500 user-role">Role</div>
+            </div>
+            <div class="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center user-initials">U</div>
+          </a>
+        </div>
+      </header>
+
+      <main class="p-6 max-w-6xl mx-auto">
+        <h1 class="text-2xl font-semibold mb-4">Director — Final Review</h1>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="space-y-6">
+            <div id="proposalInfo"></div>
+            <div id="proposalHistory"></div>
+          </div>
+
+          <div>
+            <form id="directorForm" class="bg-white p-6 rounded-2xl shadow-card border space-y-4">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <h2 class="text-lg font-semibold">Director Review Form</h2>
+                  <div class="text-xs text-gray-500">Saved drafts stay local. Submitting updates proposal history and status.</div>
+                </div>
+                <a href="proposal_list.html" class="text-sm underline text-gray-600">Back to list</a>
+              </div>
+
+              <div class="border-t pt-4">
+                <div class="mb-2">
+                  <label class="text-sm font-medium">Director Comments</label>
+                  <textarea id="directorComments" class="w-full border px-3 py-2 rounded-lg text-sm mt-1" rows="4" placeholder="Write your final comments..."></textarea>
+                </div>
+
+                <div class="mb-4">
+                  <label class="text-sm font-medium">Final Decision</label>
+                  <select id="directorDecision" class="w-full border px-3 py-2 rounded-lg text-sm mt-1">
+                    <option>Select...</option>
+                    <option>Approved</option>
+                    <option>Returned for Revision</option>
+                    <option>Return to Staff</option>
+                    <option>Reject</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="flex justify-end gap-2 pt-2">
+                <button type="button" id="directorSave" class="px-4 py-2 bg-gray-700 hover:bg-gray-800 text-white rounded-lg text-sm">Save Draft</button>
+                <button type="button" id="directorSubmit" class="px-4 py-2 bg-urds-accent hover:bg-teal-500 text-white rounded-lg text-sm">Submit Decision</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div id="toastContainer" class="fixed bottom-6 right-6 space-y-2 z-50"></div>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/director_inhousereview.js"></script>
+</body>
+</html>

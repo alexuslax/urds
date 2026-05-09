@@ -1,0 +1,1176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>UEP-URDS-FM-005 • Financial Components</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <style>
+    :root{
+      --pad: 12mm;
+      --footer-gap: 40mm;      /* reserved space for footer */
+      --contentW: 170mm;       /* portrait centered width (matches summary table) */
+      --landMargin: 30px;      /* matches your combined-table margin */
+    }
+
+    body { font-family: Arial, Helvetica, sans-serif; }
+    .form-11 { font-size: 11pt; }
+    .form-10 { font-size: 10pt; }
+    .tight { line-height: 1.05; }
+
+    /* ===== PAGE SIZES ===== */
+    .page{ background:#fff; margin:0 auto 18px; position:relative; }
+    .a4-portrait{ width:210mm; min-height:297mm; }
+    .a4-landscape{ width:297mm; min-height:210mm; }
+
+    /* padding + reserved space for footer */
+    .sheet{
+      position: relative;
+      min-height: inherit;
+      padding: var(--pad);
+      padding-bottom: var(--footer-gap);
+      box-sizing: border-box;
+    }
+
+    @media screen{
+      body{ background:#f3f4f6; padding:18px; }
+      .page{ box-shadow:0 8px 18px rgba(0,0,0,.08); }
+    }
+
+    @media print{
+      .no-print{ display:none !important; }
+      body{ background:#fff !important; margin:0 !important; padding:0 !important; }
+      .page{ box-shadow:none !important; margin:0 !important; page-break-after:always; }
+    }
+
+    /* ===== portrait centered block ===== */
+    .content-block{ width: var(--contentW); margin: 0 auto; }
+
+    /* ===== HEADER (logo close, text centered) ===== */
+    .header-block{
+      width: var(--contentW);
+      margin: 0 auto;
+      position: relative;
+      min-height: 82px;
+    }
+    .header-logo{
+      position:absolute;
+      left:0; top:0;
+      width:82px; height:82px;
+      object-fit:contain;
+    }
+    .header-text{
+      padding-left: 92px;
+      padding-right: 92px;
+      text-align:center;
+    }
+
+    /* Divider width = portrait content width */
+    .divider-wrap{ margin-top:10px; }
+    .divider{
+      width: var(--contentW);
+      margin:0 auto;
+      height:0;
+      border-top:3px solid #000;
+      border-bottom:1px solid #000;
+      padding-top:2px;
+    }
+
+    /* ===== portrait summary table ===== */
+    table{ border-collapse:collapse; width:100%; }
+    .t{ border:1px solid #000; table-layout:fixed; }
+    .t td, .t th{ border:1px solid #000; }
+    .cell{ padding:1px 5px; vertical-align:middle; line-height:1.05; }
+    .center{ text-align:center; }
+    .bold{ font-weight:bold; }
+    .val{ font-weight:bold; }
+    .t tr{ height:18px; }
+    .t th{ padding:1px 5px; }
+
+    .linkish{ color:#1d4ed8; text-decoration:underline; }
+
+    /* ===== signatures (NO lines) ===== */
+    .sig{ width: var(--contentW); margin:10px auto 0; }
+    .sig-label{ font-weight:bold; margin-bottom:2px; }
+    .sig-name{ font-weight:bold; text-transform:uppercase; text-decoration:none; }
+    .sig-role{ font-size:10pt; }
+    .two-col{ display:flex; gap:40px; }
+    .col{ flex:1; }
+    .sig-space{ height:10mm; }
+
+    /* ===== FOOTER (thin like photo) ===== */
+    .footer-table{
+      border-collapse: collapse;
+      border: 1px solid #000;
+      table-layout: fixed;
+      background:#fff;
+    }
+    .footer-table td{
+      border: 1px solid #000;
+      padding: 3px 8px;           /* thinner */
+      vertical-align: top;        /* label on top */
+      text-align: left;           /* label left */
+    }
+    .footer-label{
+      display:block;
+      font-size:10pt;
+      font-weight:bold;
+      line-height:1;
+      text-align:left;
+    }
+    .footer-value{
+      display:block;
+      font-size:10pt;
+      font-weight:bold;
+      line-height:1;
+      margin-top:2px;
+      text-align:center;
+    }
+
+    /* footer absolute positioning */
+    .footer-abs{
+      position:absolute;
+      bottom: var(--pad);
+      margin:0;
+    }
+
+    /* portrait footer width = summary table width */
+    .footer-abs.portrait{
+      width: var(--contentW);
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* landscape footer width = combined-table width */
+    .footer-abs.landscape{
+      width: calc(100% - (var(--landMargin) * 2));
+      left: var(--landMargin);
+      right: auto;
+      transform: none;
+    }
+
+    /* ===== LANDSCAPE (Pages 2–4) ===== */
+    .arial-11{ font-size:11pt; }
+    .arial-bold-11{ font-size:11pt; font-weight:bold; }
+    .arial-bold-12{ font-size:12pt; font-weight:bold; }
+
+    .land-title{ text-align:center; margin-top:10mm; margin-bottom:6mm; line-height:1.05; }
+    .info-block{ margin-left: var(--landMargin); margin-right: var(--landMargin); margin-bottom:10px; }
+    .section-h{ margin-left: var(--landMargin); margin-top:14px; margin-bottom:6px; }
+
+    .combined-table{
+      width: calc(100% - (var(--landMargin) * 2));
+      margin-left: var(--landMargin);
+      margin-right: var(--landMargin);
+      border-collapse:collapse;
+      border:1px solid #000;
+      table-layout:fixed;
+      font-size:10pt;
+      line-height:1.05;
+    }
+    .combined-table th, .combined-table td{
+      border:1px solid #000;
+      padding:2px 4px;
+      vertical-align:top;
+    }
+    .budget-header{ font-weight:bold; text-align:center; }
+
+    .input-field, .input-field-small{
+      width:100%;
+      border:none;
+      outline:none;
+      background:transparent;
+      font-size:10pt;
+      line-height:1.05;
+    }
+    .input-field-small{ text-align:center; }
+
+    /* underline helper for page 4 requested items */
+    .u{ text-decoration: underline; text-underline-position: under; }
+  </style>
+</head>
+
+<body>
+
+  <!-- Screen controls only -->
+  <div class="no-print max-w-[297mm] mx-auto mb-4 flex items-center justify-between px-2">
+    <div class="text-sm text-gray-600">UEP-URDS-FM-005 • Print View</div>
+    <div class="flex gap-2">
+      <button id="btnSavePDF" class="px-3 py-2 rounded-lg bg-green-600 text-white text-sm hover:bg-green-700">💾 Save as PDF</button>
+      <button id="btnPrint" class="px-3 py-2 rounded-lg bg-black text-white text-sm hover:bg-gray-800">🖨️ Print</button>
+      <a class="px-3 py-2 rounded-lg bg-white border text-sm hover:bg-gray-50" href="javascript:history.back()">Back</a>
+    </div>
+  </div>
+
+  <!-- ===================== -->
+  <!-- PAGE 1 (PORTRAIT)     -->
+  <!-- ===================== -->
+  <div class="page a4-portrait">
+    <div class="sheet form-11">
+
+      <!-- HEADER -->
+      <div class="header-block">
+        <img src="../public/img/logo.jpg" alt="UEP Logo" class="header-logo">
+        <div class="header-text tight">
+          <div>Republic of the Philippines</div>
+          <div class="font-bold uppercase">UNIVERSITY OF EASTERN PHILIPPINES</div>
+          <div>University Town, Northern Samar, Philippines</div>
+          <div class="form-10">
+            Web: <span class="linkish">http://uep.edu.ph</span>;
+            Email: <span class="linkish">uepnsofficial@gmail.com</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider-wrap"><div class="divider"></div></div>
+
+      <!-- TITLES -->
+      <div class="text-center mt-5 tight">
+        <div class="font-bold uppercase">UNIVERSITY RESEARCH AND DEVELOPMENT SERVICES</div>
+        <div class="font-bold uppercase mt-1">FINANCIAL COMPONENTS OF THE RESEARCH</div>
+        <div class="font-bold">(Budget Summary)</div>
+      </div>
+
+      <!-- SUMMARY TABLE -->
+      <div class="content-block mt-4">
+        <table class="t">
+          <tr><td class="cell" colspan="4">Program/Project/Study Title: <span class="val" id="projectTitle">—</span></td></tr>
+          <tr><td class="cell" colspan="4">Program/Project Study Leader: <span class="val" id="projectLeader">—</span></td></tr>
+          <tr><td class="cell" colspan="4">Duration: <span class="val" id="durationText">—</span></td></tr>
+          <tr><td class="cell" colspan="4">College/Unit/Campus: <span class="val" id="collegeUnit">—</span></td></tr>
+
+          <tr class="bold center">
+            <td class="cell">Item</td><td class="cell">Year 1</td><td class="cell">Year 2</td><td class="cell">TOTAL</td>
+          </tr>
+
+          <tr><td class="cell bold">I. Personal Services</td><td class="cell"></td><td class="cell"></td><td class="cell"></td></tr>
+          <tr><td class="cell">Honorarium</td><td class="cell center" id="psY1">—</td><td class="cell center" id="psY2">—</td><td class="cell center" id="psTotal">—</td></tr>
+          <tr><td class="cell bold">Sub-Total</td><td class="cell center bold" id="psSubY1">—</td><td class="cell center bold" id="psSubY2">—</td><td class="cell center bold" id="psSubTotal">—</td></tr>
+
+          <tr><td class="cell bold">II. MOOE</td><td class="cell"></td><td class="cell"></td><td class="cell"></td></tr>
+          <tr><td class="cell">Travel</td><td class="cell center" id="mooeTravelY1">—</td><td class="cell center" id="mooeTravelY2">—</td><td class="cell center" id="mooeTravelTotal">—</td></tr>
+          <tr><td class="cell">Supplies and Materials</td><td class="cell center" id="mooeSupY1">—</td><td class="cell center" id="mooeSupY2">—</td><td class="cell center" id="mooeSupTotal">—</td></tr>
+          <tr><td class="cell">Communications</td><td class="cell center" id="mooeCommY1">—</td><td class="cell center" id="mooeCommY2">—</td><td class="cell center" id="mooeCommTotal">—</td></tr>
+          <tr><td class="cell">Other MOOE</td><td class="cell center" id="mooeOtherY1">—</td><td class="cell center" id="mooeOtherY2">—</td><td class="cell center" id="mooeOtherTotal">—</td></tr>
+          <tr><td class="cell">Contingencies (10% of MOOE)</td><td class="cell center" id="mooeContY1">—</td><td class="cell center" id="mooeContY2">—</td><td class="cell center" id="mooeContTotal">—</td></tr>
+          <tr><td class="cell bold">Sub-Total</td><td class="cell center bold" id="mooeSubY1">—</td><td class="cell center bold" id="mooeSubY2">—</td><td class="cell center bold" id="mooeSubTotal">—</td></tr>
+
+          <tr><td class="cell bold">III. Equipment Outlay</td><td class="cell"></td><td class="cell"></td><td class="cell"></td></tr>
+          <tr><td class="cell bold">Sub-Total</td><td class="cell center bold" id="eqSubY1">—</td><td class="cell center bold" id="eqSubY2">—</td><td class="cell center bold" id="eqSubTotal">—</td></tr>
+
+          <tr><td class="cell bold">Grand Total</td><td class="cell center bold" id="grandY1">—</td><td class="cell center bold" id="grandY2">—</td><td class="cell center bold" id="grandTotal">—</td></tr>
+        </table>
+      </div>
+
+      <!-- SIGNATURES -->
+      <div class="sig">
+        <div class="mt-3">
+          <div class="sig-label">Prepared by:</div>
+          <div class="sig-space"></div>
+          <div class="sig-name" id="proponentName">—</div>
+          <div class="sig-role">Proponent</div>
+        </div>
+
+        <div class="mt-6">
+          <div class="sig-label">Recommending Approval:</div>
+          <div class="two-col mt-6">
+            <div class="col">
+              <div class="sig-name">ROGELIO A. BANAGBANAG, DALL</div>
+              <div class="sig-role">Director, URDS</div>
+            </div>
+            <div class="col">
+              <div class="sig-name">KARINA MILAGROS C. LIM, PhD</div>
+              <div class="sig-role">VP for RDE</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="two-col mt-8">
+          <div class="col">
+            <div class="sig-label">Reviewed:</div>
+            <div class="sig-space"></div>
+            <div class="sig-name">FERDINAND S. REYES, CPA</div>
+            <div class="sig-role">Budget Officer</div>
+          </div>
+          <div class="col">
+            <div class="sig-label">Approved:</div>
+            <div class="sig-space"></div>
+            <div class="sig-name">CHERRY I. ULTRA, PhD</div>
+            <div class="sig-role">President</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FOOTER (PORTRAIT) -->
+      <table class="footer-table footer-abs portrait">
+        <tr>
+          <td><span class="footer-label">DOCUMENT NO.:</span><span class="footer-value">UEP-URDS-FM-005</span></td>
+          <td><span class="footer-label">REVISION NO.:</span><span class="footer-value">00</span></td>
+          <td><span class="footer-label">EFFECTIVITY:</span><span class="footer-value">SEPTEMBER 12, 2022</span></td>
+        </tr>
+      </table>
+
+    </div>
+  </div>
+
+  <!-- ===================== -->
+  <!-- PAGE 2 (LANDSCAPE)    -->
+  <!-- ===================== -->
+  <div class="page a4-landscape">
+    <div class="sheet">
+
+      <div class="land-title">
+        <div class="arial-bold-12 uppercase tracking-wide">FINANCIAL COMPONENT OF THE RESEARCH</div>
+        <div class="arial-bold-12">(Budgetary Details of the Research)</div>
+      </div>
+
+      <div class="info-block">
+        <div class="mb-1"><span class="arial-11">Program/Project/Study Title:</span> <span class="arial-11" id="project-title-display"></span></div>
+        <div class="mb-1"><span class="arial-11">Proponents:</span> <span class="arial-11" id="proponent-display"></span></div>
+        <div class="mb-1"><span class="arial-11">Duration:</span> <span class="arial-11" id="duration-display"></span></div>
+      </div>
+
+      <div class="section-h"><div class="arial-bold-11">I. PERSONAL SERVICES</div></div>
+
+      <table class="combined-table">
+        <tr>
+          <th class="budget-header" rowspan="2" style="width:28%;">Item</th>
+          <th class="budget-header" colspan="4">YEAR</th>
+          <th class="budget-header" colspan="3" style="width:28%;">Total</th>
+        </tr>
+        <tr>
+          <th class="budget-header">Q1</th><th class="budget-header">Q2</th><th class="budget-header">Q3</th><th class="budget-header">Q4</th>
+          <th class="budget-header">Year 1</th><th class="budget-header">Year 2</th><th class="budget-header">Year 3</th>
+        </tr>
+        <tr>
+          <td style="font-weight:bold; padding-left:10px;">A. Wages</td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+        </tr>
+        <tr>
+          <td style="font-weight:bold; padding-left:10px;">B. Honorarium</td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+        </tr>
+        <tr>
+          <td style="font-weight:bold; padding-left:10px;">Total</td>
+          <td><input type="text" class="input-field-small number-input" style="font-weight:bold;"></td>
+          <td><input type="text" class="input-field-small number-input" style="font-weight:bold;"></td>
+          <td><input type="text" class="input-field-small number-input" style="font-weight:bold;"></td>
+          <td><input type="text" class="input-field-small number-input" style="font-weight:bold;"></td>
+          <td><input type="text" class="input-field-small number-input" style="font-weight:bold;"></td>
+          <td><input type="text" class="input-field-small number-input" style="font-weight:bold;"></td>
+          <td><input type="text" class="input-field-small number-input" style="font-weight:bold;"></td>
+        </tr>
+      </table>
+
+      <div class="section-h"><div class="arial-bold-11">II. MOOE-Travel</div></div>
+
+      <table class="combined-table">
+        <tr>
+          <th class="budget-header" rowspan="2" style="width:16%;">Date<br>(Quarter/Month/Year)</th>
+          <th class="budget-header" rowspan="2" style="width:18%;">Places to be Visited</th>
+          <th class="budget-header" rowspan="2" style="width:16%;">Purpose of the Travel</th>
+          <th class="budget-header" rowspan="2" style="width:12%;">Mode of Transport</th>
+          <th class="budget-header" rowspan="2" style="width:10%;">Estimated Cost</th>
+          <th class="budget-header" colspan="3">Total</th>
+        </tr>
+        <tr>
+          <th class="budget-header">Year 1</th><th class="budget-header">Year 2</th><th class="budget-header">Year 3</th>
+        </tr>
+        <tr>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+        </tr>
+        <tr>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+        </tr>
+        <tr>
+          <td colspan="5" style="text-align:right; padding-right:10px; font-weight:bold;">Total</td>
+          <td><input type="text" class="input-field-small number-input" style="font-weight:bold;"></td>
+          <td><input type="text" class="input-field-small number-input" style="font-weight:bold;"></td>
+          <td><input type="text" class="input-field-small number-input" style="font-weight:bold;"></td>
+        </tr>
+      </table>
+
+      <!-- FOOTER (LANDSCAPE) -->
+      <table class="footer-table footer-abs landscape">
+        <tr>
+          <td><span class="footer-label">DOCUMENT NO.:</span><span class="footer-value">UEP-URDS-FM-005</span></td>
+          <td><span class="footer-label">REVISION NO.:</span><span class="footer-value">00</span></td>
+          <td><span class="footer-label">EFFECTIVITY:</span><span class="footer-value">SEPTEMBER 12, 2022</span></td>
+        </tr>
+      </table>
+
+    </div>
+  </div>
+
+  <!-- ===================== -->
+  <!-- PAGE 3 (LANDSCAPE)    -->
+  <!-- ===================== -->
+  <div class="page a4-landscape">
+    <div class="sheet">
+
+      <div class="section-h"><div class="arial-bold-11">II. MOOE-Supplies &amp; Materials</div></div>
+
+      <table class="combined-table">
+        <tr>
+          <th class="budget-header" rowspan="2" style="width:16%;">Date<br>(Quarter/Month/Year)</th>
+          <th class="budget-header" rowspan="2" style="width:8%;">Unit</th>
+          <th class="budget-header" rowspan="2" style="width:22%;">Item Description</th>
+          <th class="budget-header" rowspan="2" style="width:14%;">Purpose</th>
+          <th class="budget-header" rowspan="2" style="width:6%;">Qty.</th>
+          <th class="budget-header" rowspan="2" style="width:10%;">Unit Cost</th>
+          <th class="budget-header" colspan="3">Total</th>
+        </tr>
+        <tr>
+          <th class="budget-header">Year 1</th><th class="budget-header">Year 2</th><th class="budget-header">Year 3</th>
+        </tr>
+        <tr>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field-small"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+        </tr>
+        <tr>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field-small"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+        </tr>
+        <tr>
+          <td colspan="6" style="text-align:right; padding-right:10px; font-weight:bold;">Total</td>
+          <td><input type="text" class="input-field-small number-input" style="font-weight:bold;"></td>
+          <td><input type="text" class="input-field-small number-input" style="font-weight:bold;"></td>
+          <td><input type="text" class="input-field-small number-input" style="font-weight:bold;"></td>
+        </tr>
+      </table>
+
+      <div class="section-h" style="margin-top: 18px;"><div class="arial-bold-11">II. MOOE-Communications</div></div>
+
+      <table class="combined-table">
+        <tr>
+          <th class="budget-header" rowspan="2" style="width:18%;">Date<br>(Quarter/Month/Year)</th>
+          <th class="budget-header" rowspan="2" style="width:26%;">Nature of Communications</th>
+          <th class="budget-header" rowspan="2" style="width:18%;">Purpose</th>
+          <th class="budget-header" rowspan="2" style="width:6%;">Qty.</th>
+          <th class="budget-header" rowspan="2" style="width:10%;">Estimated Cost</th>
+          <th class="budget-header" colspan="3">Total</th>
+        </tr>
+        <tr>
+          <th class="budget-header">Year 1</th><th class="budget-header">Year 2</th><th class="budget-header">Year 3</th>
+        </tr>
+        <tr>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field-small"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+        </tr>
+        <tr>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field-small"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+        </tr>
+        <tr>
+          <td colspan="5" style="text-align:right; padding-right:10px; font-weight:bold;">Total</td>
+          <td><input type="text" class="input-field-small number-input" style="font-weight:bold;"></td>
+          <td><input type="text" class="input-field-small number-input" style="font-weight:bold;"></td>
+          <td><input type="text" class="input-field-small number-input" style="font-weight:bold;"></td>
+        </tr>
+      </table>
+
+      <!-- FOOTER (LANDSCAPE) -->
+      <table class="footer-table footer-abs landscape">
+        <tr>
+          <td><span class="footer-label">DOCUMENT NO.:</span><span class="footer-value">UEP-URDS-FM-005</span></td>
+          <td><span class="footer-label">REVISION NO.:</span><span class="footer-value">00</span></td>
+          <td><span class="footer-label">EFFECTIVITY:</span><span class="footer-value">SEPTEMBER 12, 2022</span></td>
+        </tr>
+      </table>
+
+    </div>
+  </div>
+
+  <!-- ===================== -->
+  <!-- PAGE 4 (LANDSCAPE)    -->
+  <!-- ===================== -->
+  <div class="page a4-landscape">
+    <div class="sheet">
+
+      <div class="section-h"><div class="arial-bold-11">II. Other MOOE (Contract labor)</div></div>
+
+      <table class="combined-table">
+        <tr>
+          <th class="budget-header" rowspan="2" style="width:18%;">Date<br>(Quarter/Month/Year)</th>
+          <th class="budget-header" rowspan="2" style="width:22%;">Job Description</th>
+          <th class="budget-header" rowspan="2" style="width:16%;">Purpose</th>
+          <th class="budget-header" rowspan="2" style="width:12%;">Estimated No. of Days/Cost</th>
+          <th class="budget-header" rowspan="2" style="width:10%;">Estimated Cost</th>
+          <th class="budget-header" colspan="3">Total</th>
+        </tr>
+        <tr>
+          <th class="budget-header">Year 1</th><th class="budget-header">Year 2</th><th class="budget-header">Year 3</th>
+        </tr>
+        <tr>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+        </tr>
+        <tr>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+        </tr>
+        <tr>
+          <td colspan="5" style="text-align:right; padding-right:10px; font-weight:bold;">Total</td>
+          <td><input type="text" class="input-field-small number-input" style="font-weight:bold;"></td>
+          <td><input type="text" class="input-field-small number-input" style="font-weight:bold;"></td>
+          <td><input type="text" class="input-field-small number-input" style="font-weight:bold;"></td>
+        </tr>
+      </table>
+
+      <div class="section-h" style="margin-top: 18px;"><div class="arial-bold-11">III. Equipment Outlay</div></div>
+
+      <table class="combined-table">
+        <tr>
+          <th class="budget-header" rowspan="2" style="width:16%;">Date<br>(Quarter/Month/Year)</th>
+          <th class="budget-header" rowspan="2" style="width:8%;">Unit</th>
+          <th class="budget-header" rowspan="2" style="width:22%;">Item Description</th>
+          <th class="budget-header" rowspan="2" style="width:14%;">Purpose</th>
+          <th class="budget-header" rowspan="2" style="width:6%;">Qty.</th>
+          <th class="budget-header" rowspan="2" style="width:10%;">Estimated Cost</th>
+          <th class="budget-header" colspan="3">Total</th>
+        </tr>
+        <tr>
+          <th class="budget-header">Year 1</th><th class="budget-header">Year 2</th><th class="budget-header">Year 3</th>
+        </tr>
+        <tr>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field-small"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+        </tr>
+        <tr>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field"></td>
+          <td><input type="text" class="input-field-small"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+          <td><input type="text" class="input-field-small number-input"></td>
+        </tr>
+        <tr>
+          <td colspan="6" style="text-align:right; padding-right:10px; font-weight:bold;">Total</td>
+          <td><input type="text" class="input-field-small number-input" style="font-weight:bold;"></td>
+          <td><input type="text" class="input-field-small number-input" style="font-weight:bold;"></td>
+          <td><input type="text" class="input-field-small number-input" style="font-weight:bold;"></td>
+        </tr>
+      </table>
+
+     <div style="display:flex; justify-content:space-between; gap:30mm; margin-left:30px; margin-right:30px; margin-top:14mm;">
+        <div style="flex:1;">
+          <div class="arial-bold-11">Prepared by:</div>
+          <div class="sig-space" style="height: 14mm;"></div>
+          <div class="sig-name" id="proponentName2">—</div>
+          <div class="arial-11">Program/Project/Study Leader</div>
+        </div>
+        <div style="flex:1;">
+          <div class="arial-bold-11">Approved by:</div>
+          <div class="sig-space" style="height: 14mm;"></div>
+          <div class="sig-name u">ROGELIO A. BANAGBANAG, DALL</div>
+          <div class="arial-11">Director, URDS</div>
+        </div>
+      </div>
+
+      <!-- FOOTER (LANDSCAPE) -->
+      <table class="footer-table footer-abs landscape">
+        <tr>
+          <td><span class="footer-label">DOCUMENT NO.:</span><span class="footer-value">UEP-URDS-FM-005</span></td>
+          <td><span class="footer-label">REVISION NO.:</span><span class="footer-value">00</span></td>
+          <td><span class="footer-label">EFFECTIVITY:</span><span class="footer-value">SEPTEMBER 12, 2022</span></td>
+        </tr>
+      </table>
+
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("btnPrint")?.addEventListener("click", () => window.print());
+
+    document.getElementById("btnSavePDF")?.addEventListener("click", () => {
+      const pages = document.querySelectorAll('.page');
+      const proposalTitle = document.getElementById('budget_title')?.textContent || 'Budget';
+      const filename = `UEP-URDS-FM-005_${proposalTitle.replace(/[^a-z0-9]/gi, '_')}.pdf`;
+      
+      // Convert NodeList to Array and generate PDF from all pages
+      const pageArray = Array.from(pages);
+      
+      const opt = {
+        margin: 12,
+        filename: filename,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+      };
+      
+      // Process each page
+      html2pdf().set(opt).from(pageArray[0]).toPdf().get('pdf').then((pdf) => {
+        for (let i = 1; i < pageArray.length; i++) {
+          pdf.addPage();
+        }
+      }).from(pages).save();
+    });
+
+function populateFM005(budget) {
+
+    // -----------------------------
+    // SAFETY NORMALIZATION
+    // -----------------------------
+    const ps = budget.ps || [];
+    const mooe = budget.mooe || {};
+    const travel = mooe.travel || [];
+    const supplies = mooe.supplies || [];
+    const communications = mooe.communications || [];
+    const other = mooe.other || [];
+    const equipment = budget.equipment || [];
+
+    // Helper for formatting
+    const f = n => Number(n || 0).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+    // -----------------------------
+    // PAGE 1 SUMMARY TABLE
+    // -----------------------------
+
+    // PS totals
+    let psY1 = 0, psY2 = 0;
+    ps.forEach(item => {
+        psY1 += Number(item.year1 || 0);
+        psY2 += Number(item.year2 || 0);
+    });
+    setText("psY1", f(psY1));
+    setText("psY2", f(psY2));
+    setText("psTotal", f(psY1 + psY2));
+    setText("psSubY1", f(psY1));
+    setText("psSubY2", f(psY2));
+    setText("psSubTotal", f(psY1 + psY2));
+
+    // MOOE totals by group
+    const sumYear = items => items.reduce((acc, i) => {
+        acc.y1 += Number(i.year1 || 0);
+        acc.y2 += Number(i.year2 || 0);
+        return acc;
+    }, { y1: 0, y2: 0 });
+
+    const tr = sumYear(travel);
+    const sp = sumYear(supplies);
+    const cm = sumYear(communications);
+    const ot = sumYear(other);
+
+    setText("mooeTravelY1", f(tr.y1));
+    setText("mooeTravelY2", f(tr.y2));
+    setText("mooeTravelTotal", f(tr.y1 + tr.y2));
+
+    setText("mooeSupY1", f(sp.y1));
+    setText("mooeSupY2", f(sp.y2));
+    setText("mooeSupTotal", f(sp.y1 + sp.y2));
+
+    setText("mooeCommY1", f(cm.y1));
+    setText("mooeCommY2", f(cm.y2));
+    setText("mooeCommTotal", f(cm.y1 + cm.y2));
+
+    setText("mooeOtherY1", f(ot.y1));
+    setText("mooeOtherY2", f(ot.y2));
+    setText("mooeOtherTotal", f(ot.y1 + ot.y2));
+
+    // CONTINGENCY = 10% of total MOOE
+    const mooeBaseY1 = tr.y1 + sp.y1 + cm.y1 + ot.y1;
+    const mooeBaseY2 = tr.y2 + sp.y2 + cm.y2 + ot.y2;
+
+    const contY1 = mooeBaseY1 * 0.10;
+    const contY2 = mooeBaseY2 * 0.10;
+
+    setText("mooeContY1", f(contY1));
+    setText("mooeContY2", f(contY2));
+    setText("mooeContTotal", f(contY1 + contY2));
+
+    const mooeSubY1 = mooeBaseY1 + contY1;
+    const mooeSubY2 = mooeBaseY2 + contY2;
+
+    setText("mooeSubY1", f(mooeSubY1));
+    setText("mooeSubY2", f(mooeSubY2));
+    setText("mooeSubTotal", f(mooeSubY1 + mooeSubY2));
+
+    // EQUIPMENT totals
+    let eqY1 = 0, eqY2 = 0;
+    equipment.forEach(item => {
+        eqY1 += Number(item.year1 || 0);
+        eqY2 += Number(item.year2 || 0);
+    });
+
+    setText("eqSubY1", f(eqY1));
+    setText("eqSubY2", f(eqY2));
+    setText("eqSubTotal", f(eqY1 + eqY2));
+
+    // GRAND TOTAL
+    const grandY1 = psY1 + mooeSubY1 + eqY1;
+    const grandY2 = psY2 + mooeSubY2 + eqY2;
+
+    setText("grandY1", f(grandY1));
+    setText("grandY2", f(grandY2));
+    setText("grandTotal", f(grandY1 + grandY2));
+
+    // -----------------------------
+    // PAGE 2–4 DETAILED ROW POPULATION
+    // -----------------------------
+    fillDetailedTables(ps, travel, supplies, communications, equipment);
+}
+function fillDetailedTables(ps, travel, supplies, communications, equipment) {
+    // Your existing logic for populating the row inputs goes here.
+    // If you want, I can replace it with a fully cleaned-up version.
+}
+
+    function setText(id, value) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value ?? "—";
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      // Get proposal ID from URL parameter
+      const urlParams = new URLSearchParams(window.location.search);
+      const proposalId = urlParams.get('id') || localStorage.getItem("viewProposalId");
+
+      if (!proposalId) {
+        console.error("No proposal ID provided");
+        return;
+      }
+
+      try {
+        // Fetch proposal data from database
+        const response = await fetch(`../../backend/get_proposal.php?id=${encodeURIComponent(proposalId)}`, {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const text = await response.text();
+        const result = JSON.parse(text);
+
+        if (result.status === "success" && result.proposal) {
+          const proposal = result.proposal;
+
+          const title = proposal.title || "—";
+          const leader = proposal.studyLeader || proposal.leader || "—";
+          const duration = proposal.duration ? `${proposal.duration} months` : "—";
+          const college = proposal.college || "—";
+          const proponent = leader;
+
+          setText("projectTitle", title);
+          setText("projectLeader", leader);
+          setText("durationText", duration);
+          setText("collegeUnit", college);
+          setText("proponentName", String(proponent).toUpperCase());
+
+          setText("project-title-display", title);
+          setText("proponent-display", proponent);
+          setText("duration-display", duration);
+
+          setText("proponentName2", String(proponent).toUpperCase());
+
+          // Populate budget data if available
+          if (proposal.budget) {
+    populateFM005(proposal.budget);
+}
+
+        } else {
+          console.error("Error loading proposal:", result.message);
+        }
+      } catch (error) {
+        console.error("Error fetching proposal:", error);
+      }
+
+      // Setup number formatting for all inputs
+      document.querySelectorAll(".number-input").forEach(inp => {
+        inp.addEventListener("input", () => formatNumberWithCommas(inp));
+        inp.addEventListener("paste", handlePaste);
+      });
+    });
+
+    function populateBudgetData(proposal) {
+      const ps = proposal.personalServices || [];
+      const mooe = proposal.mooe || [];
+      const equipment = proposal.equipment || [];
+
+      // Calculate Personal Services totals
+      let psY1 = 0, psY2 = 0, psY3 = 0;
+      ps.forEach(item => {
+        psY1 += parseFloat(item.year1) || 0;
+        psY2 += parseFloat(item.year2) || 0;
+        psY3 += parseFloat(item.year3) || 0;
+      });
+      const psTotal = psY1 + psY2 + psY3;
+
+      // Calculate MOOE totals by type
+      let travelY1 = 0, travelY2 = 0, travelY3 = 0;
+      let supplyY1 = 0, supplyY2 = 0, supplyY3 = 0;
+      let commY1 = 0, commY2 = 0, commY3 = 0;
+      let otherY1 = 0, otherY2 = 0, otherY3 = 0;
+
+      mooe.forEach(item => {
+        const y1 = parseFloat(item.year1) || 0;
+        const y2 = parseFloat(item.year2) || 0;
+        const y3 = parseFloat(item.year3) || 0;
+        
+        const type = (item.type || '').toLowerCase();
+        if (type.includes('travel')) {
+          travelY1 += y1; travelY2 += y2; travelY3 += y3;
+        } else if (type.includes('suppl')) {
+          supplyY1 += y1; supplyY2 += y2; supplyY3 += y3;
+        } else if (type.includes('comm')) {
+          commY1 += y1; commY2 += y2; commY3 += y3;
+        } else {
+          otherY1 += y1; otherY2 += y2; otherY3 += y3;
+        }
+      });
+
+      const travelTotal = travelY1 + travelY2 + travelY3;
+      const supplyTotal = supplyY1 + supplyY2 + supplyY3;
+      const commTotal = commY1 + commY2 + commY3;
+      const otherTotal = otherY1 + otherY2 + otherY3;
+      
+      const mooeBaseY1 = travelY1 + supplyY1 + commY1 + otherY1;
+      const mooeBaseY2 = travelY2 + supplyY2 + commY2 + otherY2;
+      const mooeBaseY3 = travelY3 + supplyY3 + commY3 + otherY3;
+      const mooeBaseTotal = mooeBaseY1 + mooeBaseY2 + mooeBaseY3;
+
+      // Contingencies (10% of MOOE)
+      const contY1 = mooeBaseY1 * 0.1;
+      const contY2 = mooeBaseY2 * 0.1;
+      const contY3 = mooeBaseY3 * 0.1;
+      const contTotal = contY1 + contY2 + contY3;
+
+      const mooeSubY1 = mooeBaseY1 + contY1;
+      const mooeSubY2 = mooeBaseY2 + contY2;
+      const mooeSubY3 = mooeBaseY3 + contY3;
+      const mooeSubTotal = mooeSubY1 + mooeSubY2 + mooeSubY3;
+
+      // Calculate Equipment totals
+      let eqY1 = 0, eqY2 = 0, eqY3 = 0;
+      equipment.forEach(item => {
+        eqY1 += parseFloat(item.year1) || 0;
+        eqY2 += parseFloat(item.year2) || 0;
+        eqY3 += parseFloat(item.year3) || 0;
+      });
+      const eqTotal = eqY1 + eqY2 + eqY3;
+
+      // Personal Services
+      setText("psY1", formatCurrency(psY1));
+      setText("psY2", formatCurrency(psY2));
+      setText("psTotal", formatCurrency(psTotal));
+      setText("psSubY1", formatCurrency(psY1));
+      setText("psSubY2", formatCurrency(psY2));
+      setText("psSubTotal", formatCurrency(psTotal));
+
+      // MOOE breakdown
+      setText("mooeTravelY1", formatCurrency(travelY1));
+      setText("mooeTravelY2", formatCurrency(travelY2));
+      setText("mooeTravelTotal", formatCurrency(travelTotal));
+      setText("mooeSupY1", formatCurrency(supplyY1));
+      setText("mooeSupY2", formatCurrency(supplyY2));
+      setText("mooeSupTotal", formatCurrency(supplyTotal));
+      setText("mooeCommY1", formatCurrency(commY1));
+      setText("mooeCommY2", formatCurrency(commY2));
+      setText("mooeCommTotal", formatCurrency(commTotal));
+      setText("mooeOtherY1", formatCurrency(otherY1));
+      setText("mooeOtherY2", formatCurrency(otherY2));
+      setText("mooeOtherTotal", formatCurrency(otherTotal));
+      
+      // Contingencies
+      setText("mooeContY1", formatCurrency(contY1));
+      setText("mooeContY2", formatCurrency(contY2));
+      setText("mooeContTotal", formatCurrency(contTotal));
+      
+      // MOOE Subtotal
+      setText("mooeSubY1", formatCurrency(mooeSubY1));
+      setText("mooeSubY2", formatCurrency(mooeSubY2));
+      setText("mooeSubTotal", formatCurrency(mooeSubTotal));
+
+      // Equipment
+      setText("eqSubY1", formatCurrency(eqY1));
+      setText("eqSubY2", formatCurrency(eqY2));
+      setText("eqSubTotal", formatCurrency(eqTotal));
+
+      // Grand Total
+      const grandY1 = psY1 + mooeSubY1 + eqY1;
+      const grandY2 = psY2 + mooeSubY2 + eqY2;
+      const grandTotal = psTotal + mooeSubTotal + eqTotal;
+      setText("grandY1", formatCurrency(grandY1));
+      setText("grandY2", formatCurrency(grandY2));
+      setText("grandTotal", formatCurrency(grandTotal));
+
+      // Populate detailed tables on pages 2-4
+      populateDetailedTables(ps, mooe, equipment);
+    }
+
+    function populateDetailedTables(ps, mooe, equipment) {
+      // Page 2: Personal Services table
+      const psTables = document.querySelectorAll('.combined-table');
+      if (psTables[0]) {
+        const psTable = psTables[0];
+        const psInputs = psTable.querySelectorAll('.input-field-small');
+        
+        // Wages row (index 0-6)
+        const wagesItem = ps.find(item => (item.item || '').toLowerCase().includes('wage'));
+        if (wagesItem) {
+          if (psInputs[0]) psInputs[0].value = formatCurrency(wagesItem.q1 || 0);
+          if (psInputs[1]) psInputs[1].value = formatCurrency(wagesItem.q2 || 0);
+          if (psInputs[2]) psInputs[2].value = formatCurrency(wagesItem.q3 || 0);
+          if (psInputs[3]) psInputs[3].value = formatCurrency(wagesItem.q4 || 0);
+          if (psInputs[4]) psInputs[4].value = formatCurrency(wagesItem.year1 || 0);
+          if (psInputs[5]) psInputs[5].value = formatCurrency(wagesItem.year2 || 0);
+          if (psInputs[6]) psInputs[6].value = formatCurrency(wagesItem.year3 || 0);
+        }
+        
+        // Honorarium row (index 7-13)
+        const honorItem = ps.find(item => (item.item || '').toLowerCase().includes('honor'));
+        if (honorItem) {
+          if (psInputs[7]) psInputs[7].value = formatCurrency(honorItem.q1 || 0);
+          if (psInputs[8]) psInputs[8].value = formatCurrency(honorItem.q2 || 0);
+          if (psInputs[9]) psInputs[9].value = formatCurrency(honorItem.q3 || 0);
+          if (psInputs[10]) psInputs[10].value = formatCurrency(honorItem.q4 || 0);
+          if (psInputs[11]) psInputs[11].value = formatCurrency(honorItem.year1 || 0);
+          if (psInputs[12]) psInputs[12].value = formatCurrency(honorItem.year2 || 0);
+          if (psInputs[13]) psInputs[13].value = formatCurrency(honorItem.year3 || 0);
+        }
+        
+        // Total row (index 14-20) - calculate sums
+        const q1Total = (wagesItem?.q1 || 0) + (honorItem?.q1 || 0);
+        const q2Total = (wagesItem?.q2 || 0) + (honorItem?.q2 || 0);
+        const q3Total = (wagesItem?.q3 || 0) + (honorItem?.q3 || 0);
+        const q4Total = (wagesItem?.q4 || 0) + (honorItem?.q4 || 0);
+        const y1Total = (wagesItem?.year1 || 0) + (honorItem?.year1 || 0);
+        const y2Total = (wagesItem?.year2 || 0) + (honorItem?.year2 || 0);
+        const y3Total = (wagesItem?.year3 || 0) + (honorItem?.year3 || 0);
+        
+        if (psInputs[14]) psInputs[14].value = formatCurrency(q1Total);
+        if (psInputs[15]) psInputs[15].value = formatCurrency(q2Total);
+        if (psInputs[16]) psInputs[16].value = formatCurrency(q3Total);
+        if (psInputs[17]) psInputs[17].value = formatCurrency(q4Total);
+        if (psInputs[18]) psInputs[18].value = formatCurrency(y1Total);
+        if (psInputs[19]) psInputs[19].value = formatCurrency(y2Total);
+        if (psInputs[20]) psInputs[20].value = formatCurrency(y3Total);
+      }
+
+      // Page 2: Travel table
+      if (psTables[1]) {
+        const travelTable = psTables[1];
+        const travelItems = mooe.filter(item => (item.type || '').toLowerCase().includes('travel'));
+        const travelInputs = travelTable.querySelectorAll('.input-field, .input-field-small');
+        
+        let travelY1Sum = 0, travelY2Sum = 0, travelY3Sum = 0;
+        travelItems.slice(0, 2).forEach((item, idx) => {
+          const offset = idx * 8;
+          if (travelInputs[offset]) travelInputs[offset].value = item.date_field || '';
+          if (travelInputs[offset + 1]) travelInputs[offset + 1].value = item.places || '';
+          if (travelInputs[offset + 2]) travelInputs[offset + 2].value = item.purpose || '';
+          if (travelInputs[offset + 3]) travelInputs[offset + 3].value = item.mode_of_transport || '';
+          if (travelInputs[offset + 4]) travelInputs[offset + 4].value = formatCurrency(item.estimated_cost || 0);
+          if (travelInputs[offset + 5]) travelInputs[offset + 5].value = formatCurrency(item.year1 || 0);
+          if (travelInputs[offset + 6]) travelInputs[offset + 6].value = formatCurrency(item.year2 || 0);
+          if (travelInputs[offset + 7]) travelInputs[offset + 7].value = formatCurrency(item.year3 || 0);
+          
+          travelY1Sum += parseFloat(item.year1) || 0;
+          travelY2Sum += parseFloat(item.year2) || 0;
+          travelY3Sum += parseFloat(item.year3) || 0;
+        });
+        
+        // Total row
+        if (travelInputs[16]) travelInputs[16].value = formatCurrency(travelY1Sum);
+        if (travelInputs[17]) travelInputs[17].value = formatCurrency(travelY2Sum);
+        if (travelInputs[18]) travelInputs[18].value = formatCurrency(travelY3Sum);
+      }
+
+      // Page 3: Supplies table
+      if (psTables[2]) {
+        const supplyTable = psTables[2];
+        const supplyItems = mooe.filter(item => (item.type || '').toLowerCase().includes('suppl'));
+        const supplyInputs = supplyTable.querySelectorAll('.input-field, .input-field-small');
+        
+        let supY1Sum = 0, supY2Sum = 0, supY3Sum = 0;
+        supplyItems.slice(0, 2).forEach((item, idx) => {
+          const offset = idx * 9;
+          if (supplyInputs[offset]) supplyInputs[offset].value = item.date_field || '';
+          if (supplyInputs[offset + 1]) supplyInputs[offset + 1].value = item.unit || '';
+          if (supplyInputs[offset + 2]) supplyInputs[offset + 2].value = item.description || '';
+          if (supplyInputs[offset + 3]) supplyInputs[offset + 3].value = item.purpose || '';
+          if (supplyInputs[offset + 4]) supplyInputs[offset + 4].value = item.qty || '';
+          if (supplyInputs[offset + 5]) supplyInputs[offset + 5].value = formatCurrency(item.unit_cost || 0);
+          if (supplyInputs[offset + 6]) supplyInputs[offset + 6].value = formatCurrency(item.year1 || 0);
+          if (supplyInputs[offset + 7]) supplyInputs[offset + 7].value = formatCurrency(item.year2 || 0);
+          if (supplyInputs[offset + 8]) supplyInputs[offset + 8].value = formatCurrency(item.year3 || 0);
+          
+          supY1Sum += parseFloat(item.year1) || 0;
+          supY2Sum += parseFloat(item.year2) || 0;
+          supY3Sum += parseFloat(item.year3) || 0;
+        });
+        
+        // Total row
+        if (supplyInputs[18]) supplyInputs[18].value = formatCurrency(supY1Sum);
+        if (supplyInputs[19]) supplyInputs[19].value = formatCurrency(supY2Sum);
+        if (supplyInputs[20]) supplyInputs[20].value = formatCurrency(supY3Sum);
+      }
+
+      // Page 3: Communications table
+      if (psTables[3]) {
+        const commTable = psTables[3];
+        const commItems = mooe.filter(item => (item.type || '').toLowerCase().includes('comm'));
+        const commInputs = commTable.querySelectorAll('.input-field, .input-field-small');
+        
+        let commY1Sum = 0, commY2Sum = 0, commY3Sum = 0;
+        commItems.slice(0, 2).forEach((item, idx) => {
+          const offset = idx * 8;
+          if (commInputs[offset]) commInputs[offset].value = item.date_field || '';
+          if (commInputs[offset + 1]) commInputs[offset + 1].value = item.description || '';
+          if (commInputs[offset + 2]) commInputs[offset + 2].value = item.purpose || '';
+          if (commInputs[offset + 3]) commInputs[offset + 3].value = item.qty || '';
+          if (commInputs[offset + 4]) commInputs[offset + 4].value = formatCurrency(item.estimated_cost || 0);
+          if (commInputs[offset + 5]) commInputs[offset + 5].value = formatCurrency(item.year1 || 0);
+          if (commInputs[offset + 6]) commInputs[offset + 6].value = formatCurrency(item.year2 || 0);
+          if (commInputs[offset + 7]) commInputs[offset + 7].value = formatCurrency(item.year3 || 0);
+          
+          commY1Sum += parseFloat(item.year1) || 0;
+          commY2Sum += parseFloat(item.year2) || 0;
+          commY3Sum += parseFloat(item.year3) || 0;
+        });
+        
+        // Total row
+        if (commInputs[16]) commInputs[16].value = formatCurrency(commY1Sum);
+        if (commInputs[17]) commInputs[17].value = formatCurrency(commY2Sum);
+        if (commInputs[18]) commInputs[18].value = formatCurrency(commY3Sum);
+      }
+
+      // Page 4: Equipment table
+      if (psTables[5]) {
+        const eqTable = psTables[5];
+        const eqInputs = eqTable.querySelectorAll('.input-field, .input-field-small');
+        
+        let eqY1Sum = 0, eqY2Sum = 0, eqY3Sum = 0;
+        equipment.slice(0, 2).forEach((item, idx) => {
+          const offset = idx * 9;
+          if (eqInputs[offset]) eqInputs[offset].value = item.date_field || '';
+          if (eqInputs[offset + 1]) eqInputs[offset + 1].value = item.unit || '';
+          if (eqInputs[offset + 2]) eqInputs[offset + 2].value = item.description || '';
+          if (eqInputs[offset + 3]) eqInputs[offset + 3].value = item.purpose || '';
+          if (eqInputs[offset + 4]) eqInputs[offset + 4].value = item.qty || '';
+          if (eqInputs[offset + 5]) eqInputs[offset + 5].value = formatCurrency(item.estimated_cost || 0);
+          if (eqInputs[offset + 6]) eqInputs[offset + 6].value = formatCurrency(item.year1 || 0);
+          if (eqInputs[offset + 7]) eqInputs[offset + 7].value = formatCurrency(item.year2 || 0);
+          if (eqInputs[offset + 8]) eqInputs[offset + 8].value = formatCurrency(item.year3 || 0);
+          
+          eqY1Sum += parseFloat(item.year1) || 0;
+          eqY2Sum += parseFloat(item.year2) || 0;
+          eqY3Sum += parseFloat(item.year3) || 0;
+        });
+        
+        // Total row
+        if (eqInputs[18]) eqInputs[18].value = formatCurrency(eqY1Sum);
+        if (eqInputs[19]) eqInputs[19].value = formatCurrency(eqY2Sum);
+        if (eqInputs[20]) eqInputs[20].value = formatCurrency(eqY3Sum);
+      }
+    }
+
+    function formatCurrency(amount) {
+      return new Intl.NumberFormat('en-PH', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(amount);
+    }
+
+    function formatNumberWithCommas(input) {
+      let value = input.value.replace(/[^\d.]/g, "");
+      let parts = value.split(".");
+      let integerPart = parts[0];
+      let decimalPart = parts.length > 1 ? "." + parts[1] : "";
+      integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      input.value = integerPart + decimalPart;
+    }
+
+    function handlePaste(event) {
+      event.preventDefault();
+      let pasteData = event.clipboardData.getData("text");
+      let numbersOnly = pasteData.replace(/[^\d.]/g, "");
+      event.target.value = numbersOnly;
+      formatNumberWithCommas(event.target);
+    }
+  </script>
+
+</body>
+</html>

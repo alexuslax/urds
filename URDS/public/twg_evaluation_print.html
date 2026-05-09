@@ -1,0 +1,711 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>UEP-URDS-FM-010 • TWG Review Evaluation (Print)</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <style>
+    :root{
+      --pad: 12mm;
+      --contentW: 170mm;     /* consistent with your other print files */
+      --logoW: 82px;
+      --logoGap: 10px;
+      --footerH: 18mm;
+    }
+
+    * { box-sizing: border-box; }
+    body { font-family: Arial, Helvetica, sans-serif; }
+
+    .tight{ line-height: 1.05; }
+    .f11{ font-size: 11pt; }
+    .f10{ font-size: 10pt; }
+
+    /* Screen preview */
+    @media screen{
+      body{ background:#f3f4f6; padding:18px; }
+      .paper{
+        width: 210mm;
+        margin: 0 auto 18px;
+        background:#fff;
+        box-shadow: 0 8px 18px rgba(0,0,0,.08);
+        padding: var(--pad);
+        padding-bottom: calc(var(--footerH) + 10mm);
+      }
+      .no-print{ display:flex; }
+      .footer-fixed{ position: static; margin-top: 12mm; }
+    }
+
+    /* Print */
+    @media print{
+      .no-print{ display:none !important; }
+      body{ background:#fff !important; margin:0 !important; padding:0 !important; }
+      .paper{
+        width: auto;
+        margin: 0;
+        padding: var(--pad);
+        padding-bottom: calc(var(--footerH) + 10mm);
+      }
+      .footer-fixed{
+        position: fixed;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: var(--pad);
+        width: var(--contentW);
+        margin: 0;
+      }
+    }
+
+    /* ===== HEADER aligned to table width ===== */
+    .top-wrap{
+      width: var(--contentW);
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .header-row{
+      position: relative;
+      min-height: var(--logoW);
+    }
+
+    .header-logo{
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: var(--logoW);
+      height: var(--logoW);
+      object-fit: contain;
+    }
+
+    .header-text{
+      padding-left: calc(var(--logoW) + var(--logoGap));
+      padding-right: calc(var(--logoW) + var(--logoGap));
+      text-align: center;
+    }
+
+    .linkish{ color:#1d4ed8; text-decoration: underline; }
+
+    /* Divider same width as content */
+    .divider{
+      width: var(--contentW);
+      margin: 10px auto 0;
+      height: 0;
+      border-top: 3px solid #000;
+      border-bottom: 1px solid #000;
+      padding-top: 2px;
+    }
+
+    /* Titles */
+    .title-wrap{
+      width: var(--contentW);
+      margin: 4mm auto 0;
+      text-align: center;
+    }
+    .title-urds{
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-bottom: 0;
+    }
+    .title-form{
+      font-weight: bold;
+      margin-top: 3mm;
+      /* not fully uppercase in the photo, but okay either way */
+    }
+
+    /* Form area */
+    .form-wrap{
+      width: var(--contentW);
+      margin: 4mm auto 0;
+    }
+
+    .row{
+      display:flex;
+      gap: 10mm;
+      align-items: baseline;
+      margin-bottom: 4mm;
+      font-size: 11pt;
+    }
+    .row .label{ min-width: 34mm; font-weight: bold; }
+    .line{
+      flex: 1;
+      border-bottom: 1px solid #000;
+      height: 0.9em;
+      display:flex;
+      align-items:flex-end;
+      padding-bottom: 1px;
+    }
+    .line .value{
+      font-weight: bold;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+    }
+
+    /* Category choices */
+    .choices{
+      display:flex;
+      gap: 16mm;
+      align-items: baseline;
+      flex-wrap: wrap;
+    }
+    .choice{
+      display:flex;
+      gap: 6px;
+      align-items: baseline;
+      white-space: nowrap;
+    }
+    .circle{ font-family: Arial, Helvetica, sans-serif; }
+
+    /* Criteria blocks */
+    .crit{
+      margin-top: 6mm;
+      font-size: 11pt;
+    }
+    .crit .title{
+      font-weight: bold;
+    }
+    .crit .desc{
+      margin-top: 1mm;
+    }
+    .rating{
+      margin-top: 3mm;
+      display:flex;
+      justify-content: center;
+      gap: 16mm;
+      font-size: 11pt;
+    }
+    .rating .opt{ white-space: nowrap; }
+    .comments{
+      margin-top: 3mm;
+      display:grid;
+      grid-template-columns: 40mm 1fr;
+      gap: 3mm 6mm;
+      align-items: center;
+    }
+    .comments .c-label{ font-weight: bold; }
+    .c-line{
+      border-bottom: 1px solid #000;
+      height: 0.9em;
+    }
+
+    /* Overall + Recommendation + Sign lines */
+    .overall{
+      margin-top: 6mm;
+    }
+    .reco{
+      margin-top: 4mm;
+      font-size: 11pt;
+    }
+    .reco .opt{
+      display:flex;
+      gap: 8px;
+      align-items: baseline;
+      margin-top: 2mm;
+    }
+
+    .signs{
+      margin-top: 10mm;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12mm;
+      font-size: 11pt;
+    }
+    .sign-block{
+      display:grid;
+      grid-template-columns: 22mm 1fr;
+      gap: 4mm;
+      align-items: baseline;
+    }
+
+    /* Footer table */
+    .footer-table{
+      width: 100%;
+      border: 1px solid #000;
+      border-collapse: collapse;
+      table-layout: fixed;
+      background: #fff;
+    }
+    .footer-table td{
+      border: 1px solid #000;
+      padding: 4px 8px;
+      vertical-align: top;
+      text-align: left;
+      background:#fff;
+    }
+    .footer-label{
+      display:block;
+      font-size: 10pt;
+      font-weight: bold;
+      line-height: 1;
+      text-align: left;
+    }
+    .footer-value{
+      display:block;
+      font-size: 10pt;
+      font-weight: bold;
+      line-height: 1;
+      margin-top: 2px;
+      text-align: center;
+    }
+
+    /* Avoid ugly page breaks */
+    .crit{ page-break-inside: avoid; }
+  </style>
+</head>
+
+<body class="f11">
+
+  <!-- Screen controls only -->
+  <div class="no-print max-w-[210mm] mx-auto mb-4 flex items-center justify-between px-2">
+    <div class="text-sm text-gray-600">UEP-URDS-FM-010 • Print View</div>
+    <div class="flex gap-2">
+      <button id="btnSavePDF" class="px-3 py-2 rounded-lg bg-green-600 text-white text-sm hover:bg-green-700">💾 Save as PDF</button>
+      <button id="btnPrint" class="px-3 py-2 rounded-lg bg-black text-white text-sm hover:bg-gray-800">🖨️ Print</button>
+      <a class="px-3 py-2 rounded-lg bg-white border text-sm hover:bg-gray-50" href="javascript:history.back()">Back</a>
+    </div>
+  </div>
+
+  <div class="paper">
+
+    <!-- HEADER -->
+    <div class="top-wrap">
+      <div class="header-row">
+        <img src="../public/img/logo.jpg" alt="UEP Logo" class="header-logo">
+        <div class="header-text tight">
+          <div>Republic of the Philippines</div>
+          <div class="font-bold uppercase">UNIVERSITY OF EASTERN PHILIPPINES</div>
+          <div>University Town, Northern Samar, Philippines</div>
+          <div class="f10">
+            Web: <span class="linkish">http://uep.edu.ph</span>;
+            Email: <span class="linkish">uepnsofficial@gmail.com</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIVIDER -->
+    <div class="divider"></div>
+
+    <!-- TITLES -->
+    <div class="title-wrap tight">
+      <div class="title-urds">UNIVERSITY RESEARCH AND DEVELOPMENT SERVICES</div>
+      <div class="title-form">Technical Working Group Review Evaluation Form</div>
+    </div>
+
+    <!-- FORM -->
+    <div class="form-wrap">
+
+      <div class="row">
+        <div class="label">Research Title:</div>
+        <div class="line"><div class="value" id="p_title">—</div></div>
+      </div>
+
+      <div class="row">
+        <div class="label">Category:</div>
+        <div class="choices">
+          <div class="choice"><span class="circle" id="cat_program">( )</span> Program</div>
+          <div class="choice"><span class="circle" id="cat_project">( )</span> Project</div>
+          <div class="choice"><span class="circle" id="cat_study">( )</span> Study</div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="label">Proponent(s):</div>
+        <div class="line"><div class="value" id="p_proponent">—</div></div>
+      </div>
+
+      <div class="row">
+        <div class="label">College/Campus:</div>
+        <div class="line"><div class="value" id="p_college">—</div></div>
+      </div>
+
+      <!-- ===== CRITERIA 1 ===== -->
+      <div class="crit" id="crit1">
+        <div class="title">• Relevance of the research.</div>
+        <div class="desc">
+          The proposal corresponds with the research priorities of the university and is relevant to the problems and needs in the local/regional/national setting.
+        </div>
+
+        <div class="rating">
+          <div class="opt"><span class="circle" data-rate="1" id="c1_needs">( )</span> needs improvement</div>
+          <div class="opt"><span class="circle" data-rate="2" id="c1_good">( )</span> good</div>
+          <div class="opt"><span class="circle" data-rate="3" id="c1_vgood">( )</span> very good</div>
+          <div class="opt"><span class="circle" data-rate="4" id="c1_out">( )</span> outstanding</div>
+        </div>
+
+        <div class="comments">
+          <div class="c-label">Comments/Suggestions:</div><div></div>
+          <div class="text-right">Evaluator 1</div><div class="c-line" id="c1_e1"></div>
+          <div class="text-right">Evaluator 2</div><div class="c-line" id="c1_e2"></div>
+          <div class="text-right">Evaluator 3</div><div class="c-line" id="c1_e3"></div>
+        </div>
+      </div>
+
+      <!-- ===== CRITERIA 2 ===== -->
+      <div class="crit" id="crit2">
+        <div class="title">• Generation of New knowledge or Innovativeness.</div>
+        <div class="desc">
+          The proposal’s expected outputs, impacts and derivations are clear and well-defined.
+        </div>
+
+        <div class="rating">
+          <div class="opt"><span class="circle" id="c2_needs">( )</span> needs improvement</div>
+          <div class="opt"><span class="circle" id="c2_good">( )</span> good</div>
+          <div class="opt"><span class="circle" id="c2_vgood">( )</span> very good</div>
+          <div class="opt"><span class="circle" id="c2_out">( )</span> outstanding</div>
+        </div>
+
+        <div class="comments">
+          <div class="c-label">Comments/Suggestions:</div><div></div>
+          <div class="text-right">Evaluator 1</div><div class="c-line" id="c2_e1"></div>
+          <div class="text-right">Evaluator 2</div><div class="c-line" id="c2_e2"></div>
+          <div class="text-right">Evaluator 3</div><div class="c-line" id="c2_e3"></div>
+        </div>
+      </div>
+
+      <!-- ===== CRITERIA 3 ===== -->
+      <div class="crit" id="crit3">
+        <div class="title">• Potential for Adoption/Commercialization.</div>
+        <div class="desc">
+          The proposal has high potential for adaption/commercialization by the target beneficiaries.
+        </div>
+
+        <div class="rating">
+          <div class="opt"><span class="circle" id="c3_needs">( )</span> needs improvement</div>
+          <div class="opt"><span class="circle" id="c3_good">( )</span> good</div>
+          <div class="opt"><span class="circle" id="c3_vgood">( )</span> very good</div>
+          <div class="opt"><span class="circle" id="c3_out">( )</span> outstanding</div>
+        </div>
+
+        <div class="comments">
+          <div class="c-label">Comments/Suggestions:</div><div></div>
+          <div class="text-right">Evaluator 1</div><div class="c-line" id="c3_e1"></div>
+          <div class="text-right">Evaluator 2</div><div class="c-line" id="c3_e2"></div>
+          <div class="text-right">Evaluator 3</div><div class="c-line" id="c3_e3"></div>
+        </div>
+      </div>
+
+      <!-- ===== CRITERIA 4 ===== -->
+      <div class="crit" id="crit4">
+        <div class="title">• Appropriateness of Methodology:</div>
+        <div class="desc">
+          The methodology of the study is justified and sound.
+        </div>
+
+        <div class="rating">
+          <div class="opt"><span class="circle" id="c4_needs">( )</span> needs improvement</div>
+          <div class="opt"><span class="circle" id="c4_good">( )</span> good</div>
+          <div class="opt"><span class="circle" id="c4_vgood">( )</span> very good</div>
+          <div class="opt"><span class="circle" id="c4_out">( )</span> outstanding</div>
+        </div>
+
+        <div class="comments">
+          <div class="c-label">Comments/Suggestions:</div><div></div>
+          <div class="text-right">Evaluator 1</div><div class="c-line" id="c4_e1"></div>
+          <div class="text-right">Evaluator 2</div><div class="c-line" id="c4_e2"></div>
+          <div class="text-right">Evaluator 3</div><div class="c-line" id="c4_e3"></div>
+        </div>
+      </div>
+
+      <!-- ===== CRITERIA 5 ===== -->
+      <div class="crit" id="crit5">
+        <div class="title">• Potential Environmental Impact:</div>
+        <div class="desc">
+          The proposal when implemented, adopted and/or commercialized will not create negative effects to the environment.
+        </div>
+
+        <div class="rating">
+          <div class="opt"><span class="circle" id="c5_needs">( )</span> needs improvement</div>
+          <div class="opt"><span class="circle" id="c5_good">( )</span> good</div>
+          <div class="opt"><span class="circle" id="c5_vgood">( )</span> very good</div>
+          <div class="opt"><span class="circle" id="c5_out">( )</span> outstanding</div>
+        </div>
+
+        <div class="comments">
+          <div class="c-label">Comments/Suggestions:</div><div></div>
+          <div class="text-right">Evaluator 1</div><div class="c-line" id="c5_e1"></div>
+          <div class="text-right">Evaluator 2</div><div class="c-line" id="c5_e2"></div>
+          <div class="text-right">Evaluator 3</div><div class="c-line" id="c5_e3"></div>
+        </div>
+      </div>
+
+      <!-- ===== CRITERIA 6 ===== -->
+      <div class="crit" id="crit6">
+        <div class="title">• Potential Socio-economic Impact.</div>
+        <div class="desc">
+          The proposal will contribute to the inclusive growth specially creation of jobs and increased income.
+        </div>
+
+        <div class="rating">
+          <div class="opt"><span class="circle" id="c6_needs">( )</span> needs improvement</div>
+          <div class="opt"><span class="circle" id="c6_good">( )</span> good</div>
+          <div class="opt"><span class="circle" id="c6_vgood">( )</span> very good</div>
+          <div class="opt"><span class="circle" id="c6_out">( )</span> outstanding</div>
+        </div>
+
+        <div class="comments">
+          <div class="c-label">Comments/Suggestions:</div><div></div>
+          <div class="text-right">Evaluator 1</div><div class="c-line" id="c6_e1"></div>
+          <div class="text-right">Evaluator 2</div><div class="c-line" id="c6_e2"></div>
+          <div class="text-right">Evaluator 3</div><div class="c-line" id="c6_e3"></div>
+        </div>
+      </div>
+
+      <!-- ===== CRITERIA 7 ===== -->
+      <div class="crit" id="crit7">
+        <div class="title">• Duration and Budgetary Requirements.</div>
+        <div class="desc">
+          The research duration including date of completion and the corresponding financial plan and budgetary outlay are adequate.
+        </div>
+
+        <div class="rating">
+          <div class="opt"><span class="circle" id="c7_needs">( )</span> needs improvement</div>
+          <div class="opt"><span class="circle" id="c7_good">( )</span> good</div>
+          <div class="opt"><span class="circle" id="c7_vgood">( )</span> very good</div>
+          <div class="opt"><span class="circle" id="c7_out">( )</span> outstanding</div>
+        </div>
+
+        <div class="comments">
+          <div class="c-label">Comments/Suggestions:</div><div></div>
+          <div class="text-right">Evaluator 1</div><div class="c-line" id="c7_e1"></div>
+          <div class="text-right">Evaluator 2</div><div class="c-line" id="c7_e2"></div>
+          <div class="text-right">Evaluator 3</div><div class="c-line" id="c7_e3"></div>
+        </div>
+      </div>
+
+      <!-- OVERALL COMMENTS -->
+      <div class="crit overall">
+        <div class="title">Overall Comments:</div>
+        <div class="comments" style="margin-top: 2mm;">
+          <div class="text-right">Evaluator 1</div><div class="c-line" id="overall_e1"></div>
+          <div class="text-right">Evaluator 2</div><div class="c-line" id="overall_e2"></div>
+          <div class="text-right">Evaluator 3</div><div class="c-line" id="overall_e3"></div>
+        </div>
+      </div>
+
+      <!-- RECOMMENDATION -->
+      <div class="reco">
+        <div class="opt"><span class="circle" id="rec_present">( )</span> Recommended for presentation in the In-House Review</div>
+        <div class="opt"><span class="circle" id="rec_present_obs">( )</span> Recommended for presentation with Observations noted/ or proposal revised as suggested</div>
+      </div>
+
+      <!-- SIGNATURE / DATES -->
+      <div class="signs">
+        <div class="sign-block">
+          <div class="label" style="min-width:22mm;">Rated by:</div>
+          <div class="line"><div class="value" id="rated_by">—</div></div>
+          <div></div>
+          <div class="text-xs text-gray-600 -mt-2">Research Director</div>
+        </div>
+
+        <div class="sign-block">
+          <div class="label" style="min-width:22mm;">Date:</div>
+          <div class="line"><div class="value" id="rated_date">—</div></div>
+
+          <div class="label" style="min-width:22mm;">Noted:</div>
+          <div class="line"><div class="value" id="noted_by">&nbsp;</div></div>
+
+          <div class="label" style="min-width:22mm;">Date:</div>
+          <div class="line"><div class="value" id="noted_date">&nbsp;</div></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer-fixed" style="width: var(--contentW); margin-left:auto; margin-right:auto;">
+      <table class="footer-table">
+        <tr>
+          <td>
+            <span class="footer-label">DOCUMENT NO.:</span>
+            <span class="footer-value">UEP-URDS-FM-010</span>
+          </td>
+          <td>
+            <span class="footer-label">REVISION NO.:</span>
+            <span class="footer-value">00</span>
+          </td>
+          <td>
+            <span class="footer-label">EFFECTIVITY:</span>
+            <span class="footer-value">SEPTEMBER 12, 2022</span>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+  </div>
+
+  <script>
+    // =========================
+    // PRINT + PDF
+    // =========================
+    document.getElementById("btnPrint")?.addEventListener("click", () => window.print());
+
+    document.getElementById("btnSavePDF")?.addEventListener("click", () => {
+      const element = document.querySelector('.paper');
+      const title = document.getElementById('p_title')?.textContent || 'TWG_Evaluation';
+      const filename = `UEP-URDS-FM-010_${String(title).replace(/[^a-z0-9]/gi, '_')}.pdf`;
+
+      const opt = {
+        margin: 12,
+        filename: filename,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(element).save();
+    });
+
+    // =========================
+    // HELPERS
+    // =========================
+    function setText(id, value, fallback="—"){
+      const el = document.getElementById(id);
+      if (el) el.textContent = (value ?? fallback);
+    }
+
+    function markChoice(elId, yes){
+      const el = document.getElementById(elId);
+      if (!el) return;
+      el.textContent = yes ? "(✓)" : "( )";
+    }
+
+    // Map your 1–5 input (twg_crit1..5) to the 4 print choices
+    // 1-2 => needs improvement, 3 => good, 4 => very good, 5 => outstanding
+    function scoreToBucket(n){
+      const v = Number(n);
+      if (!Number.isFinite(v)) return null;
+      if (v <= 2) return "needs";
+      if (v === 3) return "good";
+      if (v === 4) return "vgood";
+      return "out";
+    }
+
+    function applyRating(prefix, bucket){
+      markChoice(prefix + "_needs", bucket === "needs");
+      markChoice(prefix + "_good",  bucket === "good");
+      markChoice(prefix + "_vgood", bucket === "vgood");
+      markChoice(prefix + "_out",   bucket === "out");
+    }
+
+    function pickCategory(nature){
+      const v = String(nature || "").toLowerCase();
+      markChoice("cat_program", v.includes("program"));
+      markChoice("cat_project", v.includes("project"));
+      markChoice("cat_study",   v.includes("study"));
+    }
+
+    // =========================
+    // LOAD DATA
+    // =========================
+    document.addEventListener("DOMContentLoaded", async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const proposalId = urlParams.get("id");
+      if (!proposalId) {
+        alert("No proposal ID provided");
+        return;
+      }
+
+      try {
+        const resp = await fetch(`../../backend/get_proposal.php?id=${proposalId}`, {
+          method: "GET",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" }
+        });
+
+        if (!resp.ok) throw new Error("HTTP " + resp.status);
+        const result = await resp.json();
+        if (result.status !== "success" || !result.proposal) {
+          throw new Error(result.message || "Failed to load proposal");
+        }
+
+        const p = result.proposal;
+
+        const title = p.title || "—";
+        const nature = p.nature || "—";
+        const leader = p.leader || p.studyLeader || "—";
+        const otherPersonnel = p.otherPersonnel || "";
+        const proponent = otherPersonnel ? `${leader}, ${otherPersonnel}` : leader;
+
+        const college = (p.college || p.collegeName || "—");
+        const campus = (p.campus || "");
+        const collegeCampus = campus ? `${college} / ${campus}` : college;
+
+        setText("p_title", title);
+        setText("p_proponent", proponent);
+        setText("p_college", collegeCampus);
+        pickCategory(nature);
+
+        // Try to read TWG review object if your API provides it.
+        // If not present, we still print blanks.
+        // Expected (optional) shapes:
+        // p.twgReview = { crit1..crit7 OR crits: {1:..}, comments, recommendation, evaluatorName, dateSubmitted }
+        const twg = p.twgReview || p.twg || null;
+
+        // Fill ratings from TWG if available; otherwise leave all ( ).
+        // If your system only stores 5 criteria, we apply them to first 5 and leave 6–7 blank.
+        if (twg) {
+          const c1 = twg.crit1 ?? twg.twg_crit1 ?? twg.c1;
+          const c2 = twg.crit2 ?? twg.twg_crit2 ?? twg.c2;
+          const c3 = twg.crit3 ?? twg.twg_crit3 ?? twg.c3;
+          const c4 = twg.crit4 ?? twg.twg_crit4 ?? twg.c4;
+          const c5 = twg.crit5 ?? twg.twg_crit5 ?? twg.c5;
+          const c6 = twg.crit6 ?? twg.twg_crit6 ?? twg.c6;
+          const c7 = twg.crit7 ?? twg.twg_crit7 ?? twg.c7;
+
+          applyRating("c1", scoreToBucket(c1));
+          applyRating("c2", scoreToBucket(c2));
+          applyRating("c3", scoreToBucket(c3));
+          applyRating("c4", scoreToBucket(c4));
+          applyRating("c5", scoreToBucket(c5));
+          applyRating("c6", scoreToBucket(c6));
+          applyRating("c7", scoreToBucket(c7));
+
+          const comment = twg.comments || twg.twg_comments || "";
+          // Put the comment on Evaluator 1 lines (common in systems w/ single evaluator field)
+          const fillLine = (id, text) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            // Keep as a single line, like handwriting line
+            // If long, it will overflow visually (print form behavior). You can shorten if desired.
+            el.textContent = String(text || "");
+          };
+
+          // Use the same comment across sections (Evaluator 1) if only one comment exists
+          ["c1_e1","c2_e1","c3_e1","c4_e1","c5_e1","c6_e1","c7_e1","overall_e1"].forEach(id => fillLine(id, comment));
+
+          // Recommendation
+          const rec = String(twg.recommendation || twg.twgRecommendation || "").toLowerCase();
+          // Map your select values to the two check options
+          // - "For UREC Review" / "For Director Review" => recommended for presentation
+          // - "Return for Revision" => presentation with observations noted
+          const present = rec.includes("urec") || rec.includes("director");
+          const presentObs = rec.includes("return") || rec.includes("revision") || rec.includes("observe");
+          markChoice("rec_present", present);
+          markChoice("rec_present_obs", presentObs);
+
+          // Rated by + date
+          const evaluatorName = twg.evaluatorName || localStorage.getItem("userName") || "—";
+          setText("rated_by", String(evaluatorName).toUpperCase());
+
+          const dt = twg.date || twg.submittedAt || twg.createdAt || twg.reviewDate || "";
+          setText("rated_date", dt ? String(dt) : new Date().toLocaleDateString());
+        } else {
+          // Still show Rated by from localStorage so printed form isn't blank
+          const evaluatorName = localStorage.getItem("userName") || "—";
+          setText("rated_by", String(evaluatorName).toUpperCase());
+          setText("rated_date", new Date().toLocaleDateString());
+        }
+
+      } catch (err) {
+        console.error(err);
+        alert("Failed to load TWG Evaluation: " + err.message);
+      }
+    });
+  </script>
+
+</body>
+</html>

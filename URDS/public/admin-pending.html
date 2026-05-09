@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pending User Approvals</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            urds: {900:"#172033",800:"#1f2b3a",accent:"#0ea5a4"}
+          },
+          boxShadow: { card: "0 6px 20px rgba(18,26,40,0.06)" }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-gray-50 font-inter antialiased">
+
+  <div class="min-h-screen flex">
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar"
+      class="w-72 bg-urds-900 text-white shrink-0 h-screen sticky top-0 overflow-y-auto">
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="flex-1">
+
+      <!-- HEADER -->
+      <header class="bg-white border-b px-6 py-4 flex items-center justify-between">
+        <h1 class="text-xl font-semibold">Pending Registrations</h1>
+
+        <a href="profile.html" class="flex items-center gap-3 cursor-pointer">
+          <div class="text-right">
+            <div class="text-sm font-medium user-name">Admin</div>
+            <div class="text-xs text-gray-500 user-role">Administrator</div>
+          </div>
+          <div class="w-10 h-10 rounded-full bg-urds-900 text-white flex items-center justify-center user-initials">A</div>
+        </a>
+      </header>
+
+      <!-- CONTENT -->
+      <main class="p-6">
+
+        <h2 class="text-lg font-semibold mb-1">User Approvals</h2>
+        <p class="text-sm text-gray-500 mb-6">
+          Review and approve or reject new user accounts.
+        </p>
+
+        <!-- Tabs -->
+        <div class="flex gap-2 mb-6 border-b">
+          <button id="pendingTab" class="tab-btn px-4 py-2 font-medium text-sm border-b-2 border-urds-accent text-urds-accent">
+            Pending Approvals
+          </button>
+          <button id="rejectedTab" class="tab-btn px-4 py-2 font-medium text-sm border-b-2 border-transparent text-gray-500 hover:text-gray-700">
+            Rejected Users
+          </button>
+        </div>
+
+        <!-- Search and Filter Section -->
+        <div class="bg-white p-6 rounded-2xl shadow-card border mb-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            <!-- Search Bar -->
+            <div class="lg:col-span-2">
+              <label class="text-xs font-medium text-gray-600 mb-1 block">Search</label>
+              <div class="relative">
+                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
+                <input 
+                  type="text" 
+                  id="searchInput"
+                  placeholder="Search by name or email..."
+                  class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-urds-accent focus:outline-none"
+                />
+              </div>
+            </div>
+
+            <!-- Role Filter -->
+            <div>
+              <label class="text-xs font-medium text-gray-600 mb-1 block">📌 Filter by Role</label>
+              <select 
+                id="roleFilter"
+                class="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-urds-accent focus:outline-none"
+              >
+                <option value="">All Roles</option>
+                <option value="College Dean">College Dean</option>
+                <option value="URDS Staff">URDS Staff</option>
+                <option value="College Research Coordinator">College Research Coordinator</option>
+                <option value="Evaluator">Evaluator</option>
+                <option value="UREC">UREC</option>
+                <option value="Senior Faculty Researcher / TWG">Senior Faculty Researcher / TWG</option>
+                <option value="URDS Director">URDS Director</option>
+              </select>
+            </div>
+
+            <!-- College Filter -->
+            <div>
+              <label class="text-xs font-medium text-gray-600 mb-1 block">🏛️ Filter by College</label>
+              <select 
+                id="collegeFilter"
+                class="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-urds-accent focus:outline-none"
+              >
+                <option value="">All Colleges</option>
+                <!-- Populated dynamically -->
+              </select>
+            </div>
+
+            <!-- Department Filter -->
+            <div class="lg:col-span-2">
+              <label class="text-xs font-medium text-gray-600 mb-1 block">📚 Filter by Department</label>
+              <select 
+                id="departmentFilter"
+                class="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-urds-accent focus:outline-none"
+              >
+                <option value="">All Departments</option>
+                <!-- Populated dynamically -->
+              </select>
+            </div>
+
+            <!-- Clear Filters Button -->
+            <div class="lg:col-span-2 flex items-end">
+              <button 
+                id="clearFiltersBtn"
+                class="w-full px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-medium transition-colors"
+              >
+                Clear Filters
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+      <!-- Pending Users Table -->
+      <div id="pendingSection" class="bg-white p-6 rounded-2xl shadow-card border">
+        <h2 class="text-lg font-semibold mb-4">Users Awaiting Approval</h2>
+
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b text-sm text-gray-500">
+              <th class="py-3">User</th>
+              <th class="py-3">Role</th>
+              <th class="py-3">College</th>
+              <th class="py-3">Department</th>
+              <th class="py-3 text-center">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody id="pendingUsersTable">
+            <!-- JS will load rows here -->
+          </tbody>
+        </table>
+
+        <!-- Empty state -->
+        <div id="emptyState" class="hidden text-center py-6 text-gray-500">
+          No pending registrations.
+        </div>
+      </div>
+
+      <!-- Rejected Users Table -->
+      <div id="rejectedSection" class="bg-white p-6 rounded-2xl shadow-card border hidden">
+        <h2 class="text-lg font-semibold mb-4">Rejected Users</h2>
+
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b text-sm text-gray-500">
+              <th class="py-3">Name</th>
+              <th class="py-3">Email</th>
+              <th class="py-3">Role Requested</th>
+              <th class="py-3">College / Department</th>
+              <th class="py-3">Date Rejected</th>
+              <th class="py-3 text-center">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody id="rejectedUsersTable">
+            <!-- JS will load rows here -->
+          </tbody>
+        </table>
+
+        <!-- Empty state -->
+        <div id="emptyStateRejected" class="hidden text-center py-6 text-gray-500">
+          No rejected users.
+        </div>
+      </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script src="js/admin-approvals.js"></script>
+
+</body>
+</html>

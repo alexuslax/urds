@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>View Announcements | UEP-URDS</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            urds: {
+              900: "#172033",
+              800: "#1f2b3a",
+              accent: "#0ea5a4"
+            }
+          },
+          boxShadow: {
+            card: "0 6px 20px rgba(18,26,40,0.06)",
+            soft: "0 10px 30px rgba(15,23,42,0.08)"
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-gray-50 text-gray-900 antialiased h-screen overflow-hidden">
+  <div class="h-screen flex overflow-hidden">
+
+    <aside id="sidebar" class="w-72 h-screen bg-urds-900 text-white shrink-0 overflow-y-auto"></aside>
+
+    <div class="flex-1 min-w-0 h-screen overflow-y-auto">
+
+      <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-30">
+        <div class="flex items-center gap-4">
+          <button
+            id="hamburger"
+            type="button"
+            class="md:hidden w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition"
+          >
+            ☰
+          </button>
+
+          <div>
+            <div class="text-xs text-gray-500">UEP-URDS / Announcements</div>
+            <h1 class="text-xl font-semibold mt-1">View Announcements</h1>
+            <p class="text-xs text-gray-500 mt-0.5">
+              Read recent announcements, deadlines, reminders, and URDS updates.
+            </p>
+          </div>
+        </div>
+
+        <a href="profile.html" class="flex items-center gap-3 rounded-xl hover:bg-gray-50 p-2 transition">
+          <div class="text-right">
+            <div class="text-sm font-semibold user-name">User</div>
+            <div class="text-xs text-gray-500 user-role">Role</div>
+          </div>
+          <div class="w-10 h-10 rounded-full bg-urds-accent text-white flex items-center justify-center font-bold user-initials">
+            U
+          </div>
+        </a>
+      </header>
+
+      <main class="p-6 max-w-5xl mx-auto space-y-6">
+
+        <section class="bg-gradient-to-r from-urds-900 to-urds-800 text-white p-6 rounded-2xl shadow-soft">
+          <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div>
+              <div class="text-sm text-white/70">Announcement Board</div>
+              <h2 class="text-2xl font-bold mt-1">URDS Announcements</h2>
+              <p class="text-sm text-white/75 mt-2 max-w-2xl">
+                Check important notices about proposal submissions, review schedules, reports, and office updates.
+              </p>
+            </div>
+
+            <a
+              href="create_announcement.html"
+              class="px-5 py-3 rounded-xl bg-white text-urds-900 text-sm font-bold hover:bg-gray-100 active:scale-95 transition"
+            >
+              Manage Announcements
+            </a>
+          </div>
+        </section>
+
+        <section class="bg-white p-5 rounded-2xl shadow-card border border-gray-100">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <input
+              id="announcement-search"
+              type="search"
+              placeholder="Search announcements..."
+              class="md:col-span-2 w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-urds-accent focus:ring-4 focus:ring-teal-100"
+            />
+
+            <select
+              id="announcement-filter"
+              class="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-urds-accent focus:ring-4 focus:ring-teal-100"
+            >
+              <option value="">All priorities</option>
+              <option value="Urgent">Urgent</option>
+              <option value="Important">Important</option>
+              <option value="Normal">Normal</option>
+            </select>
+          </div>
+
+          <div id="announcement-count" class="text-xs text-gray-500 mt-3"></div>
+        </section>
+
+        <section>
+          <div id="announcement-list" class="space-y-4">
+            <div class="bg-white p-6 rounded-2xl shadow-card border border-gray-100 text-sm text-gray-500">
+              Loading announcements...
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script src="js/view_announcement.js"></script>
+</body>
+</html>

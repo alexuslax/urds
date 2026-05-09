@@ -1,0 +1,778 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>UEP-URDS-FM-007 • On-going Research Template</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #eef0f3;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #000;
+      font-size: 11pt;
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: #fff;
+      border-bottom: 1px solid #d1d5db;
+      padding: 10px 16px;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .toolbar button {
+      border: 1px solid #cbd5e1;
+      background: #fff;
+      padding: 7px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .toolbar .primary {
+      background: #16a34a;
+      color: #fff;
+      border-color: #16a34a;
+    }
+
+    .toolbar .dark {
+      background: #111827;
+      color: #fff;
+      border-color: #111827;
+    }
+
+    .page-wrap {
+      padding: 28px 0;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      background: #fff;
+      padding: 14mm 18mm;
+      box-shadow: 0 8px 28px rgba(15, 23, 42, 0.16);
+      position: relative;
+    }
+
+    .page-inner {
+      width: 174mm;
+      min-height: calc(297mm - 28mm);
+      margin: 0 auto;
+      position: relative;
+      padding-bottom: 24mm;
+    }
+
+    /* HEADER - lighter and closer to printed template */
+    .header {
+      position: relative;
+      min-height: 26mm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-wrap {
+      position: absolute;
+      left: 15mm;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20mm;
+      height: 20mm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo {
+      width: 20mm;
+      height: 20mm;
+      object-fit: contain;
+      display: block;
+    }
+
+    .header-text {
+      text-align: center;
+      line-height: 1.05;
+      width: 100%;
+      padding-left: 24mm;
+      padding-right: 18mm;
+    }
+
+    .republic {
+      font-size: 10.5pt;
+      font-weight: 400;
+    }
+
+    .university {
+      font-size: 11.5pt;
+      font-weight: 700;
+      letter-spacing: 0.1px;
+      text-transform: uppercase;
+    }
+
+    .address {
+      font-size: 10.5pt;
+      font-weight: 400;
+    }
+
+    .contact {
+      font-size: 9.5pt;
+      font-weight: 400;
+    }
+
+    .contact a {
+      color: #0645ad;
+      text-decoration: underline;
+    }
+
+    .top-rule {
+      border-top: 2px solid #000;
+      border-bottom: 1px solid #000;
+      height: 5px;
+      margin-top: 3mm;
+    }
+
+    .office-title {
+      text-align: center;
+      font-size: 11pt;
+      font-weight: 700;
+      margin-top: 6mm;
+      text-transform: uppercase;
+      letter-spacing: 0.1px;
+    }
+
+    .doc-title {
+      text-align: center;
+      font-size: 11pt;
+      font-weight: 700;
+      margin-top: 8mm;
+      font-style: normal;
+    }
+
+    /* BODY */
+    .content {
+      margin-top: 8mm;
+      font-size: 11pt;
+      line-height: 1.25;
+    }
+
+    .roman-section {
+      display: grid;
+      grid-template-columns: 10mm 1fr;
+      column-gap: 2mm;
+      margin-bottom: 2mm;
+    }
+
+    .roman {
+      font-weight: 700;
+      text-align: right;
+      padding-right: 2mm;
+    }
+
+    .section-body {
+      min-width: 0;
+    }
+
+    .section-title {
+      font-weight: 700;
+    }
+
+    .item {
+      display: grid;
+      grid-template-columns: 45mm 1fr;
+      gap: 3mm;
+      margin-top: 1mm;
+      align-items: baseline;
+    }
+
+    .item-label {
+      font-weight: 400;
+    }
+
+    .line {
+      display: inline-block;
+      width: 100%;
+      border-bottom: 1px solid #000;
+      min-height: 16px;
+      padding: 0 2mm 1px;
+      font-weight: 400;
+    }
+
+    .budget-indent {
+      margin-left: 12mm;
+      margin-top: 1mm;
+    }
+
+    .budget-row {
+      display: grid;
+      grid-template-columns: 18mm 30mm 1fr;
+      gap: 2mm;
+      align-items: baseline;
+      margin-top: 1mm;
+    }
+
+    .small-line {
+      display: inline-block;
+      border-bottom: 1px solid #000;
+      width: 30mm;
+      min-height: 15px;
+      padding: 0 1mm 1px;
+      font-weight: 400;
+      text-align: center;
+    }
+
+    .subitem {
+      margin-left: 12mm;
+      margin-top: 1mm;
+    }
+
+    .paragraph-box {
+      margin-top: 2mm;
+      border: 1px solid transparent;
+      min-height: 18mm;
+      white-space: pre-line;
+      text-align: justify;
+      line-height: 1.35;
+    }
+
+    .technical-block {
+      margin-top: 2mm;
+      padding-left: 0;
+    }
+
+    .technical-title {
+      font-weight: 700;
+      margin-top: 2mm;
+    }
+
+    .technical-text {
+      margin-top: 1mm;
+      margin-left: 8mm;
+      white-space: pre-line;
+      text-align: justify;
+      line-height: 1.35;
+    }
+
+    .footer {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      border: 1px solid #000;
+      font-size: 9.5pt;
+      font-weight: 800;
+      text-align: center;
+      background: #fff;
+    }
+
+    .footer div {
+      min-height: 10mm;
+      padding: 3px 6px;
+      border-right: 1px solid #000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      line-height: 1.1;
+    }
+
+    .footer div:last-child {
+      border-right: none;
+    }
+
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        margin: 0;
+        padding: 0;
+      }
+
+      .toolbar {
+        display: none !important;
+      }
+
+      .page-wrap {
+        padding: 0;
+      }
+
+      .page {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 0;
+        box-shadow: none;
+        padding: 14mm 18mm;
+      }
+
+      * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="toolbar">
+    <button class="primary" type="button" id="savePdfBtn">Save as PDF</button>
+    <button class="dark" type="button" onclick="window.print()">Print</button>
+    <button type="button" onclick="goBack()">Back</button>
+  </div>
+
+  <div class="page-wrap">
+    <main class="page" id="printPage">
+      <div class="page-inner">
+
+        <header>
+          <div class="header">
+            <div class="logo-wrap">
+              <img id="uepLogo" class="logo" src="img/logo.jpg" alt="UEP Logo" />
+            </div>
+
+            <div class="header-text">
+              <div class="republic">Republic of the Philippines</div>
+              <div class="university">UNIVERSITY OF EASTERN PHILIPPINES</div>
+              <div class="address">University Town, Northern Samar, Philippines</div>
+              <div class="contact">
+                Web: <a href="#">http://uep.edu.ph</a>; Email: <a href="#">uepnsofficial@gmail.com</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="top-rule"></div>
+
+          <div class="office-title">UNIVERSITY RESEARCH AND DEVELOPMENT SERVICES</div>
+          <div class="doc-title">On-going Research Template</div>
+        </header>
+
+        <section class="content">
+
+          <div class="roman-section">
+            <div class="roman">I.</div>
+            <div class="section-body">
+              <div class="section-title">Basic Information (1 page)</div>
+
+              <div class="item">
+                <div class="item-label">Program/Project Title</div>
+                <div class="line" id="programProjectTitle"></div>
+              </div>
+
+              <div class="item">
+                <div class="item-label">Study Title</div>
+                <div class="line" id="studyTitle"></div>
+              </div>
+
+              <div class="item">
+                <div class="item-label">Researcher(s)</div>
+                <div class="line" id="researchersText"></div>
+              </div>
+
+              <div class="item">
+                <div class="item-label">Designation</div>
+                <div class="line" id="designationText"></div>
+              </div>
+
+              <div class="item">
+                <div class="item-label">Implementing Agency(ies)</div>
+                <div class="line" id="implementingAgencyText"></div>
+              </div>
+
+              <div class="item">
+                <div class="item-label">Cooperating Agency(ies)</div>
+                <div class="line" id="cooperatingAgencyText"></div>
+              </div>
+
+              <div class="section-title" style="margin-top:2mm;">Budget</div>
+
+              <div class="budget-indent">
+                <div>Amount (per release)</div>
+
+                <div class="budget-row">
+                  <div></div>
+                  <div>PS</div>
+                  <div><span class="small-line" id="releasePSText"></span></div>
+                </div>
+
+                <div class="budget-row">
+                  <div></div>
+                  <div>MOE</div>
+                  <div><span class="small-line" id="releaseMOOEText"></span></div>
+                </div>
+
+                <div class="budget-row">
+                  <div></div>
+                  <div>CO</div>
+                  <div><span class="small-line" id="releaseCOText"></span></div>
+                </div>
+              </div>
+
+              <div class="item">
+                <div class="item-label">Total Amount of Release</div>
+                <div class="line" id="releaseTotalText"></div>
+              </div>
+
+              <div class="section-title" style="margin-top:2mm;">Expenditure(s)</div>
+
+              <div class="subitem">
+                <div>Year</div>
+                <div class="line" id="expenditureYearText"></div>
+
+                <div style="margin-top:1mm;">Total Expenditure(s)</div>
+                <div class="line" id="expenditureTotalText"></div>
+              </div>
+
+              <div class="item">
+                <div class="item-label">Duration of the study</div>
+                <div class="line" id="durationText"></div>
+              </div>
+
+              <div class="item">
+                <div class="item-label">Project Location</div>
+                <div class="line" id="projectLocationText"></div>
+              </div>
+
+              <div class="section-title" style="margin-top:2mm;">Executive Summary (another page)</div>
+              <div class="paragraph-box" id="executiveSummaryText"></div>
+            </div>
+          </div>
+
+          <div class="roman-section">
+            <div class="roman">II.</div>
+            <div class="section-body">
+              <div class="section-title">Technical Description</div>
+
+              <div class="technical-block">
+                <div class="technical-title">Rationale</div>
+                <div class="technical-text" id="rationaleText"></div>
+
+                <div class="technical-title">Objectives</div>
+                <div class="technical-text" id="objectivesText"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="roman-section">
+            <div class="roman">III.</div>
+            <div class="section-body">
+              <div class="section-title">Review of Literature (optional for extension)</div>
+              <div class="technical-text" id="literatureText"></div>
+            </div>
+          </div>
+
+          <div class="roman-section">
+            <div class="roman">IV.</div>
+            <div class="section-body">
+              <div class="section-title">Methodology</div>
+              <div class="technical-text" id="methodologyText"></div>
+            </div>
+          </div>
+
+          <div class="roman-section">
+            <div class="roman">V.</div>
+            <div class="section-body">
+              <div class="section-title">
+                Results and Discussion
+                <span style="font-weight:400;">
+                  (please identify and briefly describe the technology/significant info. generated)
+                </span>
+              </div>
+              <div class="technical-text" id="resultsDiscussionText"></div>
+            </div>
+          </div>
+
+          <div class="roman-section">
+            <div class="roman">VI.</div>
+            <div class="section-body">
+              <div class="section-title">Literature Cited</div>
+              <div class="technical-text" id="literatureCitedText"></div>
+            </div>
+          </div>
+
+        </section>
+
+        <footer class="footer">
+          <div>
+            <span>DOCUMENT NO.:</span>
+            <span>UEP-URDS-FM-007</span>
+          </div>
+
+          <div>
+            <span>REVISION NO.:</span>
+            <span>00</span>
+          </div>
+
+          <div>
+            <span>EFFECTIVITY</span>
+            <span>SEPTEMBER 12, 2022</span>
+          </div>
+        </footer>
+
+      </div>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      const logoPaths = [
+        "img/logo.jpg",
+        "img/uep-logo.png",
+        "img/uep-logo.jpg",
+        "assets/uep-logo.png",
+        "assets/logo.png",
+        "../public/img/logo.jpg"
+      ];
+
+      const logo = document.getElementById("uepLogo");
+      let logoIndex = 0;
+
+      if (logo) {
+        logo.onerror = function () {
+          logoIndex += 1;
+
+          if (logoIndex < logoPaths.length) {
+            logo.src = logoPaths[logoIndex];
+          } else {
+            logo.style.display = "none";
+          }
+        };
+
+        logo.src = logoPaths[0];
+      }
+
+      const params = new URLSearchParams(window.location.search);
+
+      const proposalId =
+        params.get("id") ||
+        localStorage.getItem("viewProposalId") ||
+        "";
+
+      const draftKeys = [
+        "ongoing_research_draft_" + (proposalId || "no_proposal"),
+        "ongoingResearchDraft:" + (proposalId || "no_proposal"),
+        "fm007_ongoing_draft_" + (proposalId || "no_proposal"),
+        "ongoing_research_form_" + (proposalId || "no_proposal")
+      ];
+
+      const defaultData = {
+        report_title: "",
+        program_project_title: "",
+        study_title: "",
+        researchers: "",
+        designation: "",
+        implementing_agency: "",
+        cooperating_agency: "",
+        project_location: "",
+        duration: "",
+        release_ps: "",
+        release_mooe: "",
+        release_co: "",
+        release_total: "",
+        expenditures: [],
+        executive_summary: "",
+        rationale: "",
+        objectives: "",
+        literature: "",
+        methodology: "",
+        results_discussion: "",
+        literature_cited: ""
+      };
+
+      let data = loadDraft();
+
+      fillPage(data);
+
+      document.getElementById("savePdfBtn")?.addEventListener("click", () => {
+        const element = document.getElementById("printPage");
+        const title = data.report_title || data.study_title || "On-going_Research_Template";
+        const cleanTitle = String(title).replace(/[^a-z0-9]/gi, "_").slice(0, 70);
+
+        html2pdf()
+          .set({
+            margin: 0,
+            filename: "UEP-URDS-FM-007_" + cleanTitle + ".pdf",
+            image: { type: "jpeg", quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+          })
+          .from(element)
+          .save();
+      });
+
+      function loadDraft() {
+        for (const key of draftKeys) {
+          try {
+            const raw = localStorage.getItem(key);
+            if (!raw) continue;
+
+            const saved = JSON.parse(raw);
+            return normalizeData(Object.assign({}, defaultData, saved || {}));
+          } catch (error) {
+            console.warn("Unable to load draft key:", key, error);
+          }
+        }
+
+        return defaultData;
+      }
+
+      function normalizeData(raw) {
+        return {
+          report_title: raw.report_title || raw.reportTitle || raw.title || "",
+
+          program_project_title:
+            raw.program_project_title ||
+            raw.programProjectTitle ||
+            raw.report_title ||
+            raw.reportTitle ||
+            "",
+
+          study_title:
+            raw.study_title ||
+            raw.studyTitle ||
+            raw.report_title ||
+            raw.reportTitle ||
+            "",
+
+          researchers: raw.researchers || raw.researcher || raw.proponent || "",
+          designation: raw.designation || "",
+          implementing_agency: raw.implementing_agency || raw.implementingAgency || "",
+          cooperating_agency: raw.cooperating_agency || raw.cooperatingAgency || "",
+          project_location: raw.project_location || raw.projectLocation || "",
+          duration: raw.duration || "",
+          release_ps: raw.release_ps || raw.releasePS || "",
+          release_mooe: raw.release_mooe || raw.releaseMOOE || raw.release_moe || raw.releaseMOE || "",
+          release_co: raw.release_co || raw.releaseCO || "",
+          release_total: raw.release_total || raw.releaseTotal || "",
+          expenditures: Array.isArray(raw.expenditures) ? raw.expenditures : [],
+          executive_summary: raw.executive_summary || raw.executiveSummary || "",
+          rationale: raw.rationale || "",
+          objectives: raw.objectives || "",
+          literature: raw.literature || raw.review_literature || "",
+          methodology: raw.methodology || "",
+          results_discussion: raw.results_discussion || raw.resultsDiscussion || "",
+          literature_cited: raw.literature_cited || raw.literatureCited || ""
+        };
+      }
+
+      function fillPage(d) {
+        setText("programProjectTitle", d.program_project_title);
+        setText("studyTitle", d.study_title);
+        setText("researchersText", d.researchers);
+        setText("designationText", d.designation);
+        setText("implementingAgencyText", d.implementing_agency);
+        setText("cooperatingAgencyText", d.cooperating_agency);
+
+        setText("releasePSText", moneyOrBlank(d.release_ps));
+        setText("releaseMOOEText", moneyOrBlank(d.release_mooe));
+        setText("releaseCOText", moneyOrBlank(d.release_co));
+
+        const totalRelease =
+          d.release_total ||
+          calculateTotal(d.release_ps, d.release_mooe, d.release_co);
+
+        setText("releaseTotalText", moneyOrBlank(totalRelease));
+
+        const firstExp =
+          Array.isArray(d.expenditures) && d.expenditures.length
+            ? d.expenditures[0]
+            : null;
+
+        const expYear =
+          firstExp?.period ||
+          firstExp?.year ||
+          firstExp?.label ||
+          "";
+
+        const expAmount =
+          firstExp?.amount ||
+          firstExp?.total ||
+          "";
+
+        setText("expenditureYearText", expYear);
+        setText("expenditureTotalText", moneyOrBlank(expAmount));
+
+        setText("durationText", d.duration);
+        setText("projectLocationText", d.project_location);
+
+        setParagraph("executiveSummaryText", d.executive_summary);
+        setParagraph("rationaleText", d.rationale);
+        setParagraph("objectivesText", d.objectives);
+        setParagraph("literatureText", d.literature);
+        setParagraph("methodologyText", d.methodology);
+        setParagraph("resultsDiscussionText", d.results_discussion);
+        setParagraph("literatureCitedText", d.literature_cited);
+      }
+
+      function setText(id, value) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.textContent = String(value || "").trim() || " ";
+      }
+
+      function setParagraph(id, value) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.textContent = String(value || "").trim() || "";
+      }
+
+      function toNumber(value) {
+        const number = Number(String(value || "").replace(/,/g, ""));
+        return Number.isFinite(number) ? number : 0;
+      }
+
+      function calculateTotal(ps, mooe, co) {
+        const total = toNumber(ps) + toNumber(mooe) + toNumber(co);
+        return total > 0 ? total : "";
+      }
+
+      function moneyOrBlank(value) {
+        if (value === null || value === undefined || value === "") return "";
+
+        const number = toNumber(value);
+
+        if (!number) return "";
+
+        return "₱" + number.toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+      }
+
+      window.goBack = function () {
+        const returnTo = params.get("returnTo");
+
+        if (returnTo) {
+          window.location.href = returnTo;
+          return;
+        }
+
+        if (proposalId) {
+          window.location.href = "ongoing_research_form.html?id=" + encodeURIComponent(proposalId);
+        } else {
+          window.location.href = "ongoing_research_form.html";
+        }
+      };
+    })();
+  </script>
+</body>
+</html>

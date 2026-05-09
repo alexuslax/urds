@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FM-009 Terminal Report Entry | UEP-URDS</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            urds: {
+              900: "#172033",
+              800: "#1f2b3a",
+              accent: "#0ea5a4"
+            }
+          },
+          boxShadow: {
+            card: "0 6px 20px rgba(18,26,40,0.06)",
+            soft: "0 10px 30px rgba(15,23,42,0.08)"
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .form-input {
+      width: 100%;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      padding: 0.75rem 0.875rem;
+      border-radius: 0.75rem;
+      font-size: 0.875rem;
+      transition: all 0.15s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #0ea5a4;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(14, 165, 164, 0.18);
+    }
+
+    .section-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 1rem;
+      padding: 1.25rem;
+      background: #ffffff;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-900 h-screen overflow-hidden">
+  <div class="h-screen flex overflow-hidden">
+    <aside id="sidebar" class="w-72 h-screen bg-urds-900 text-white shrink-0 overflow-y-auto"></aside>
+
+    <div class="flex-1 min-w-0 h-screen overflow-y-auto">
+      <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-30">
+        <div class="flex items-center gap-4">
+          <button id="hamburger" class="md:hidden w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center" type="button">
+            ☰
+          </button>
+
+          <div>
+            <div class="text-xs text-gray-500">UEP-URDS / FM-009</div>
+            <h1 class="text-xl font-semibold mt-1">Terminal Report Entry</h1>
+            <p class="text-xs text-gray-500 mt-0.5">
+              Encode terminal report details before generating the print-ready FM-009 form.
+            </p>
+          </div>
+        </div>
+
+        <a href="profile.html" class="flex items-center gap-3 rounded-xl hover:bg-gray-50 p-2 transition">
+          <div class="text-right">
+            <div class="text-sm font-semibold user-name">User</div>
+            <div class="text-xs text-gray-500 user-role">Role</div>
+          </div>
+          <div class="w-10 h-10 rounded-full bg-urds-accent text-white flex items-center justify-center font-bold user-initials">U</div>
+        </a>
+      </header>
+
+      <main class="p-6 max-w-7xl mx-auto space-y-6">
+        <section class="bg-gradient-to-r from-urds-900 to-urds-800 text-white p-6 rounded-2xl shadow-soft">
+          <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div>
+              <div class="text-sm text-white/70">FM-009 Terminal Report Template</div>
+              <h2 class="text-2xl font-bold mt-1">Terminal Report</h2>
+              <p class="text-sm text-white/75 mt-2 max-w-2xl">
+                Use this after the study is completed and ready for final terminal reporting.
+              </p>
+            </div>
+
+            <div class="flex flex-wrap gap-2">
+              <button id="saveDraftBtn" type="button" class="px-4 py-2 rounded-xl bg-gray-700 text-white text-sm font-bold hover:bg-gray-800">
+                Save Entry
+              </button>
+
+              <button id="previewPrintBtn" type="button" class="px-4 py-2 rounded-xl bg-emerald-600 text-white text-sm font-bold hover:bg-emerald-700">
+                Preview Print
+              </button>
+
+              <button id="backBtn" type="button" class="px-4 py-2 rounded-xl bg-white text-urds-900 text-sm font-bold hover:bg-gray-100">
+                Back
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <div class="grid grid-cols-1 xl:grid-cols-5 gap-6">
+          <aside class="xl:col-span-2 space-y-6">
+            <section id="proposalSummary" class="bg-white p-5 rounded-2xl shadow-card border border-gray-100">
+              <div class="text-sm text-gray-500">Loading selected proposal...</div>
+            </section>
+
+            <section class="bg-white p-5 rounded-2xl shadow-card border border-gray-100">
+              <h2 class="text-lg font-semibold">Instructions</h2>
+              <div class="text-sm text-gray-600 space-y-3 mt-3">
+                <p>This form is for the final terminal report.</p>
+                <p>Complete the title, author, abstract, keywords, introduction, methodology, results, conclusions, acknowledgement, and literature cited.</p>
+                <p>Click <strong>Save Entry</strong>, then <strong>Preview Print</strong>.</p>
+              </div>
+            </section>
+
+            <section class="bg-green-50 border border-green-200 rounded-2xl p-5">
+              <h3 class="font-bold text-green-900">When to Use FM-009</h3>
+              <p class="text-sm text-green-800 mt-2">
+                Use this when the research has ended and the final terminal report is ready to be submitted.
+              </p>
+            </section>
+          </aside>
+
+          <section class="xl:col-span-3">
+            <form id="terminalReportForm" class="bg-white rounded-2xl shadow-card border border-gray-100 overflow-hidden">
+              <div class="bg-urds-900 px-6 py-4">
+                <h2 class="text-lg font-semibold text-white">FM-009 Terminal Report Entry</h2>
+                <p class="text-xs text-white/70 mt-1">These values will appear in the print-ready terminal report template.</p>
+              </div>
+
+              <div class="p-6 space-y-6">
+                <section class="section-card">
+                  <h3 class="text-base font-semibold">Basic Report Details</h3>
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
+                    <div class="md:col-span-2">
+                      <label for="studyProjectTitle" class="block text-xs font-bold text-gray-600">Study / Project Title</label>
+                      <input id="studyProjectTitle" type="text" class="form-input mt-1" />
+                    </div>
+
+                    <div class="md:col-span-2">
+                      <label for="authorResearcher" class="block text-xs font-bold text-gray-600">Author / Researcher</label>
+                      <input id="authorResearcher" type="text" class="form-input mt-1" />
+                    </div>
+
+                    <div class="md:col-span-2">
+                      <label for="abstract" class="block text-xs font-bold text-gray-600">Abstract 200 to 300 words</label>
+                      <textarea id="abstract" rows="6" class="form-input mt-1"></textarea>
+                    </div>
+
+                    <div class="md:col-span-2">
+                      <label for="keywords" class="block text-xs font-bold text-gray-600">Keywords</label>
+                      <input id="keywords" type="text" class="form-input mt-1" placeholder="Example: research, agriculture, education" />
+                    </div>
+                  </div>
+                </section>
+
+                <section class="section-card">
+                  <h3 class="text-base font-semibold">Report Content</h3>
+
+                  <div class="space-y-4 mt-5">
+                    <div>
+                      <label for="introduction" class="block text-xs font-bold text-gray-600">Introduction</label>
+                      <textarea id="introduction" rows="5" class="form-input mt-1"></textarea>
+                    </div>
+
+                    <div>
+                      <label for="methodology" class="block text-xs font-bold text-gray-600">Methodology</label>
+                      <textarea id="methodology" rows="5" class="form-input mt-1"></textarea>
+                    </div>
+
+                    <div>
+                      <label for="resultsDiscussion" class="block text-xs font-bold text-gray-600">Results and Discussion</label>
+                      <textarea id="resultsDiscussion" rows="6" class="form-input mt-1"></textarea>
+                    </div>
+
+                    <div>
+                      <label for="conclusions" class="block text-xs font-bold text-gray-600">Conclusions</label>
+                      <textarea id="conclusions" rows="4" class="form-input mt-1"></textarea>
+                    </div>
+
+                    <div>
+                      <label for="acknowledgement" class="block text-xs font-bold text-gray-600">Acknowledgement</label>
+                      <textarea id="acknowledgement" rows="3" class="form-input mt-1"></textarea>
+                    </div>
+
+                    <div>
+                      <label for="literatureCited" class="block text-xs font-bold text-gray-600">Literature cited</label>
+                      <textarea id="literatureCited" rows="4" class="form-input mt-1"></textarea>
+                    </div>
+                  </div>
+                </section>
+
+                <div class="flex flex-col sm:flex-row sm:justify-end gap-2 pt-2">
+                  <button id="saveDraftBtnBottom" type="button" class="px-5 py-3 bg-gray-700 hover:bg-gray-800 text-white rounded-xl text-sm font-bold">
+                    Save Entry
+                  </button>
+
+                  <button id="resetBtn" type="button" class="px-5 py-3 bg-white border border-gray-200 hover:bg-gray-100 rounded-xl text-sm font-bold text-gray-700">
+                    Reset
+                  </button>
+
+                  <button id="previewPrintBtnBottom" type="button" class="px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-bold">
+                    Preview Print
+                  </button>
+                </div>
+              </div>
+            </form>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div id="toastContainer" class="fixed bottom-6 right-6 space-y-2 z-50"></div>
+
+  <script src="js/main.js"></script>
+  <script src="js/terminal_report_entry.js"></script>
+</body>
+</html>

@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Profile | UEP-URDS</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            urds: {
+              950: "#0f172a",
+              900: "#172033",
+              800: "#1f2b3a",
+              700: "#2f3f55",
+              accent: "#0ea5a4"
+            }
+          },
+          boxShadow: {
+            card: "0 6px 20px rgba(18,26,40,0.06)",
+            soft: "0 10px 30px rgba(15,23,42,0.08)"
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .form-input {
+      width: 100%;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      padding: 0.75rem 0.875rem;
+      border-radius: 0.75rem;
+      font-size: 0.875rem;
+      transition: all 0.15s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #0ea5a4;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(14,165,164,0.18);
+    }
+
+    .info-card {
+      background: #ffffff;
+      border: 1px solid #f3f4f6;
+      border-radius: 1rem;
+      box-shadow: 0 6px 20px rgba(18,26,40,0.06);
+    }
+
+    .detail-label {
+      font-size: 0.75rem;
+      color: #6b7280;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .detail-value {
+      font-size: 0.925rem;
+      color: #111827;
+      font-weight: 600;
+      margin-top: 0.25rem;
+      overflow-wrap: anywhere;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-900 antialiased h-screen overflow-hidden">
+
+  <div class="h-screen flex overflow-hidden">
+
+    <!-- SIDEBAR -->
+    <aside
+      id="sidebar"
+      class="w-72 h-screen bg-urds-900 text-white shrink-0 overflow-y-auto"
+    ></aside>
+
+    <!-- MAIN WRAPPER -->
+    <div class="flex-1 min-w-0 h-screen overflow-y-auto">
+
+      <!-- HEADER -->
+      <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-30">
+        <div class="flex items-center gap-4 min-w-0">
+          <button
+            id="hamburger"
+            type="button"
+            class="md:hidden w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition"
+          >
+            ☰
+          </button>
+
+          <div>
+            <div class="text-xs text-gray-500">UEP-URDS / Account</div>
+            <h1 class="text-xl font-semibold mt-1">Profile</h1>
+            <p class="hidden sm:block text-xs text-gray-500 mt-0.5">
+              View your account details, role access, and profile information.
+            </p>
+          </div>
+        </div>
+
+        <a
+          href="profile.html"
+          class="flex items-center gap-3 rounded-xl hover:bg-gray-50 p-2 transition"
+        >
+          <div class="text-right hidden sm:block">
+            <div class="text-sm font-semibold user-name">User</div>
+            <div class="text-xs text-gray-500 user-role">Role</div>
+          </div>
+
+          <div class="w-10 h-10 rounded-full bg-urds-accent text-white flex items-center justify-center font-bold user-initials">
+            U
+          </div>
+        </a>
+      </header>
+
+      <!-- MAIN CONTENT -->
+      <main class="p-6 max-w-7xl mx-auto space-y-6">
+
+        <!-- PROFILE HERO -->
+        <section class="bg-gradient-to-r from-urds-900 to-urds-700 text-white p-6 rounded-2xl shadow-soft overflow-hidden relative">
+          <div class="absolute -right-10 -top-10 w-44 h-44 rounded-full bg-white/10"></div>
+          <div class="absolute right-24 -bottom-16 w-44 h-44 rounded-full bg-white/5"></div>
+
+          <div class="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+            <div class="flex items-center gap-5">
+              <div class="w-20 h-20 rounded-2xl bg-white/15 border border-white/20 text-white flex items-center justify-center text-3xl font-black user-initials">
+                U
+              </div>
+
+              <div>
+                <div class="text-sm text-white/70">Signed in as</div>
+                <h2 class="text-2xl md:text-3xl font-bold mt-1 user-name">
+                  User Name
+                </h2>
+                <div class="flex flex-wrap items-center gap-2 mt-2">
+                  <span class="inline-flex px-3 py-1 rounded-full bg-white/15 text-white text-xs font-bold user-role">
+                    Role
+                  </span>
+                  <span class="inline-flex px-3 py-1 rounded-full bg-white/15 text-white text-xs font-bold user-email">
+                    user@example.com
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap gap-2">
+              <button
+                id="editProfileBtn"
+                type="button"
+                class="px-5 py-3 rounded-xl bg-urds-accent text-white text-sm font-bold hover:opacity-90 active:scale-95 transition"
+              >
+                Edit Profile
+              </button>
+
+              <button
+                id="logoutBtn"
+                type="button"
+                class="px-5 py-3 rounded-xl bg-red-600 text-white text-sm font-bold hover:bg-red-700 active:scale-95 transition"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- PROFILE DETAILS -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+          <!-- ACCOUNT DETAILS -->
+          <div class="info-card lg:col-span-2 overflow-hidden">
+            <div class="px-6 py-5 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div>
+                <h3 class="text-lg font-bold text-gray-900">Account Details</h3>
+                <p class="text-sm text-gray-500 mt-1">
+                  Basic account information used across the URDS system.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                id="editProfileBtnSecondary"
+                class="px-4 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-bold transition"
+              >
+                Edit
+              </button>
+            </div>
+
+            <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100">
+                <div class="detail-label">Full Name</div>
+                <div class="detail-value user-name">User Name</div>
+              </div>
+
+              <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100">
+                <div class="detail-label">Role</div>
+                <div class="detail-value user-role">Role</div>
+              </div>
+
+              <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100">
+                <div class="detail-label">Email Address</div>
+                <div class="detail-value user-email">user@example.com</div>
+              </div>
+
+              <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100">
+                <div class="detail-label">Campus</div>
+                <div class="detail-value user-campus">Campus</div>
+              </div>
+
+              <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100">
+                <div class="detail-label">College</div>
+                <div class="detail-value user-college">College</div>
+              </div>
+
+              <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100">
+                <div class="detail-label">Department</div>
+                <div class="detail-value user-department">Department</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ROLE SUMMARY -->
+          <div class="info-card overflow-hidden">
+            <div class="px-6 py-5 border-b border-gray-100">
+              <h3 class="text-lg font-bold text-gray-900">Role Access</h3>
+              <p class="text-sm text-gray-500 mt-1">
+                Your available pages depend on your account role.
+              </p>
+            </div>
+
+            <div class="p-6 space-y-3">
+              <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-100">
+                <div class="text-sm font-bold text-emerald-800">Evaluator</div>
+                <p class="text-xs text-emerald-700 mt-1">
+                  Can access assigned evaluations, complete evaluation forms, save drafts, and generate printable official forms.
+                </p>
+              </div>
+
+              <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100">
+                <div class="text-sm font-bold text-gray-800">Faculty Researcher</div>
+                <p class="text-xs text-gray-500 mt-1">
+                  Can submit proposals, revise returned submissions, and track research status.
+                </p>
+              </div>
+
+              <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100">
+                <div class="text-sm font-bold text-gray-800">CRC / Dean / URDS</div>
+                <p class="text-xs text-gray-500 mt-1">
+                  Can review, endorse, route, monitor, and manage proposals depending on assigned role.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- EVALUATOR ACCESS -->
+        <section id="evaluatorAccessSection" class="info-card overflow-hidden">
+          <div class="px-6 py-5 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <h3 class="text-lg font-bold text-gray-900">Evaluator Access</h3>
+              <p class="text-sm text-gray-500 mt-1">
+                Use these shortcuts if your account role is Evaluator.
+              </p>
+            </div>
+
+            <span class="inline-flex w-fit px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold">
+              Evaluation Forms
+            </span>
+          </div>
+
+          <div class="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <a
+              href="dashboard.html#evaluatorPanel"
+              class="p-5 rounded-2xl border border-gray-100 bg-gray-50 hover:bg-white hover:shadow-card transition"
+            >
+              <div class="w-11 h-11 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl mb-3">
+                📝
+              </div>
+              <div class="font-bold text-gray-900">Assigned Evaluations</div>
+              <p class="text-xs text-gray-500 mt-1">
+                View proposals assigned for your evaluation.
+              </p>
+            </a>
+
+            <a
+              href="evaluator-dashboard.html"
+              class="p-5 rounded-2xl border border-gray-100 bg-gray-50 hover:bg-white hover:shadow-card transition"
+            >
+              <div class="w-11 h-11 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-xl mb-3">
+                📊
+              </div>
+              <div class="font-bold text-gray-900">Evaluator Dashboard</div>
+              <p class="text-xs text-gray-500 mt-1">
+                Open the dedicated evaluator workspace.
+              </p>
+            </a>
+
+            <a
+              href="evaluator-history.html"
+              class="p-5 rounded-2xl border border-gray-100 bg-gray-50 hover:bg-white hover:shadow-card transition"
+            >
+              <div class="w-11 h-11 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-xl mb-3">
+                📚
+              </div>
+              <div class="font-bold text-gray-900">Evaluation History</div>
+              <p class="text-xs text-gray-500 mt-1">
+                View evaluations already submitted.
+              </p>
+            </a>
+
+            <a
+              href="agency_in_house_evaluation_newproposals_form.html"
+              class="p-5 rounded-2xl border border-gray-100 bg-gray-50 hover:bg-white hover:shadow-card transition"
+            >
+              <div class="w-11 h-11 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-xl mb-3">
+                011
+              </div>
+              <div class="font-bold text-gray-900">New Proposal Form</div>
+              <p class="text-xs text-gray-500 mt-1">
+                FM-011 Agency In-House Review for new proposals.
+              </p>
+            </a>
+
+            <a
+              href="agency_in_house_ongoing_natural_sciences_form.html"
+              class="p-5 rounded-2xl border border-gray-100 bg-gray-50 hover:bg-white hover:shadow-card transition"
+            >
+              <div class="w-11 h-11 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center text-xl mb-3">
+                012
+              </div>
+              <div class="font-bold text-gray-900">On-going Natural Sciences</div>
+              <p class="text-xs text-gray-500 mt-1">
+                FM-012 evaluation form for on-going natural sciences research.
+              </p>
+            </a>
+
+            <a
+              href="agency_in_house_ongoing_social_sciences_form.html"
+              class="p-5 rounded-2xl border border-gray-100 bg-gray-50 hover:bg-white hover:shadow-card transition"
+            >
+              <div class="w-11 h-11 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-xl mb-3">
+                013
+              </div>
+              <div class="font-bold text-gray-900">On-going Social Sciences</div>
+              <p class="text-xs text-gray-500 mt-1">
+                FM-013 evaluation form for on-going social sciences research.
+              </p>
+            </a>
+
+            <a
+              href="agency_in_house_completed_natural_sciences_form.html"
+              class="p-5 rounded-2xl border border-gray-100 bg-gray-50 hover:bg-white hover:shadow-card transition"
+            >
+              <div class="w-11 h-11 rounded-xl bg-cyan-100 text-cyan-700 flex items-center justify-center text-xl mb-3">
+                014
+              </div>
+              <div class="font-bold text-gray-900">Completed Natural Sciences</div>
+              <p class="text-xs text-gray-500 mt-1">
+                FM-014 evaluation form for completed natural sciences research.
+              </p>
+            </a>
+
+            <a
+              href="agency_in_house_completed_social_sciences_form.html"
+              class="p-5 rounded-2xl border border-gray-100 bg-gray-50 hover:bg-white hover:shadow-card transition"
+            >
+              <div class="w-11 h-11 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center text-xl mb-3">
+                015
+              </div>
+              <div class="font-bold text-gray-900">Completed Social Sciences</div>
+              <p class="text-xs text-gray-500 mt-1">
+                FM-015 evaluation form for completed social sciences research.
+              </p>
+            </a>
+
+            <a
+              href="status_tracking.html"
+              class="p-5 rounded-2xl border border-gray-100 bg-gray-50 hover:bg-white hover:shadow-card transition"
+            >
+              <div class="w-11 h-11 rounded-xl bg-gray-200 text-gray-700 flex items-center justify-center text-xl mb-3">
+                🔎
+              </div>
+              <div class="font-bold text-gray-900">Status Tracking</div>
+              <p class="text-xs text-gray-500 mt-1">
+                Check proposal progress and review routing status.
+              </p>
+            </a>
+          </div>
+        </section>
+
+        <!-- ACCOUNT NOTES -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="info-card p-6">
+            <h3 class="text-lg font-bold text-gray-900">Account Update Rules</h3>
+            <p class="text-sm text-gray-500 mt-2">
+              You may update your basic profile information. College, department, and role assignments should be managed by the administrator to keep routing and access control accurate.
+            </p>
+
+            <div class="mt-4 p-4 rounded-2xl bg-amber-50 border border-amber-100 text-sm text-amber-800">
+              <strong>Note:</strong> If you need your role changed to Evaluator, contact the system administrator.
+            </div>
+          </div>
+
+          <div class="info-card p-6">
+            <h3 class="text-lg font-bold text-gray-900">Security Reminder</h3>
+            <p class="text-sm text-gray-500 mt-2">
+              Always log out after using a shared computer. Evaluation records and proposal documents should only be accessed through your assigned account.
+            </p>
+
+            <button
+              id="logoutBtnSecondary"
+              type="button"
+              class="mt-4 px-5 py-3 rounded-xl bg-red-50 hover:bg-red-100 text-red-700 text-sm font-bold transition"
+            >
+              Logout
+            </button>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- EDIT PROFILE MODAL -->
+  <div
+    id="editProfileModal"
+    class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4"
+    aria-hidden="true"
+  >
+    <div class="bg-white rounded-2xl w-full max-w-lg shadow-soft overflow-hidden">
+      <div class="px-6 py-5 border-b border-gray-100 flex items-start justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-bold text-gray-900">Edit Profile</h2>
+          <p class="text-sm text-gray-500 mt-1">
+            Update your basic account information.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          id="closeEditModal"
+          class="w-9 h-9 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition"
+        >
+          ✕
+        </button>
+      </div>
+
+      <form id="profileForm" class="p-6 space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label for="editFirstName" class="block text-sm font-bold text-gray-700 mb-1">
+              First Name
+            </label>
+            <input
+              type="text"
+              id="editFirstName"
+              required
+              class="form-input"
+            />
+          </div>
+
+          <div>
+            <label for="editLastName" class="block text-sm font-bold text-gray-700 mb-1">
+              Last Name
+            </label>
+            <input
+              type="text"
+              id="editLastName"
+              required
+              class="form-input"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label for="editEmail" class="block text-sm font-bold text-gray-700 mb-1">
+            Email
+          </label>
+          <input
+            type="email"
+            id="editEmail"
+            required
+            class="form-input"
+          />
+        </div>
+
+        <div>
+          <label for="editCampus" class="block text-sm font-bold text-gray-700 mb-1">
+            Campus
+          </label>
+          <input
+            type="text"
+            id="editCampus"
+            class="form-input"
+          />
+        </div>
+
+        <div class="rounded-2xl bg-gray-50 border border-gray-100 p-4 text-sm text-gray-600">
+          <p>
+            <strong>College:</strong>
+            <span id="displayCollege">-</span>
+          </p>
+
+          <p class="mt-1">
+            <strong>Department:</strong>
+            <span id="displayDepartment">-</span>
+          </p>
+
+          <p class="text-xs mt-3 text-gray-400">
+            College, Department, and Role can only be changed by an administrator.
+          </p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:justify-end gap-3 pt-2">
+          <button
+            type="button"
+            id="cancelEdit"
+            class="px-5 py-3 rounded-xl border border-gray-200 text-gray-700 text-sm font-bold hover:bg-gray-50 transition"
+          >
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            class="px-5 py-3 rounded-xl bg-urds-accent text-white text-sm font-bold hover:opacity-90 transition"
+          >
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="js/main.js"></script>
+  <script src="js/profile.js"></script>
+
+  <script>
+    // Extra compatibility helpers for the improved profile UI.
+    // These do not replace profile.js; they only connect the new duplicate buttons.
+    (function () {
+      "use strict";
+
+      const editProfileBtn = document.getElementById("editProfileBtn");
+      const editProfileBtnSecondary = document.getElementById("editProfileBtnSecondary");
+      const editProfileModal = document.getElementById("editProfileModal");
+      const cancelEdit = document.getElementById("cancelEdit");
+      const closeEditModal = document.getElementById("closeEditModal");
+
+      const logoutBtn = document.getElementById("logoutBtn");
+      const logoutBtnSecondary = document.getElementById("logoutBtnSecondary");
+
+      function openModal() {
+        if (!editProfileModal) return;
+        editProfileModal.classList.remove("hidden");
+        editProfileModal.classList.add("flex");
+        editProfileModal.setAttribute("aria-hidden", "false");
+      }
+
+      function closeModal() {
+        if (!editProfileModal) return;
+        editProfileModal.classList.add("hidden");
+        editProfileModal.classList.remove("flex");
+        editProfileModal.setAttribute("aria-hidden", "true");
+      }
+
+      editProfileBtnSecondary?.addEventListener("click", () => {
+        if (editProfileBtn) {
+          editProfileBtn.click();
+        } else {
+          openModal();
+        }
+      });
+
+      closeEditModal?.addEventListener("click", closeModal);
+      cancelEdit?.addEventListener("click", closeModal);
+
+      logoutBtnSecondary?.addEventListener("click", () => {
+        if (logoutBtn) {
+          logoutBtn.click();
+        }
+      });
+
+      editProfileModal?.addEventListener("click", (event) => {
+        if (event.target === editProfileModal) {
+          closeModal();
+        }
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          closeModal();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

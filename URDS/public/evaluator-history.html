@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Evaluation History | UEP-URDS</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            urds: {
+              950: "#0f172a",
+              900: "#172033",
+              800: "#1f2b3a",
+              700: "#2f3f55",
+              accent: "#0ea5a4"
+            }
+          },
+          boxShadow: {
+            card: "0 6px 20px rgba(18,26,40,0.06)",
+            soft: "0 10px 30px rgba(15,23,42,0.08)"
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .form-input {
+      width: 100%;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      padding: 0.75rem 0.875rem;
+      border-radius: 0.75rem;
+      font-size: 0.875rem;
+      transition: all 0.15s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #0ea5a4;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(14,165,164,0.18);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      display: inline-block;
+    }
+
+    @media print {
+      aside,
+      header,
+      .no-print,
+      #historyDetailsModal {
+        display: none !important;
+      }
+
+      body {
+        background: #fff !important;
+      }
+
+      main {
+        padding: 0 !important;
+        max-width: 100% !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-900 antialiased h-screen overflow-hidden">
+
+  <div class="h-screen flex overflow-hidden">
+
+    <!-- SIDEBAR -->
+    <aside
+      id="sidebar"
+      class="w-72 h-screen bg-urds-900 text-white shrink-0 overflow-y-auto"
+    ></aside>
+
+    <!-- MAIN WRAPPER -->
+    <div class="flex-1 min-w-0 h-screen overflow-y-auto">
+
+      <!-- HEADER -->
+      <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-30 no-print">
+        <div class="flex items-center gap-4 min-w-0">
+          <button
+            id="hamburger"
+            type="button"
+            class="md:hidden w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition"
+          >
+            ☰
+          </button>
+
+          <div>
+            <div class="text-xs text-gray-500">UEP-URDS / Evaluator</div>
+            <h1 class="text-xl font-semibold mt-1">Evaluation History</h1>
+            <p class="hidden sm:block text-xs text-gray-500 mt-0.5">
+              View submitted evaluations, ratings, recommendations, and printable official forms.
+            </p>
+          </div>
+        </div>
+
+        <a
+          href="profile.html"
+          class="flex items-center gap-3 rounded-xl hover:bg-gray-50 p-2 transition"
+        >
+          <div class="text-right hidden sm:block">
+            <div class="text-sm font-semibold user-name">Evaluator</div>
+            <div class="text-xs text-gray-500 user-role">Evaluator</div>
+          </div>
+
+          <div class="w-10 h-10 rounded-full bg-urds-accent text-white flex items-center justify-center font-bold user-initials">
+            E
+          </div>
+        </a>
+      </header>
+
+      <!-- MAIN CONTENT -->
+      <main class="p-6 max-w-7xl mx-auto space-y-6">
+
+        <!-- HERO -->
+        <section class="bg-gradient-to-r from-urds-900 to-urds-700 text-white p-6 rounded-2xl shadow-soft overflow-hidden relative">
+          <div class="absolute -right-10 -top-10 w-44 h-44 rounded-full bg-white/10"></div>
+          <div class="absolute right-24 -bottom-16 w-44 h-44 rounded-full bg-white/5"></div>
+
+          <div class="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+            <div>
+              <div class="text-sm text-white/70">Evaluation Records</div>
+              <h2 class="text-2xl md:text-3xl font-bold mt-1">Submitted Evaluation History</h2>
+              <p class="text-sm text-white/75 mt-2 max-w-2xl">
+                Review completed evaluations, open printable forms, and check ratings and recommendations previously submitted.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+              <div class="bg-white/10 border border-white/10 rounded-2xl px-4 py-4">
+                <div id="totalHistoryCount" class="text-2xl font-bold">0</div>
+                <div class="text-xs text-white/70 mt-1">Total</div>
+              </div>
+
+              <div class="bg-white/10 border border-white/10 rounded-2xl px-4 py-4">
+                <div id="monthHistoryCount" class="text-2xl font-bold">0</div>
+                <div class="text-xs text-white/70 mt-1">This Month</div>
+              </div>
+
+              <div class="bg-white/10 border border-white/10 rounded-2xl px-4 py-4">
+                <div id="averageScore" class="text-2xl font-bold">0</div>
+                <div class="text-xs text-white/70 mt-1">Avg. Score</div>
+              </div>
+
+              <div class="bg-white/10 border border-white/10 rounded-2xl px-4 py-4">
+                <div id="latestDate" class="text-lg font-bold">-</div>
+                <div class="text-xs text-white/70 mt-1">Latest</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- FILTERS -->
+        <section class="bg-white p-5 rounded-2xl shadow-card border border-gray-100 no-print">
+          <div class="grid grid-cols-1 md:grid-cols-6 gap-3">
+
+            <div class="md:col-span-2 relative">
+              <input
+                id="historySearch"
+                type="search"
+                placeholder="Search title, proponent, college, recommendation..."
+                class="form-input pl-10"
+              />
+              <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">
+                🔎
+              </span>
+            </div>
+
+            <select id="categoryFilter" class="form-input">
+              <option value="">All Categories</option>
+              <option value="new_proposal">New Proposal</option>
+              <option value="ongoing_natural_sciences">On-going Natural Sciences</option>
+              <option value="ongoing_social_sciences">On-going Social Sciences</option>
+              <option value="completed_natural_sciences">Completed Natural Sciences</option>
+              <option value="completed_social_sciences">Completed Social Sciences</option>
+            </select>
+
+            <select id="recommendationFilter" class="form-input">
+              <option value="">All Recommendations</option>
+              <option value="approved">Approved / Continue</option>
+              <option value="revision">For Revision</option>
+              <option value="presentation">For Presentation</option>
+              <option value="terminal_report">Terminal Report</option>
+              <option value="suspension">Suspension</option>
+              <option value="termination">Termination</option>
+            </select>
+
+            <input id="dateFromFilter" type="date" class="form-input" />
+
+            <select id="sortFilter" class="form-input">
+              <option value="submitted_desc">Newest First</option>
+              <option value="submitted_asc">Oldest First</option>
+              <option value="score_desc">Highest Score</option>
+              <option value="score_asc">Lowest Score</option>
+              <option value="title_asc">Title A-Z</option>
+            </select>
+
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-4 pt-4 border-t border-gray-100">
+            <div id="resultCount" class="text-xs text-gray-500">
+              Loading evaluation history...
+            </div>
+
+            <div class="flex flex-wrap gap-2">
+              <button
+                id="clearFiltersBtn"
+                type="button"
+                class="px-4 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-bold transition"
+              >
+                Clear Filters
+              </button>
+
+              <button
+                id="printPageBtn"
+                type="button"
+                class="px-4 py-2 rounded-xl bg-gray-800 text-white text-sm font-bold hover:bg-gray-900 transition"
+              >
+                Print List
+              </button>
+
+              <button
+                id="refreshBtn"
+                type="button"
+                class="px-4 py-2 rounded-xl bg-urds-accent text-white text-sm font-bold hover:opacity-90 transition"
+              >
+                Refresh
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- HISTORY TABLE -->
+        <section class="bg-white rounded-2xl shadow-card border border-gray-100 overflow-hidden">
+          <div class="px-5 py-4 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900">Submitted Evaluations</h3>
+              <p class="text-xs text-gray-500 mt-1">
+                Official evaluation records submitted by your evaluator account.
+              </p>
+            </div>
+
+            <span class="inline-flex w-fit px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold">
+              History
+            </span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full min-w-[1150px] text-left border-collapse">
+              <thead class="bg-gray-50">
+                <tr class="border-b border-gray-100 text-xs uppercase tracking-wide text-gray-500">
+                  <th class="px-5 py-3 font-bold">Proposal</th>
+                  <th class="px-5 py-3 font-bold">Category</th>
+                  <th class="px-5 py-3 font-bold">College</th>
+                  <th class="px-5 py-3 font-bold">Submitted</th>
+                  <th class="px-5 py-3 font-bold">Score</th>
+                  <th class="px-5 py-3 font-bold">Recommendation</th>
+                  <th class="px-5 py-3 font-bold text-center no-print">Actions</th>
+                </tr>
+              </thead>
+
+              <tbody id="historyTable" class="divide-y divide-gray-100">
+                <tr>
+                  <td colspan="7" class="px-5 py-8 text-center text-sm text-gray-500">
+                    Loading evaluation history...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div id="emptyState" class="hidden text-center py-12 px-5">
+            <div class="mx-auto w-14 h-14 rounded-2xl bg-gray-100 flex items-center justify-center text-2xl mb-4">
+              📚
+            </div>
+
+            <h3 class="text-lg font-bold text-gray-900">
+              No evaluation history found
+            </h3>
+
+            <p class="text-sm text-gray-500 mt-2">
+              Submitted evaluations will appear here after you complete and submit evaluation forms.
+            </p>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- DETAILS MODAL -->
+  <div
+    id="historyDetailsModal"
+    class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50 p-4"
+    aria-hidden="true"
+  >
+    <div class="bg-white rounded-2xl shadow-soft w-full max-w-3xl max-h-[90vh] overflow-hidden">
+      <div class="px-6 py-5 border-b border-gray-100 flex items-start justify-between gap-4">
+        <div>
+          <h2 id="modalTitle" class="text-xl font-bold text-gray-900">Evaluation Details</h2>
+          <p id="modalSubtitle" class="text-sm text-gray-500 mt-1">Submitted evaluation record</p>
+        </div>
+
+        <button
+          id="closeDetailsModal"
+          type="button"
+          class="w-9 h-9 rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition"
+        >
+          ✕
+        </button>
+      </div>
+
+      <div id="modalBody" class="p-6 overflow-y-auto max-h-[70vh] space-y-4">
+        <!-- JS fills this -->
+      </div>
+    </div>
+  </div>
+
+  <div id="toastContainer" class="fixed bottom-6 right-6 space-y-2 z-50"></div>
+
+  <script src="js/main.js"></script>
+  <script src="js/evaluator-history.js"></script>
+</body>
+</html>

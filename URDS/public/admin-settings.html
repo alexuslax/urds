@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>System Settings | UEP-URDS</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            urds: {
+              950: "#0f172a",
+              900: "#172033",
+              800: "#1f2b3a",
+              700: "#2f3f55",
+              accent: "#0ea5a4",
+            },
+          },
+          boxShadow: {
+            card: "0 6px 20px rgba(18,26,40,0.06)",
+            soft: "0 10px 30px rgba(15,23,42,0.08)",
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .form-input {
+      width: 100%;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      padding: 0.75rem 0.875rem;
+      border-radius: 0.75rem;
+      font-size: 0.875rem;
+      transition: all 0.15s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #0ea5a4;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(14, 165, 164, 0.18);
+    }
+
+    .toggle-box {
+      width: 1.25rem;
+      height: 1.25rem;
+      accent-color: #0ea5a4;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-900 antialiased h-screen overflow-hidden">
+
+  <div class="h-screen flex overflow-hidden">
+
+    <!-- SIDEBAR -->
+    <aside
+      id="sidebar"
+      class="w-72 h-screen bg-urds-900 text-white shrink-0 overflow-y-auto"
+    ></aside>
+
+    <!-- MAIN WRAPPER -->
+    <div class="flex-1 min-w-0 h-screen overflow-y-auto">
+
+      <!-- HEADER -->
+      <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-30">
+        <div class="flex items-center gap-4 min-w-0">
+          <button
+            id="hamburger"
+            type="button"
+            class="md:hidden w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition"
+          >
+            ☰
+          </button>
+
+          <div>
+            <div class="text-xs text-gray-500">UEP-URDS / Administration</div>
+            <h1 class="text-xl font-semibold mt-1">System Settings</h1>
+            <p class="hidden sm:block text-xs text-gray-500 mt-0.5">
+              Configure academic year, announcements, and system preferences.
+            </p>
+          </div>
+        </div>
+
+        <!-- PROFILE AREA -->
+        <a
+          id="user-profile-link"
+          href="profile.html"
+          class="flex items-center gap-3 rounded-xl hover:bg-gray-50 p-2 transition"
+        >
+          <div class="text-right hidden sm:block">
+            <div class="text-sm font-semibold user-name">Loading...</div>
+            <div class="text-xs text-gray-500 user-role">Loading...</div>
+          </div>
+
+          <div class="w-10 h-10 rounded-full bg-urds-accent text-white flex items-center justify-center font-bold user-initials">
+            U
+          </div>
+        </a>
+      </header>
+
+      <!-- PAGE CONTENT -->
+      <main class="p-6 max-w-7xl mx-auto space-y-6">
+
+        <!-- HERO -->
+        <section class="bg-gradient-to-r from-urds-900 to-urds-700 text-white p-6 rounded-2xl shadow-soft overflow-hidden relative">
+          <div class="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-white/10"></div>
+          <div class="absolute right-20 -bottom-16 w-44 h-44 rounded-full bg-white/5"></div>
+
+          <div class="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+            <div>
+              <div class="text-sm text-white/70">Configuration Panel</div>
+              <h2 class="text-2xl md:text-3xl font-bold mt-1">System Preferences</h2>
+              <p class="text-sm text-white/75 mt-2 max-w-2xl">
+                Manage academic year details, announcement behavior, proposal archiving,
+                and maintenance mode for the UEP-URDS system.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 text-center">
+              <div class="bg-white/10 border border-white/10 rounded-2xl px-5 py-4">
+                <div id="currentAcademicYearLabel" class="text-xl font-bold">-</div>
+                <div class="text-xs text-white/70 mt-1">Academic Year</div>
+              </div>
+
+              <div class="bg-white/10 border border-white/10 rounded-2xl px-5 py-4">
+                <div id="currentSemesterLabel" class="text-xl font-bold">-</div>
+                <div class="text-xs text-white/70 mt-1">Semester</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SETTINGS STATUS -->
+        <section
+          id="settingsStatus"
+          class="hidden rounded-2xl border px-5 py-4 text-sm font-medium"
+        ></section>
+
+        <!-- SETTINGS GRID -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+          <!-- Academic Year Settings -->
+          <div class="bg-white rounded-2xl shadow-card border border-gray-100 overflow-hidden">
+            <div class="px-5 py-4 border-b border-gray-100 flex items-start justify-between gap-3">
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900">Academic Year</h3>
+                <p class="text-xs text-gray-500 mt-1">
+                  Set the current academic year and active semester.
+                </p>
+              </div>
+
+              <div class="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shrink-0">
+                🎓
+              </div>
+            </div>
+
+            <div class="p-5 space-y-4">
+              <div>
+                <label for="academicYearInput" class="text-sm font-semibold text-gray-700">
+                  Current Academic Year
+                </label>
+
+                <input
+                  id="academicYearInput"
+                  type="text"
+                  class="form-input mt-2"
+                  placeholder="Example: 2024-2025"
+                />
+
+                <p class="text-xs text-gray-500 mt-1">
+                  Use a clear year format such as 2024-2025.
+                </p>
+              </div>
+
+              <div>
+                <label for="semesterSelect" class="text-sm font-semibold text-gray-700">
+                  Semester
+                </label>
+
+                <select id="semesterSelect" class="form-input mt-2">
+                  <option value="1st Semester">1st Semester</option>
+                  <option value="2nd Semester">2nd Semester</option>
+                  <option value="Summer">Summer</option>
+                </select>
+              </div>
+
+              <button
+                id="saveAcademicYearBtn"
+                type="button"
+                class="w-full sm:w-auto px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-bold active:scale-95 transition"
+              >
+                Save Academic Year
+              </button>
+            </div>
+          </div>
+
+          <!-- Announcement Settings -->
+          <div class="bg-white rounded-2xl shadow-card border border-gray-100 overflow-hidden">
+            <div class="px-5 py-4 border-b border-gray-100 flex items-start justify-between gap-3">
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900">Announcements</h3>
+                <p class="text-xs text-gray-500 mt-1">
+                  Configure default announcement visibility and comments.
+                </p>
+              </div>
+
+              <div class="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl shrink-0">
+                📢
+              </div>
+            </div>
+
+            <div class="p-5 space-y-4">
+              <div>
+                <label for="announcementDuration" class="text-sm font-semibold text-gray-700">
+                  Default Announcement Duration
+                </label>
+
+                <select id="announcementDuration" class="form-input mt-2">
+                  <option value="3 Days">3 Days</option>
+                  <option value="5 Days">5 Days</option>
+                  <option value="7 Days">7 Days</option>
+                  <option value="14 Days">14 Days</option>
+                </select>
+
+                <p class="text-xs text-gray-500 mt-1">
+                  Announcements can automatically expire based on this setting.
+                </p>
+              </div>
+
+              <label class="flex items-start gap-3 p-4 rounded-xl bg-gray-50 border border-gray-100 cursor-pointer">
+                <input
+                  id="announcementAllowComments"
+                  type="checkbox"
+                  class="toggle-box mt-0.5"
+                />
+
+                <span>
+                  <span class="block text-sm font-semibold text-gray-800">
+                    Allow Comments
+                  </span>
+                  <span class="block text-xs text-gray-500 mt-1">
+                    Enable comments on announcements when users view them.
+                  </span>
+                </span>
+              </label>
+
+              <button
+                id="updateAnnouncementSettingsBtn"
+                type="button"
+                class="w-full sm:w-auto px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-bold active:scale-95 transition"
+              >
+                Update Announcement Settings
+              </button>
+            </div>
+          </div>
+
+          <!-- System Options -->
+          <div class="bg-white rounded-2xl shadow-card border border-gray-100 overflow-hidden lg:col-span-2">
+            <div class="px-5 py-4 border-b border-gray-100 flex items-start justify-between gap-3">
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900">System Preferences</h3>
+                <p class="text-xs text-gray-500 mt-1">
+                  Control system-wide behavior and proposal maintenance settings.
+                </p>
+              </div>
+
+              <div class="w-11 h-11 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl shrink-0">
+                ⚙️
+              </div>
+            </div>
+
+            <div class="p-5">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                <label class="flex items-start gap-3 p-4 rounded-2xl bg-gray-50 border border-gray-100 cursor-pointer hover:bg-gray-100 transition">
+                  <input
+                    id="maintenanceMode"
+                    type="checkbox"
+                    class="toggle-box mt-0.5"
+                  />
+
+                  <span>
+                    <span class="block text-sm font-semibold text-gray-800">
+                      Maintenance Mode
+                    </span>
+                    <span class="block text-xs text-gray-500 mt-1">
+                      Temporarily restrict normal access while maintenance is active.
+                    </span>
+                  </span>
+                </label>
+
+                <label class="flex items-start gap-3 p-4 rounded-2xl bg-gray-50 border border-gray-100 cursor-pointer hover:bg-gray-100 transition">
+                  <input
+                    id="autoArchive"
+                    type="checkbox"
+                    class="toggle-box mt-0.5"
+                  />
+
+                  <span>
+                    <span class="block text-sm font-semibold text-gray-800">
+                      Auto-Archive Proposals
+                    </span>
+                    <span class="block text-xs text-gray-500 mt-1">
+                      Automatically archive proposals older than one year.
+                    </span>
+                  </span>
+                </label>
+
+              </div>
+
+              <div class="mt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-5 border-t border-gray-100">
+                <p class="text-xs text-gray-500">
+                  Changes may affect all users across the research management system.
+                </p>
+
+                <button
+                  id="saveSystemSettingsBtn"
+                  type="button"
+                  class="px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-bold active:scale-95 transition"
+                >
+                  Save System Settings
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <div id="toastContainer" class="fixed bottom-6 right-6 space-y-2 z-50"></div>
+
+  <script src="js/main.js"></script>
+  <script src="js/admin-settings.js"></script>
+
+</body>
+</html>

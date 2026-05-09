@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Dashboard | UEP-URDS</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            urds: {
+              950: "#0f172a",
+              900: "#172033",
+              800: "#1f2b3a",
+              700: "#2f3f55",
+              accent: "#0ea5a4"
+            }
+          },
+          boxShadow: {
+            card: "0 6px 20px rgba(18,26,40,0.06)",
+            soft: "0 10px 30px rgba(15,23,42,0.08)"
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .form-input {
+      width: 100%;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      padding: 0.75rem 0.875rem;
+      border-radius: 0.75rem;
+      font-size: 0.875rem;
+      transition: all 0.15s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #0ea5a4;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(14,165,164,0.18);
+    }
+
+    canvas {
+      max-width: 100%;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-900 antialiased h-screen overflow-hidden">
+
+  <div class="h-screen flex overflow-hidden">
+
+    <!-- SIDEBAR -->
+    <aside
+      id="sidebar"
+      class="w-72 h-screen bg-urds-900 text-white shrink-0 overflow-y-auto"
+    ></aside>
+
+    <!-- PAGE WRAPPER -->
+    <div class="flex-1 min-w-0 h-screen overflow-y-auto">
+
+      <!-- HEADER -->
+      <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-30">
+        <div class="flex items-center gap-4 min-w-0">
+          <button
+            id="hamburger"
+            type="button"
+            class="md:hidden w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition"
+          >
+            ☰
+          </button>
+
+          <div class="hidden sm:block">
+            <div class="text-xs text-gray-500">UEP-URDS / Administration</div>
+            <h1 class="text-xl font-semibold mt-1">Admin Dashboard</h1>
+          </div>
+
+          <div class="relative hidden lg:block ml-4">
+            <input
+              id="search"
+              type="search"
+              placeholder="Search dashboard..."
+              class="form-input w-72 pl-10"
+            />
+            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">
+              🔎
+            </span>
+          </div>
+        </div>
+
+        <a href="profile.html" class="flex items-center gap-3 rounded-xl hover:bg-gray-50 p-2 transition">
+          <div class="text-right hidden sm:block">
+            <div class="text-sm font-semibold user-name">Admin</div>
+            <div class="text-xs text-gray-500 user-role">Administrator</div>
+          </div>
+
+          <div class="w-10 h-10 rounded-full bg-urds-accent text-white flex items-center justify-center font-bold user-initials">
+            A
+          </div>
+        </a>
+      </header>
+
+      <!-- MAIN CONTENT -->
+      <main class="p-6 max-w-7xl mx-auto space-y-6">
+
+        <!-- HERO -->
+        <section class="bg-gradient-to-r from-urds-900 to-urds-700 text-white p-6 rounded-2xl shadow-soft overflow-hidden relative">
+          <div class="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-white/10"></div>
+          <div class="absolute right-16 -bottom-16 w-44 h-44 rounded-full bg-white/5"></div>
+
+          <div class="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+            <div>
+              <div class="text-sm text-white/70">System Overview</div>
+              <h2 class="text-2xl md:text-3xl font-bold mt-1">Admin Panel</h2>
+              <p class="text-sm text-white/75 mt-2 max-w-2xl">
+                Manage users, colleges, research proposals, approvals, analytics, permissions, and system activities.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 text-center">
+              <a
+                href="admin-pending.html"
+                class="bg-white/10 hover:bg-white/15 border border-white/10 rounded-2xl px-5 py-4 transition"
+              >
+                <div id="pendingCountHero" class="text-2xl font-bold">-</div>
+                <div class="text-xs text-white/70 mt-1">Pending</div>
+              </a>
+
+              <a
+                href="admin-users.html"
+                class="bg-white/10 hover:bg-white/15 border border-white/10 rounded-2xl px-5 py-4 transition"
+              >
+                <div id="userCountHero" class="text-2xl font-bold">-</div>
+                <div class="text-xs text-white/70 mt-1">Users</div>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <!-- MOBILE SEARCH -->
+        <section class="lg:hidden bg-white p-4 rounded-2xl shadow-card border border-gray-100">
+          <input
+            id="mobileSearch"
+            type="search"
+            placeholder="Search dashboard..."
+            class="form-input"
+          />
+        </section>
+
+        <!-- STATS CARDS -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+
+          <div class="bg-white p-5 rounded-2xl shadow-card border border-gray-100">
+            <div class="flex items-center justify-between gap-3">
+              <div>
+                <div class="text-sm text-gray-500">Total Users</div>
+                <div id="userCount" class="text-3xl font-bold mt-2 text-urds-900">-</div>
+              </div>
+
+              <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl">
+                👥
+              </div>
+            </div>
+
+            <p class="text-xs text-gray-400 mt-4">
+              Registered accounts in the system.
+            </p>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl shadow-card border border-gray-100">
+            <div class="flex items-center justify-between gap-3">
+              <div>
+                <div class="text-sm text-gray-500">Colleges</div>
+                <div id="collegeCount" class="text-3xl font-bold mt-2 text-urds-900">-</div>
+              </div>
+
+              <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl">
+                🏛️
+              </div>
+            </div>
+
+            <p class="text-xs text-gray-400 mt-4">
+              Active colleges and departments.
+            </p>
+          </div>
+
+          <div class="bg-white p-5 rounded-2xl shadow-card border border-gray-100">
+            <div class="flex items-center justify-between gap-3">
+              <div>
+                <div class="text-sm text-gray-500">Proposals</div>
+                <div id="proposalCount" class="text-3xl font-bold mt-2 text-urds-900">-</div>
+              </div>
+
+              <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-2xl">
+                📄
+              </div>
+            </div>
+
+            <p class="text-xs text-gray-400 mt-4">
+              Total submitted research proposals.
+            </p>
+          </div>
+
+          <a
+            href="admin-pending.html"
+            class="bg-white p-5 rounded-2xl shadow-card hover:shadow-soft border border-gray-100 transition group"
+          >
+            <div class="flex items-center justify-between gap-3">
+              <div>
+                <div class="text-sm text-gray-500">Pending Approvals</div>
+                <div id="pendingCount" class="text-3xl font-bold mt-2 text-orange-600">-</div>
+              </div>
+
+              <div class="w-12 h-12 rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center text-2xl group-hover:bg-orange-100 transition">
+                ⏳
+              </div>
+            </div>
+
+            <p class="text-xs text-gray-400 mt-4">
+              Users waiting for admin approval.
+            </p>
+          </a>
+
+        </section>
+
+        <!-- ANALYTICS HEADER -->
+        <section class="flex flex-col md:flex-row md:items-end md:justify-between gap-3 border-t border-gray-200 pt-6">
+          <div>
+            <h2 class="text-xl font-semibold text-urds-900">Research Analytics</h2>
+            <p class="text-sm text-gray-500 mt-1">
+              Visual insights into proposal submissions, user roles, and college activity.
+            </p>
+          </div>
+
+          <a
+            href="admin-logs.html"
+            class="inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-white border border-gray-200 text-sm font-bold text-gray-700 hover:bg-gray-50 transition"
+          >
+            View Logs
+          </a>
+        </section>
+
+        <!-- CHART GRID -->
+        <section class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+
+          <!-- Proposals Per College -->
+          <div class="bg-white p-6 rounded-2xl shadow-card border border-gray-100 min-h-[360px]">
+            <div class="flex items-start justify-between gap-3 mb-4">
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900">Proposals Per College</h3>
+                <p class="text-xs text-gray-500 mt-1">
+                  Number of research proposals grouped by college.
+                </p>
+              </div>
+
+              <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                📊
+              </div>
+            </div>
+
+            <div class="h-[260px]">
+              <canvas id="chartProposals"></canvas>
+            </div>
+          </div>
+
+          <!-- User Role Distribution -->
+          <div class="bg-white p-6 rounded-2xl shadow-card border border-gray-100 min-h-[360px]">
+            <div class="flex items-start justify-between gap-3 mb-4">
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900">User Roles</h3>
+                <p class="text-xs text-gray-500 mt-1">
+                  Distribution of accounts by assigned system role.
+                </p>
+              </div>
+
+              <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                👤
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center min-h-[250px]">
+              <div class="flex items-center justify-center">
+                <canvas id="chartRoles" class="!h-[220px] !w-[220px]"></canvas>
+              </div>
+
+              <div
+                id="roleLegend"
+                class="space-y-2 text-sm"
+              >
+                <!-- JS will insert legends -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Monthly Submissions -->
+          <div class="bg-white p-6 rounded-2xl shadow-card border border-gray-100 xl:col-span-2 min-h-[360px]">
+            <div class="flex items-start justify-between gap-3 mb-4">
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900">Monthly Submissions</h3>
+                <p class="text-xs text-gray-500 mt-1">
+                  Proposal submission trend across the academic year.
+                </p>
+              </div>
+
+              <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
+                📈
+              </div>
+            </div>
+
+            <div class="h-[260px]">
+              <canvas id="chartMonthly"></canvas>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ADMIN TOOLS HEADER -->
+        <section class="flex flex-col md:flex-row md:items-end md:justify-between gap-3 border-t border-gray-200 pt-6">
+          <div>
+            <h2 class="text-xl font-semibold text-urds-900">Administrative Tools</h2>
+            <p class="text-sm text-gray-500 mt-1">
+              Quick access to system management functions.
+            </p>
+          </div>
+        </section>
+
+        <!-- TOOL GRID -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+
+          <a
+            href="admin-users.html"
+            class="bg-white p-5 rounded-2xl shadow-card hover:shadow-soft border border-gray-100 transition group"
+          >
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 text-2xl group-hover:bg-blue-100 transition">
+                👥
+              </div>
+
+              <div>
+                <div class="text-sm text-gray-500">User Accounts</div>
+                <div class="text-xl font-bold text-urds-900">Manage</div>
+              </div>
+            </div>
+
+            <p class="text-xs text-gray-400">
+              Add, edit, approve, and remove system users.
+            </p>
+          </a>
+
+          <a
+            href="admin-colleges.html"
+            class="bg-white p-5 rounded-2xl shadow-card hover:shadow-soft border border-gray-100 transition group"
+          >
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 text-2xl group-hover:bg-emerald-100 transition">
+                🏛️
+              </div>
+
+              <div>
+                <div class="text-sm text-gray-500">Colleges & Departments</div>
+                <div class="text-xl font-bold text-urds-900">Organize</div>
+              </div>
+            </div>
+
+            <p class="text-xs text-gray-400">
+              Configure colleges, departments, deans, and logos.
+            </p>
+          </a>
+
+          <a
+            href="admin-logs.html"
+            class="bg-white p-5 rounded-2xl shadow-card hover:shadow-soft border border-gray-100 transition group"
+          >
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600 text-2xl group-hover:bg-purple-100 transition">
+                📋
+              </div>
+
+              <div>
+                <div class="text-sm text-gray-500">System Logs</div>
+                <div class="text-xl font-bold text-urds-900">View</div>
+              </div>
+            </div>
+
+            <p class="text-xs text-gray-400">
+              Review proposal history and account activity.
+            </p>
+          </a>
+
+          <a
+            href="admin-permissions.html"
+            class="bg-white p-5 rounded-2xl shadow-card hover:shadow-soft border border-gray-100 transition group"
+          >
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600 text-2xl group-hover:bg-orange-100 transition">
+                🔐
+              </div>
+
+              <div>
+                <div class="text-sm text-gray-500">Permissions</div>
+                <div class="text-xl font-bold text-urds-900">Control</div>
+              </div>
+            </div>
+
+            <p class="text-xs text-gray-400">
+              Manage role-based access and admin controls.
+            </p>
+          </a>
+
+          <a
+            href="admin-settings.html"
+            class="bg-white p-5 rounded-2xl shadow-card hover:shadow-soft border border-gray-100 transition group"
+          >
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center text-gray-600 text-2xl group-hover:bg-gray-200 transition">
+                ⚙️
+              </div>
+
+              <div>
+                <div class="text-sm text-gray-500">System Settings</div>
+                <div class="text-xl font-bold text-urds-900">Configure</div>
+              </div>
+            </div>
+
+            <p class="text-xs text-gray-400">
+              Set deadlines, academic year, and announcements.
+            </p>
+          </a>
+
+          <a
+            href="admin-pending.html"
+            class="bg-white p-5 rounded-2xl shadow-card hover:shadow-soft border border-gray-100 transition group"
+          >
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-12 h-12 rounded-xl bg-red-50 flex items-center justify-center text-red-600 text-2xl group-hover:bg-red-100 transition">
+                ✅
+              </div>
+
+              <div>
+                <div class="text-sm text-gray-500">Approvals</div>
+                <div class="text-xl font-bold text-urds-900">Review</div>
+              </div>
+            </div>
+
+            <p class="text-xs text-gray-400">
+              Approve or reject pending user registrations.
+            </p>
+          </a>
+
+        </section>
+
+        <!-- RECENT ADMIN ACTIVITIES -->
+        <section class="bg-white p-5 rounded-2xl shadow-card border border-gray-100">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+            <div>
+              <h2 class="text-lg font-semibold text-gray-900">Recent Admin Activities</h2>
+              <p class="text-xs text-gray-500 mt-1">
+                Latest administrative actions and system updates.
+              </p>
+            </div>
+
+            <a
+              href="admin-logs.html"
+              class="text-sm font-bold text-urds-accent hover:underline"
+            >
+              View all
+            </a>
+          </div>
+
+          <div id="activityList" class="space-y-3">
+            <div class="text-sm text-gray-500 bg-gray-50 border border-gray-100 rounded-xl p-4">
+              Loading recent activities...
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script src="js/admin-dashboard.js"></script>
+
+</body>
+</html>

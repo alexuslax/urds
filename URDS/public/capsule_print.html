@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>UEP-URDS-FM-002 • Capsule Research Proposal (Print)</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <style>
+    :root{
+      --pad: 12mm;
+      --contentW: 170mm;     /* keep same width for header/table/divider/footer */
+      --logoW: 82px;
+      --logoGap: 10px;
+      --footerH: 18mm;       /* reserved space so footer won't overlap */
+    }
+
+    * { box-sizing: border-box; }
+    body { font-family: Arial, Helvetica, sans-serif; }
+
+    .tight{ line-height: 1.05; }
+    .f11{ font-size: 11pt; }
+    .f10{ font-size: 10pt; }
+
+    /* Screen preview */
+    @media screen{
+      body{ background:#f3f4f6; padding:18px; }
+      .paper{
+        width: 210mm;
+        margin: 0 auto 18px;
+        background:#fff;
+        box-shadow: 0 8px 18px rgba(0,0,0,.08);
+        padding: var(--pad);
+        padding-bottom: calc(var(--footerH) + 10mm);
+      }
+      .no-print{ display:flex; }
+      .footer-fixed{ position: static; margin-top: 12mm; }
+    }
+
+    /* Print */
+    @media print{
+      .no-print{ display:none !important; }
+      body{ background:#fff !important; margin:0 !important; padding:0 !important; }
+      .paper{
+        width: auto;
+        margin: 0;
+        padding: var(--pad);
+        padding-bottom: calc(var(--footerH) + 10mm);
+      }
+      .footer-fixed{
+        position: fixed;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: var(--pad);
+        width: var(--contentW);
+        margin: 0;
+      }
+    }
+
+    /* ===== HEADER aligned to table width ===== */
+    .top-wrap{
+      width: var(--contentW);
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .header-row{
+      position: relative;
+      min-height: var(--logoW);
+    }
+
+    .header-logo{
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: var(--logoW);
+      height: var(--logoW);
+      object-fit: contain;
+    }
+
+    /* keep true center by reserving equal space left+right */
+    .header-text{
+      padding-left: calc(var(--logoW) + var(--logoGap));
+      padding-right: calc(var(--logoW) + var(--logoGap));
+      text-align: center;
+    }
+
+    .linkish{ color:#1d4ed8; text-decoration: underline; }
+
+    /* Divider same width as table */
+    .divider{
+      width: var(--contentW);
+      margin: 10px auto 0;
+      height: 0;
+      border-top: 3px solid #000;
+      border-bottom: 1px solid #000;
+      padding-top: 2px;
+    }
+
+    /* ===== TITLES ===== */
+    .title-wrap{
+      width: var(--contentW);
+      margin: 4mm auto 0;
+      text-align: center;
+    }
+    .title-urds{
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-bottom: 0;
+    }
+    .title-capsule{
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-top: 3mm;
+    }
+
+    /* ===== MAIN TABLE ===== */
+    .table-wrap{
+      width: var(--contentW);
+      margin: 3mm auto 0;
+    }
+
+    table{ border-collapse: collapse; width:100%; table-layout: fixed; }
+    .t{ border:1px solid #000; }
+    .t td, .t th{ border:1px solid #000; vertical-align: top; background:#fff; }
+
+    /* Like the scanned form: left labels a bit wider */
+    .lbl{
+      width: 34%;
+      padding: 6px 6px;
+      background:#fff;
+      font-weight: bold;
+    }
+    .val{
+      width: 66%;
+      padding: 6px 6px;
+      font-weight: normal;
+      word-wrap: break-word;
+      white-space: pre-wrap;
+      background:#fff;
+    }
+
+    .sec-title{
+      font-weight: bold;
+      padding: 6px 6px;
+      background:#fff;
+    }
+
+    tr{ page-break-inside: avoid; }
+
+    /* ===== FOOTER ===== */
+    .footer-table{
+      width: 100%;
+      border: 1px solid #000;
+      border-collapse: collapse;
+      table-layout: fixed;
+      background: #fff;
+    }
+    .footer-table td{
+      border: 1px solid #000;
+      padding: 4px 8px;
+      vertical-align: top;
+      text-align: left;
+      background:#fff;
+    }
+    .footer-label{
+      display:block;
+      font-size: 10pt;
+      font-weight: bold;
+      line-height: 1;
+      text-align: left;
+    }
+    .footer-value{
+      display:block;
+      font-size: 10pt;
+      font-weight: bold;
+      line-height: 1;
+      margin-top: 2px;
+      text-align: center;
+    }
+
+    /* Small helper for the nature line to look like the form */
+    .nature-line{
+      white-space: pre-wrap;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+  </style>
+</head>
+
+<body class="f11">
+
+  <!-- Screen controls only -->
+  <div class="no-print max-w-[210mm] mx-auto mb-4 flex items-center justify-between px-2">
+    <div class="text-sm text-gray-600">UEP-URDS-FM-002 • Print View</div>
+    <div class="flex gap-2">
+      <button id="btnSavePDF" class="px-3 py-2 rounded-lg bg-green-600 text-white text-sm hover:bg-green-700">💾 Save as PDF</button>
+      <button id="btnPrint" class="px-3 py-2 rounded-lg bg-black text-white text-sm hover:bg-gray-800">🖨️ Print</button>
+      <a class="px-3 py-2 rounded-lg bg-white border text-sm hover:bg-gray-50" href="javascript:history.back()">Back</a>
+    </div>
+  </div>
+
+  <div class="paper">
+
+    <!-- HEADER -->
+    <div class="top-wrap">
+      <div class="header-row">
+        <img src="../public/img/logo.jpg" alt="UEP Logo" class="header-logo">
+        <div class="header-text tight">
+          <div>Republic of the Philippines</div>
+          <div class="font-bold uppercase">UNIVERSITY OF EASTERN PHILIPPINES</div>
+          <div>University Town, Northern Samar, Philippines</div>
+          <div class="f10">
+            Web: <span class="linkish">http://uep.edu.ph</span>;
+            Email: <span class="linkish">uepnsofficial@gmail.com</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIVIDER -->
+    <div class="divider"></div>
+
+    <!-- TITLES -->
+    <div class="title-wrap tight">
+      <div class="title-urds">UNIVERSITY RESEARCH AND DEVELOPMENT SERVICES</div>
+      <div class="title-capsule">CAPSULE RESEARCH PROPOSAL TEMPLATE</div>
+    </div>
+
+    <!-- MAIN TABLE (matches the photo order) -->
+    <div class="table-wrap">
+      <table class="t">
+        <tr>
+          <td class="sec-title" colspan="2">Capsule Research Proposal</td>
+        </tr>
+
+        <tr>
+          <td class="lbl">Title</td>
+          <td class="val" id="cap_title">—</td>
+        </tr>
+
+        <tr>
+          <td class="lbl">Nature of Research<br><span class="f10">(Please check one)</span></td>
+          <td class="val nature-line" id="cap_nature_line">___ Program&nbsp;&nbsp;&nbsp;&nbsp;___ Project&nbsp;&nbsp;&nbsp;&nbsp;___ Study</td>
+        </tr>
+
+        <tr>
+          <td class="lbl">Leader/ Main Proponent</td>
+          <td class="val" id="cap_leader">—</td>
+        </tr>
+
+        <tr>
+          <td class="lbl">Other Personnel Involved</td>
+          <td class="val" id="cap_personnel">—</td>
+        </tr>
+
+        <tr>
+          <td class="lbl">Project Location/s</td>
+          <td class="val" id="cap_location">—</td>
+        </tr>
+
+        <tr>
+          <td class="lbl">Duration</td>
+          <td class="val" id="cap_duration">—</td>
+        </tr>
+
+        <tr>
+          <td class="lbl">Budget for the Year</td>
+          <td class="val" id="cap_budget">—</td>
+        </tr>
+
+        <tr>
+          <td class="lbl">Rationale/Significance of Research</td>
+          <td class="val" id="cap_rationale">—</td>
+        </tr>
+
+        <tr>
+          <td class="lbl">Objectives</td>
+          <td class="val" id="cap_objectives">—</td>
+        </tr>
+
+        <tr>
+          <td class="lbl">Expected Outputs</td>
+          <td class="val" id="cap_outputs">—</td>
+        </tr>
+
+        <tr>
+          <td class="lbl">Brief Methodology</td>
+          <td class="val" id="cap_methodology">—</td>
+        </tr>
+
+        <tr>
+          <td class="lbl">Workplan</td>
+          <td class="val" id="cap_workplan">—</td>
+        </tr>
+
+        <tr>
+          <td class="lbl">Detailed Budgetary Requirement</td>
+          <td class="val" id="cap_budgetreq">—</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer-fixed" style="width: var(--contentW); margin-left:auto; margin-right:auto;">
+      <table class="footer-table">
+        <tr>
+          <td>
+            <span class="footer-label">DOCUMENT NO.:</span>
+            <span class="footer-value" id="cap_docno">UEP-URDS-FM-002</span>
+          </td>
+          <td>
+            <span class="footer-label">REVISION NO.:</span>
+            <span class="footer-value" id="cap_revno">00</span>
+          </td>
+          <td>
+            <span class="footer-label">EFFECTIVITY:</span>
+            <span class="footer-value" id="cap_effect">SEPTEMBER 12, 2022</span>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+  </div>
+
+  <script>
+    document.getElementById("btnPrint")?.addEventListener("click", () => window.print());
+
+    document.getElementById("btnSavePDF")?.addEventListener("click", () => {
+      const element = document.querySelector('.paper');
+      const proposalTitle = document.getElementById('cap_title')?.textContent || 'Capsule_Proposal';
+      const filename = `UEP-URDS-FM-002_${proposalTitle.replace(/[^a-z0-9]/gi, '_')}.pdf`;
+
+      const opt = {
+        margin: 12,
+        filename: filename,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      html2pdf().set(opt).from(element).save();
+    });
+
+    function setText(id, value, fallback="—"){
+      const el = document.getElementById(id);
+      if (!el) return;
+      const v = (value == null || value === "") ? fallback : value;
+      el.textContent = v;
+    }
+
+    function money(value){
+      if (value == null || value === "") return "—";
+      const n = Number(String(value).replace(/,/g,""));
+      if (!Number.isFinite(n)) return String(value);
+      return n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function setNatureLine(nature){
+      const el = document.getElementById("cap_nature_line");
+      if (!el) return;
+
+      const n = String(nature || "").trim().toLowerCase();
+
+      // Keep the "___" look but put an "X" on the selected one
+      const box = (label, selected) => (selected ? "X__ " : "___ ") + label;
+
+      const isProgram = n === "program";
+      const isProject = n === "project";
+      const isStudy   = n === "study";
+
+      el.innerHTML =
+        `${box("Program", isProgram)}&nbsp;&nbsp;&nbsp;&nbsp;` +
+        `${box("Project", isProject)}&nbsp;&nbsp;&nbsp;&nbsp;` +
+        `${box("Study",   isStudy)}`;
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const proposalId = urlParams.get("id");
+
+      if (!proposalId) {
+        alert("No proposal ID provided");
+        return;
+      }
+
+      try {
+        const response = await fetch(`../../backend/get_proposal.php?id=${proposalId}`, {
+          method: "GET",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" }
+        });
+
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+        const result = await response.json();
+        if (result.status !== "success" || !result.proposal) {
+          throw new Error(result.message || "Failed to load proposal");
+        }
+
+        const proposal = result.proposal;
+
+        // Map fields (based on your detailed_print.html mapping style)
+        const title      = proposal.title || "—";
+        const leader     = proposal.leader || proposal.studyLeader || "—";
+        const duration   = proposal.durationMonths ? `${proposal.durationMonths} months` : "—";
+        const location   = proposal.location || "—";
+        const personnel  = proposal.otherPersonnel || "—";
+        const nature     = proposal.nature || "—";
+        const budgetYear = proposal.estimatedBudget;
+
+        const rationale  = proposal.rationale || "—";
+        const objectives = proposal.objectives || "—";
+        const outputs    = proposal.expectedOutput || "—";
+        const method     = proposal.methodology || "—";
+
+        setText("cap_title", title);
+        setText("cap_leader", leader);
+        setText("cap_personnel", personnel);
+        setText("cap_location", location);
+        setText("cap_duration", duration);
+        setNatureLine(nature);
+
+        if (budgetYear != null) setText("cap_budget", money(budgetYear));
+
+        setText("cap_rationale", rationale);
+        setText("cap_objectives", objectives);
+        setText("cap_outputs", outputs);
+        setText("cap_methodology", method);
+
+        // Workplan + Budget requirement wording like your detailed page
+        const workplanText = (proposal.workplan && proposal.workplan.length > 0)
+          ? "See FM-004 Workplan attached"
+          : "—";
+        setText("cap_workplan", workplanText);
+
+        // Your API sometimes stores budget as object or string; keep it robust:
+        const b = proposal.budget || null;
+        const hasBudget =
+          (b && typeof b === "object" && (
+            (Array.isArray(b.personalServices) && b.personalServices.length) ||
+            (Array.isArray(b.mooe) && b.mooe.length) ||
+            (Array.isArray(b.equipment) && b.equipment.length) ||
+            (b.mooe && typeof b.mooe === "object" && Object.values(b.mooe).some(v => Array.isArray(v) && v.length))
+          )) || false;
+
+        const budgetReqText = hasBudget ? "See FM-005 Budget attached" : "—";
+        setText("cap_budgetreq", budgetReqText);
+
+      } catch (error) {
+        console.error("Error loading proposal:", error);
+        alert("Failed to load proposal: " + error.message);
+      }
+    });
+  </script>
+
+</body>
+</html>

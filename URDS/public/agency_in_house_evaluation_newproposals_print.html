@@ -1,0 +1,853 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>UEP-URDS-FM-011 • Agency In-House Review Evaluation Form</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #eef0f3;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #000;
+      font-size: 11pt;
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: #fff;
+      border-bottom: 1px solid #d1d5db;
+      padding: 10px 16px;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .toolbar button {
+      border: 1px solid #cbd5e1;
+      background: #fff;
+      padding: 7px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .toolbar .primary {
+      background: #16a34a;
+      color: #fff;
+      border-color: #16a34a;
+    }
+
+    .toolbar .dark {
+      background: #111827;
+      color: #fff;
+      border-color: #111827;
+    }
+
+    .page-wrap {
+      padding: 28px 0;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto 24px;
+      background: #fff;
+      padding: 10mm 18mm 14mm;
+      box-shadow: 0 8px 28px rgba(15, 23, 42, 0.16);
+      position: relative;
+      page-break-after: always;
+    }
+
+    .page:last-child {
+      page-break-after: auto;
+    }
+
+    .page-inner {
+      width: 174mm;
+      min-height: calc(297mm - 24mm);
+      margin: 0 auto;
+      position: relative;
+      padding-bottom: 22mm;
+    }
+
+    .header {
+      position: relative;
+      min-height: 28mm;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .logo-wrap {
+      position: absolute;
+      left: 0;
+      top: 1mm;
+      width: 22mm;
+      height: 22mm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo {
+      width: 20mm;
+      height: 20mm;
+      object-fit: contain;
+      display: block;
+    }
+
+    .header-text {
+      text-align: center;
+      width: 100%;
+      line-height: 1.1;
+      padding-left: 28mm;
+      padding-right: 10mm;
+    }
+
+    .republic {
+      font-size: 11pt;
+      font-weight: 400;
+    }
+
+    .university {
+      font-size: 13pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.2px;
+    }
+
+    .address {
+      font-size: 10.5pt;
+      font-weight: 400;
+    }
+
+    .contact {
+      font-size: 10pt;
+      font-weight: 400;
+    }
+
+    .contact a {
+      color: #0645ad;
+      text-decoration: underline;
+    }
+
+    .top-rule {
+      border-top: 2px solid #000;
+      border-bottom: 1px solid #000;
+      height: 5px;
+      margin-top: 5mm;
+    }
+
+    .office-title {
+      text-align: center;
+      font-size: 10.8pt;
+      font-weight: 700;
+      margin-top: 6mm;
+      text-transform: uppercase;
+      letter-spacing: 0.2px;
+    }
+
+    .doc-title {
+      text-align: center;
+      font-size: 10.6pt;
+      font-weight: 700;
+      margin-top: 4mm;
+      text-transform: uppercase;
+      line-height: 1.25;
+    }
+
+    .content {
+      margin-top: 8mm;
+      font-size: 10.8pt;
+      line-height: 1.25;
+    }
+
+    .info-row {
+      display: grid;
+      grid-template-columns: 8mm auto 1fr;
+      align-items: end;
+      column-gap: 3mm;
+      margin-bottom: 2mm;
+      font-size: 10.5pt;
+    }
+
+    .info-letter {
+      font-weight: 400;
+    }
+
+    .info-label {
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .info-line {
+      min-height: 5mm;
+      border-bottom: 1px solid #000;
+      padding: 0 2mm 1px;
+      font-weight: 400;
+    }
+
+    .section-heading {
+      margin-top: 6mm;
+      margin-bottom: 3mm;
+      font-size: 10.6pt;
+      font-weight: 600;
+    }
+
+    .comment-block {
+      margin-top: 8mm;
+    }
+
+    .comment-label {
+      font-size: 10.6pt;
+      font-weight: 400;
+      margin-bottom: 2mm;
+    }
+
+    .comment-space {
+      min-height: 22mm;
+      white-space: pre-line;
+      padding-top: 1mm;
+      font-weight: 400;
+    }
+
+    .comment-space.small {
+      min-height: 18mm;
+    }
+
+    .rating-title {
+      margin-top: 2mm;
+      margin-bottom: 4mm;
+      font-size: 10.8pt;
+      font-weight: 400;
+    }
+
+    .rating-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10pt;
+    }
+
+    .rating-table th,
+    .rating-table td {
+      border: 1px solid #000;
+      vertical-align: top;
+      padding: 5px 7px;
+      font-weight: 400;
+    }
+
+    .rating-table th {
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .criteria-col {
+      width: 63%;
+    }
+
+    .point-col {
+      width: 15%;
+      text-align: center;
+    }
+
+    .remarks-col {
+      width: 22%;
+    }
+
+    .criteria-title {
+      font-weight: 400;
+    }
+
+    .criteria-list {
+      margin: 3px 0 0 18px;
+      padding: 0;
+    }
+
+    .criteria-list li {
+      margin-bottom: 2px;
+      font-weight: 400;
+    }
+
+    .row-lg td {
+      height: 26mm;
+    }
+
+    .row-md td {
+      height: 21mm;
+    }
+
+    .row-sm td {
+      height: 12mm;
+    }
+
+    .total-row td {
+      height: 11mm;
+      font-weight: 600;
+    }
+
+    .signature-area {
+      width: 68mm;
+      margin-left: auto;
+      margin-top: 18mm;
+      text-align: center;
+      font-size: 10.5pt;
+      font-weight: 400;
+    }
+
+    .signature-line {
+      border-top: 1px solid #000;
+      height: 5mm;
+      margin-bottom: 2mm;
+    }
+
+    .sig-date-line {
+      width: 40mm;
+      border-top: 1px solid #000;
+      margin: 14mm auto 0;
+      height: 4mm;
+    }
+
+    .footer {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      border: 1px solid #000;
+      font-size: 9pt;
+      text-align: center;
+      background: #fff;
+    }
+
+    .footer div {
+      min-height: 10mm;
+      padding: 3px 6px;
+      border-right: 1px solid #000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      line-height: 1.1;
+      font-weight: 600;
+    }
+
+    .footer div:last-child {
+      border-right: none;
+    }
+
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        margin: 0;
+        padding: 0;
+      }
+
+      .toolbar {
+        display: none !important;
+      }
+
+      .page-wrap {
+        padding: 0;
+      }
+
+      .page {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 0;
+        box-shadow: none;
+        padding: 10mm 18mm 14mm;
+        page-break-after: always;
+      }
+
+      .page:last-child {
+        page-break-after: auto;
+      }
+
+      * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="toolbar">
+    <button class="primary" type="button" id="savePdfBtn">Save as PDF</button>
+    <button class="dark" type="button" onclick="window.print()">Print</button>
+    <button type="button" onclick="goBack()">Back</button>
+  </div>
+
+  <div class="page-wrap" id="pdfContent">
+
+    <!-- PAGE 1 -->
+    <main class="page">
+      <div class="page-inner">
+        <header>
+          <div class="header">
+            <div class="logo-wrap">
+              <img id="uepLogo" class="logo" src="img/logo.jpg" alt="UEP Logo" />
+            </div>
+
+            <div class="header-text">
+              <div class="republic">Republic of the Philippines</div>
+              <div class="university">UNIVERSITY OF EASTERN PHILIPPINES</div>
+              <div class="address">University Town, Northern Samar, Philippines</div>
+              <div class="contact">
+                Web: <a href="#">http://uep.edu.ph</a>; Email: <a href="#">uepnsofficial@gmail.com</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="top-rule"></div>
+
+          <div class="office-title">UNIVERSITY RESEARCH AND DEVELOPMENT SERVICES</div>
+          <div class="doc-title">
+            <span id="formYear">(YEAR)</span> AGENCY IN-HOUSE REVIEW EVALUATION FORM<br />
+            FOR NEW PROPOSALS
+          </div>
+        </header>
+
+        <section class="content">
+          <div class="info-row">
+            <div class="info-letter">A.</div>
+            <div class="info-label">PROJECT/STUDY/ACTIVITY TITLE:</div>
+            <div class="info-line" id="projectStudyActivityTitle"></div>
+          </div>
+
+          <div class="info-row">
+            <div class="info-letter">B.</div>
+            <div class="info-label">PROGRAM/PROJECT LEADER(S)/PROPONENTS:</div>
+            <div class="info-line" id="programProjectLeaders"></div>
+          </div>
+
+          <div class="info-row">
+            <div class="info-letter">C.</div>
+            <div class="info-label">IMPLEMENTING COLLEGE/DEPARTMENT:</div>
+            <div class="info-line" id="implementingCollegeDepartment"></div>
+          </div>
+
+          <div class="info-row">
+            <div class="info-letter">D.</div>
+            <div class="info-label">FUNDING AGENCY:</div>
+            <div class="info-line" id="fundingAgency"></div>
+          </div>
+
+          <div class="info-row">
+            <div class="info-letter">E.</div>
+            <div class="info-label">DURATION (Definite Date):</div>
+            <div class="info-line" id="durationDefiniteDate"></div>
+          </div>
+
+          <div class="section-heading">F. &nbsp; EVALUATOR’S ANALYSIS/RECOMMENDATIONS/COMMENTS</div>
+
+          <div class="comment-block">
+            <div class="comment-label">Title:</div>
+            <div class="comment-space small" id="titleComments"></div>
+          </div>
+
+          <div class="comment-block">
+            <div class="comment-label">Objectives:</div>
+            <div class="comment-space small" id="objectivesComments"></div>
+          </div>
+
+          <div class="comment-block">
+            <div class="comment-label">Methodology:</div>
+            <div class="comment-space small" id="methodologyComments"></div>
+          </div>
+
+          <div class="comment-block">
+            <div class="comment-label">Output:</div>
+            <div class="comment-space small" id="outputComments"></div>
+          </div>
+
+          <div class="comment-block">
+            <div class="comment-label">Impact/Sustainability:</div>
+            <div class="comment-space small" id="impactSustainabilityComments"></div>
+          </div>
+
+          <div class="comment-block">
+            <div class="comment-label">General Comments:</div>
+            <div class="comment-space small" id="generalComments"></div>
+          </div>
+        </section>
+
+        <footer class="footer">
+          <div>
+            <span>DOCUMENT NO.:</span>
+            <span>UEP-URDS-FM-011</span>
+          </div>
+          <div>
+            <span>REVISION NO.:</span>
+            <span>00</span>
+          </div>
+          <div>
+            <span>EFFECTIVITY</span>
+            <span>SEPTEMBER 12, 2022</span>
+          </div>
+        </footer>
+      </div>
+    </main>
+
+    <!-- PAGE 2 -->
+    <main class="page">
+      <div class="page-inner">
+        <section class="content">
+          <div class="rating-title">G. &nbsp; EVALUATOR’S RATING</div>
+
+          <table class="rating-table">
+            <thead>
+              <tr>
+                <th class="criteria-col">Criteria</th>
+                <th class="point-col">Point</th>
+                <th class="remarks-col">Remarks</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="row-md">
+                <td>
+                  <div class="criteria-title">Track record /competence of main proponent &nbsp; (10 points)</div>
+                  <ul class="criteria-list">
+                    <li>Academic qualification</li>
+                    <li>Research experience in field of specialization</li>
+                  </ul>
+                </td>
+                <td id="trackRecordPoint"></td>
+                <td id="trackRecordRemarks"></td>
+              </tr>
+
+              <tr class="row-lg">
+                <td>
+                  <div class="criteria-title">Relevance of the research (to UEP-URDA) &nbsp; (20 points)</div>
+                  <ul class="criteria-list">
+                    <li>Aligned to URDA</li>
+                    <li>Comprehensive review of literature</li>
+                    <li>Clarity of objectives and expected outputs</li>
+                  </ul>
+                </td>
+                <td id="researchRelevancePoint"></td>
+                <td id="researchRelevanceRemarks"></td>
+              </tr>
+
+              <tr class="row-lg">
+                <td>
+                  <div class="criteria-title">Generation of new knowledge or innovativeness &nbsp; (30 points)</div>
+                  <ul class="criteria-list">
+                    <li>Potential for publication</li>
+                    <li>Potential for IPP</li>
+                    <li>Potential for commercialization</li>
+                  </ul>
+                </td>
+                <td id="innovativenessPoint"></td>
+                <td id="innovativenessRemarks"></td>
+              </tr>
+
+              <tr class="row-lg">
+                <td>
+                  <div class="criteria-title">Appropriateness of methodology &nbsp; (20 points)</div>
+                  <ul class="criteria-list">
+                    <li>Appropriateness of research design</li>
+                    <li>Availability of facilities and expertise</li>
+                    <li>Appropriate data collection and analysis procedures</li>
+                  </ul>
+                </td>
+                <td id="methodologyPoint"></td>
+                <td id="methodologyRemarks"></td>
+              </tr>
+
+              <tr class="row-sm">
+                <td>
+                  <div class="criteria-title">Potential environmental impact &nbsp; (10 points)</div>
+                </td>
+                <td id="environmentalImpactPoint"></td>
+                <td id="environmentalImpactRemarks"></td>
+              </tr>
+
+              <tr class="row-sm">
+                <td>
+                  <div class="criteria-title">Potential socio-economic impact &nbsp; (10 points)</div>
+                </td>
+                <td id="socioEconomicImpactPoint"></td>
+                <td id="socioEconomicImpactRemarks"></td>
+              </tr>
+
+              <tr class="total-row">
+                <td>Total</td>
+                <td id="totalPoint"></td>
+                <td id="totalRemarks"></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="signature-area">
+            <div class="signature-line"></div>
+            <div>Name &amp; Signature of Evaluator</div>
+            <div class="sig-date-line"></div>
+          </div>
+        </section>
+
+        <footer class="footer">
+          <div>
+            <span>DOCUMENT NO.:</span>
+            <span>UEP-URDS-FM-011</span>
+          </div>
+          <div>
+            <span>REVISION NO.:</span>
+            <span>00</span>
+          </div>
+          <div>
+            <span>EFFECTIVITY</span>
+            <span>SEPTEMBER 12, 2022</span>
+          </div>
+        </footer>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      const logoPaths = [
+        "img/logo.jpg",
+        "img/uep-logo.png",
+        "img/uep-logo.jpg",
+        "assets/uep-logo.png",
+        "assets/logo.png",
+        "../public/img/logo.jpg"
+      ];
+
+      const logo = document.getElementById("uepLogo");
+      let logoIndex = 0;
+
+      if (logo) {
+        logo.onerror = function () {
+          logoIndex += 1;
+          if (logoIndex < logoPaths.length) {
+            logo.src = logoPaths[logoIndex];
+          } else {
+            logo.style.display = "none";
+          }
+        };
+        logo.src = logoPaths[0];
+      }
+
+      const params = new URLSearchParams(window.location.search);
+
+      const proposalId =
+        params.get("id") ||
+        localStorage.getItem("viewProposalId") ||
+        "";
+
+      const draftKeys = [
+        "agency_in_house_review_draft_" + (proposalId || "no_proposal"),
+        "agencyReviewDraft:" + (proposalId || "no_proposal"),
+        "fm011_agency_review_draft_" + (proposalId || "no_proposal")
+      ];
+
+      const defaultData = {
+        form_year: "",
+        project_study_activity_title: "",
+        program_project_leaders: "",
+        implementing_college_department: "",
+        funding_agency: "",
+        duration_definite_date: "",
+        title_comments: "",
+        objectives_comments: "",
+        methodology_comments: "",
+        output_comments: "",
+        impact_sustainability_comments: "",
+        general_comments: "",
+        track_record_point: "",
+        track_record_remarks: "",
+        research_relevance_point: "",
+        research_relevance_remarks: "",
+        innovativeness_point: "",
+        innovativeness_remarks: "",
+        methodology_point: "",
+        methodology_remarks: "",
+        environmental_impact_point: "",
+        environmental_impact_remarks: "",
+        socio_economic_impact_point: "",
+        socio_economic_impact_remarks: "",
+        total_point: "",
+        total_remarks: ""
+      };
+
+      const data = loadDraft();
+      fillPage(data);
+
+      document.getElementById("savePdfBtn")?.addEventListener("click", () => {
+        const element = document.getElementById("pdfContent");
+        const title = data.project_study_activity_title || "Agency_In_House_Review";
+        const cleanTitle = String(title).replace(/[^a-z0-9]/gi, "_").slice(0, 70);
+
+        html2pdf()
+          .set({
+            margin: 0,
+            filename: "UEP-URDS-FM-011_" + cleanTitle + ".pdf",
+            image: { type: "jpeg", quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+          })
+          .from(element)
+          .save();
+      });
+
+      function loadDraft() {
+        for (const key of draftKeys) {
+          try {
+            const raw = localStorage.getItem(key);
+            if (!raw) continue;
+            const saved = JSON.parse(raw);
+            return normalizeData(Object.assign({}, defaultData, saved || {}));
+          } catch (error) {
+            console.warn("Unable to load draft key:", key, error);
+          }
+        }
+        return defaultData;
+      }
+
+      function normalizeData(raw) {
+        return {
+          form_year: raw.form_year || raw.formYear || raw.year || "",
+          project_study_activity_title:
+            raw.project_study_activity_title ||
+            raw.projectStudyActivityTitle ||
+            raw.project_title ||
+            raw.study_title ||
+            raw.activity_title ||
+            raw.title ||
+            "",
+          program_project_leaders:
+            raw.program_project_leaders ||
+            raw.programProjectLeaders ||
+            raw.project_leaders ||
+            raw.proponents ||
+            raw.leaders ||
+            "",
+          implementing_college_department:
+            raw.implementing_college_department ||
+            raw.implementingCollegeDepartment ||
+            raw.college_department ||
+            raw.college ||
+            raw.department ||
+            "",
+          funding_agency: raw.funding_agency || raw.fundingAgency || "",
+          duration_definite_date:
+            raw.duration_definite_date ||
+            raw.durationDefiniteDate ||
+            raw.duration ||
+            "",
+          title_comments: raw.title_comments || raw.titleComments || "",
+          objectives_comments: raw.objectives_comments || raw.objectivesComments || "",
+          methodology_comments: raw.methodology_comments || raw.methodologyComments || "",
+          output_comments: raw.output_comments || raw.outputComments || "",
+          impact_sustainability_comments:
+            raw.impact_sustainability_comments ||
+            raw.impactSustainabilityComments ||
+            "",
+          general_comments: raw.general_comments || raw.generalComments || "",
+          track_record_point: raw.track_record_point || raw.trackRecordPoint || "",
+          track_record_remarks: raw.track_record_remarks || raw.trackRecordRemarks || "",
+          research_relevance_point:
+            raw.research_relevance_point || raw.researchRelevancePoint || "",
+          research_relevance_remarks:
+            raw.research_relevance_remarks || raw.researchRelevanceRemarks || "",
+          innovativeness_point:
+            raw.innovativeness_point || raw.innovativenessPoint || "",
+          innovativeness_remarks:
+            raw.innovativeness_remarks || raw.innovativenessRemarks || "",
+          methodology_point: raw.methodology_point || raw.methodologyPoint || "",
+          methodology_remarks:
+            raw.methodology_remarks || raw.methodologyRemarks || "",
+          environmental_impact_point:
+            raw.environmental_impact_point || raw.environmentalImpactPoint || "",
+          environmental_impact_remarks:
+            raw.environmental_impact_remarks || raw.environmentalImpactRemarks || "",
+          socio_economic_impact_point:
+            raw.socio_economic_impact_point || raw.socioEconomicImpactPoint || "",
+          socio_economic_impact_remarks:
+            raw.socio_economic_impact_remarks || raw.socioEconomicImpactRemarks || "",
+          total_point: raw.total_point || raw.totalPoint || "",
+          total_remarks: raw.total_remarks || raw.totalRemarks || ""
+        };
+      }
+
+      function fillPage(d) {
+        setText("formYear", d.form_year ? "(" + d.form_year + ")" : "(YEAR)");
+
+        setText("projectStudyActivityTitle", d.project_study_activity_title);
+        setText("programProjectLeaders", d.program_project_leaders);
+        setText("implementingCollegeDepartment", d.implementing_college_department);
+        setText("fundingAgency", d.funding_agency);
+        setText("durationDefiniteDate", d.duration_definite_date);
+
+        setParagraph("titleComments", d.title_comments);
+        setParagraph("objectivesComments", d.objectives_comments);
+        setParagraph("methodologyComments", d.methodology_comments);
+        setParagraph("outputComments", d.output_comments);
+        setParagraph("impactSustainabilityComments", d.impact_sustainability_comments);
+        setParagraph("generalComments", d.general_comments);
+
+        setText("trackRecordPoint", d.track_record_point);
+        setParagraph("trackRecordRemarks", d.track_record_remarks);
+
+        setText("researchRelevancePoint", d.research_relevance_point);
+        setParagraph("researchRelevanceRemarks", d.research_relevance_remarks);
+
+        setText("innovativenessPoint", d.innovativeness_point);
+        setParagraph("innovativenessRemarks", d.innovativeness_remarks);
+
+        setText("methodologyPoint", d.methodology_point);
+        setParagraph("methodologyRemarks", d.methodology_remarks);
+
+        setText("environmentalImpactPoint", d.environmental_impact_point);
+        setParagraph("environmentalImpactRemarks", d.environmental_impact_remarks);
+
+        setText("socioEconomicImpactPoint", d.socio_economic_impact_point);
+        setParagraph("socioEconomicImpactRemarks", d.socio_economic_impact_remarks);
+
+        setText("totalPoint", d.total_point);
+        setParagraph("totalRemarks", d.total_remarks);
+      }
+
+      function setText(id, value) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.textContent = String(value || "").trim() || " ";
+      }
+
+      function setParagraph(id, value) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.textContent = String(value || "").trim() || "";
+      }
+
+      window.goBack = function () {
+        if (proposalId) {
+          window.location.href = "agency_in_house_review_form.html?id=" + encodeURIComponent(proposalId);
+        } else {
+          window.location.href = "agency_in_house_review_form.html";
+        }
+      };
+    })();
+  </script>
+</body>
+</html>
