@@ -1,4 +1,0 @@
-DirectoryIndex URDS/public/login.html
-
-RewriteEngine On
-RewriteRule ^$ URDS/public/login.html [R=302,L]
