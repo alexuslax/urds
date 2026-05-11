@@ -23,6 +23,8 @@ echo "Apache ports.conf:"
 cat /etc/apache2/ports.conf
 echo "Enabled MPM modules:"
 find /etc/apache2/mods-enabled -maxdepth 1 -type l -name 'mpm_*' -print
+echo "Apache default vhost:"
+cat /etc/apache2/sites-available/000-default.conf
 
 apache2ctl -t
 exec apache2-foreground
