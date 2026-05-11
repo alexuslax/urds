@@ -33,7 +33,7 @@
       background:
         radial-gradient(circle at 15% 20%, rgba(14, 165, 164, 0.18), transparent 42%),
         linear-gradient(130deg, rgba(23, 32, 51, 0.62), rgba(15, 23, 42, 0.56)),
-        url('../public/img/bg2.jpg') center/cover no-repeat;
+        url('img/bg2.jpg') center/cover no-repeat;
     }
 
     .panel-card {
@@ -141,7 +141,7 @@
       <!-- Header -->
       <div class="flex items-center justify-between gap-4 mb-7">
         <div class="flex items-center gap-3">
-          <img src="../public/img/logo.jpg" alt="UEP Logo" class="w-12 h-12 rounded-2xl object-cover border border-gray-100" />
+          <img src="img/logo.jpg" alt="UEP Logo" class="w-12 h-12 rounded-2xl object-cover border border-gray-100" />
           <div>
             <h1 class="text-base font-extrabold tracking-tight text-urds-900">UEP URDS</h1>
             <p class="text-xs text-gray-500">Research Management</p>
@@ -268,7 +268,7 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
   errorMsg.textContent = "";
 
   try {
-    const response = await fetch("../../backend/login.php", {
+    const response = await fetch("/backend/login.php", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`

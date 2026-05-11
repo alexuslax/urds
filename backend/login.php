@@ -1,8 +1,15 @@
 <?php
 session_start();
-require_once "db.php";
-
 header("Content-Type: application/json");
+
+try {
+    require_once "db.php";
+} catch (Throwable $e) {
+    error_log("Login database connection failed: " . $e->getMessage());
+    http_response_code(500);
+    echo json_encode(["status" => "error", "message" => "Database connection failed"]);
+    exit;
+}
 
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
     echo json_encode(["status" => "error", "message" => "Invalid request"]);
@@ -19,10 +26,20 @@ if ($username === "" || $password === "") {
 
 // Fetch user (active only)
 $sql = "SELECT * FROM users WHERE username = ? AND is_active = 1 LIMIT 1";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $username);
-$stmt->execute();
-$result = $stmt->get_result();
+try {
+    $stmt = $conn->prepare($sql);
+    if (!$stmt) {
+        throw new Exception($conn->error);
+    }
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+} catch (Throwable $e) {
+    error_log("Login query failed: " . $e->getMessage());
+    http_response_code(500);
+    echo json_encode(["status" => "error", "message" => "Login query failed"]);
+    exit;
+}
 
 if ($result->num_rows !== 1) {
     echo json_encode(["status"=>"error","message"=>"User not found or inactive"]);
