@@ -3,6 +3,8 @@ set -eu
 
 PORT="${PORT:-80}"
 
+rm -f /etc/apache2/mods-enabled/mpm_*.load /etc/apache2/mods-enabled/mpm_*.conf
+
 if grep -q "^Listen " /etc/apache2/ports.conf; then
     sed -i "s/^Listen .*/Listen ${PORT}/" /etc/apache2/ports.conf
 else

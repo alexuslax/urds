@@ -8,6 +8,7 @@ COPY . /var/www/html/
 RUN a2enmod rewrite \
     && mkdir -p /var/www/html/uploads/proposals /var/www/html/uploads/announcements /var/www/html/uploads/profile_pictures \
     && chmod +x /var/www/html/docker-entrypoint.sh \
+    && rm -f /etc/apache2/mods-enabled/mpm_*.load /etc/apache2/mods-enabled/mpm_*.conf \
     && chown -R www-data:www-data /var/www/html/uploads
 
 EXPOSE 80
