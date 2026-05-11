@@ -7,7 +7,7 @@ try {
 } catch (Throwable $e) {
     error_log("Login database connection failed: " . $e->getMessage());
     http_response_code(500);
-    echo json_encode(["status" => "error", "message" => "Database connection failed"]);
+    echo json_encode(["status" => "error", "message" => "Database connection failed: " . $e->getMessage()]);
     exit;
 }
 
