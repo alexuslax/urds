@@ -6,9 +6,9 @@ if ($url) {
     $db = parse_url($url);
     $host = $db["host"] ?? "localhost";
     $port = $db["port"] ?? 3306;
-    $user = $db["user"] ?? "root";
+    $user = isset($db["user"]) ? urldecode($db["user"]) : "root";
     $pass = isset($db["pass"]) ? urldecode($db["pass"]) : "";
-    $dbname = isset($db["path"]) ? ltrim($db["path"], "/") : "research_db";
+    $dbname = isset($db["path"]) ? urldecode(ltrim($db["path"], "/")) : "research_db";
 } else {
     $host = getenv("MYSQLHOST") ?: getenv("DB_HOST") ?: "localhost";
     $port = getenv("MYSQLPORT") ?: getenv("DB_PORT") ?: 3306;
