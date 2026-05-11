@@ -1,5 +1,4 @@
 <?php
-<<<<<<< HEAD
 $url = getenv("MYSQL_URL") ?: getenv("DATABASE_URL");
 
 if ($url) {
@@ -19,15 +18,6 @@ if ($url) {
 
 // Suppress connection warnings
 $conn = @new mysqli($host, $user, $pass, $dbname, (int) $port);
-=======
-$host = "localhost";
-$user = "root"; // default XAMPP username
-$pass = "";     // default XAMPP password
-$dbname = "research_db";
-
-// Suppress connection warnings
-$conn = @new mysqli($host, $user, $pass, $dbname);
->>>>>>> origin/master
 
 if ($conn->connect_error) {
     // Don't die with HTML, let calling script handle error
