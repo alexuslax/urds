@@ -85,6 +85,7 @@ A web-based system for managing university research proposals, evaluations, endo
 
 ---
 
+<<<<<<< HEAD
 ## 🚂 Railway Deployment
 
 This repository includes a `Dockerfile`, `.htaccess`, and `railway.json` so Railway builds it as a PHP/Apache app.
@@ -114,6 +115,8 @@ This repository includes a `Dockerfile`, `.htaccess`, and `railway.json` so Rail
 
 ---
 
+=======
+>>>>>>> origin/master
 ## 🔐 User Roles
 
 | Role | Access Level |
