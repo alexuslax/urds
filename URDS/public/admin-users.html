@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Manage Users | UEP-URDS</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            urds: {
+              950: "#0f172a",
+              900: "#172033",
+              800: "#1f2b3a",
+              700: "#2f3f55",
+              accent: "#0ea5a4"
+            }
+          },
+          boxShadow: {
+            card: "0 6px 20px rgba(18,26,40,0.06)",
+            soft: "0 10px 30px rgba(15,23,42,0.08)"
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .form-input {
+      width: 100%;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      padding: 0.75rem 0.875rem;
+      border-radius: 0.75rem;
+      font-size: 0.875rem;
+      transition: all 0.15s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #0ea5a4;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(14,165,164,0.18);
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-900 antialiased h-screen overflow-hidden">
+
+  <div class="h-screen flex overflow-hidden">
+
+    <!-- SIDEBAR -->
+    <aside
+      id="sidebar"
+      class="w-72 h-screen bg-urds-900 text-white shrink-0 overflow-y-auto"
+    ></aside>
+
+    <!-- MAIN WRAPPER -->
+    <div class="flex-1 min-w-0 h-screen overflow-y-auto">
+
+      <!-- HEADER -->
+      <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-30">
+        <div class="flex items-center gap-4 min-w-0">
+          <button
+            id="hamburger"
+            type="button"
+            class="md:hidden w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition"
+          >
+            ☰
+          </button>
+
+          <div>
+            <div class="text-xs text-gray-500">UEP-URDS / Administration</div>
+            <h1 class="text-xl font-semibold mt-1">User Accounts</h1>
+            <p class="hidden sm:block text-xs text-gray-500 mt-0.5">
+              Manage registered users, roles, colleges, departments, and account access.
+            </p>
+          </div>
+        </div>
+
+        <a
+          href="profile.html"
+          class="flex items-center gap-3 rounded-xl hover:bg-gray-50 p-2 transition"
+        >
+          <div class="text-right hidden sm:block">
+            <div class="text-sm font-semibold user-name">Admin</div>
+            <div class="text-xs text-gray-500 user-role">Administrator</div>
+          </div>
+
+          <div class="w-10 h-10 rounded-full bg-urds-accent text-white flex items-center justify-center font-bold user-initials">
+            A
+          </div>
+        </a>
+      </header>
+
+      <!-- CONTENT -->
+      <main class="p-6 max-w-7xl mx-auto space-y-6">
+
+        <!-- HERO -->
+        <section class="bg-gradient-to-r from-urds-900 to-urds-700 text-white p-6 rounded-2xl shadow-soft overflow-hidden relative">
+          <div class="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-white/10"></div>
+          <div class="absolute right-20 -bottom-16 w-44 h-44 rounded-full bg-white/5"></div>
+
+          <div class="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+            <div>
+              <div class="text-sm text-white/70">Account Management</div>
+              <h2 class="text-2xl md:text-3xl font-bold mt-1">Manage Users</h2>
+              <p class="text-sm text-white/75 mt-2 max-w-2xl">
+                Add, update, and organize user accounts by role, college, and department.
+                Keep system access accurate for researchers, coordinators, evaluators, and administrators.
+              </p>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3">
+              <div class="bg-white/10 border border-white/10 rounded-2xl px-5 py-4 text-center">
+                <div id="totalUsersCount" class="text-2xl font-bold">-</div>
+                <div class="text-xs text-white/70 mt-1">Total Users</div>
+              </div>
+
+              <button
+                id="addUserBtn"
+                type="button"
+                class="px-5 py-3 rounded-xl bg-emerald-600 text-white text-sm font-bold hover:bg-emerald-700 active:bg-emerald-800 active:scale-95 transition"
+              >
+                + Add User
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- FILTERS -->
+        <section class="bg-white p-5 rounded-2xl shadow-card border border-gray-100">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+
+            <div class="md:col-span-2 relative">
+              <input
+                id="userSearch"
+                type="search"
+                placeholder="Search users, roles, colleges, or departments..."
+                class="form-input pl-10"
+              />
+              <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">
+                🔎
+              </span>
+            </div>
+
+            <select id="roleFilter" class="form-input">
+              <option value="">All Roles</option>
+              <option value="Faculty Researcher">Faculty Researcher</option>
+              <option value="College Research Coordinator">College Research Coordinator</option>
+              <option value="Evaluator">Evaluator</option>
+              <option value="College Dean">College Dean</option>
+              <option value="URDS Staff">URDS Staff</option>
+              <option value="URDS Director">URDS Director</option>
+              <option value="Senior Faculty Researcher / TWG">Senior Faculty Researcher / TWG</option>
+              <option value="UREC">UREC</option>
+              <option value="Administrator">Administrator</option>
+            </select>
+
+            <button
+              id="clearUserFilters"
+              type="button"
+              class="px-4 py-3 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-bold transition"
+            >
+              Clear Filters
+            </button>
+
+          </div>
+
+          <div id="userResultCount" class="text-xs text-gray-500 mt-3">
+            Loading users...
+          </div>
+        </section>
+
+        <!-- USERS TABLE -->
+        <section class="bg-white rounded-2xl shadow-card border border-gray-100 overflow-hidden">
+          <div class="px-5 py-4 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900">Registered Users</h3>
+              <p class="text-xs text-gray-500 mt-1">
+                View and manage all active user accounts.
+              </p>
+            </div>
+
+            <span class="inline-flex w-fit items-center px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold">
+              Active Directory
+            </span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full min-w-[900px] text-left border-collapse">
+              <thead class="bg-gray-50">
+                <tr class="border-b border-gray-100 text-xs uppercase tracking-wide text-gray-500">
+                  <th class="px-5 py-3 font-bold">Name</th>
+                  <th class="px-5 py-3 font-bold">Role</th>
+                  <th class="px-5 py-3 font-bold">College</th>
+                  <th class="px-5 py-3 font-bold">Department</th>
+                  <th class="px-5 py-3 font-bold text-center">Actions</th>
+                </tr>
+              </thead>
+
+              <tbody id="userTable" class="divide-y divide-gray-100">
+                <!-- JS will load users here -->
+              </tbody>
+            </table>
+          </div>
+
+          <div
+            id="emptyUsers"
+            class="hidden text-center py-12 px-5"
+          >
+            <div class="mx-auto w-14 h-14 rounded-2xl bg-gray-100 flex items-center justify-center text-2xl mb-4">
+              👥
+            </div>
+
+            <h3 class="text-lg font-bold text-gray-900">
+              No users found
+            </h3>
+
+            <p class="text-sm text-gray-500 mt-2">
+              Try changing your search keyword or selected role filter.
+            </p>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ADD / EDIT USER MODAL -->
+  <div
+    id="userModal"
+    class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm items-center justify-center p-4 z-50"
+  >
+    <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden">
+
+      <div class="bg-gradient-to-r from-urds-900 to-urds-800 px-6 py-4 flex items-center justify-between">
+        <div>
+          <h3 id="modalTitle" class="text-lg font-semibold text-white">
+            Add User
+          </h3>
+          <p class="text-xs text-white/70 mt-1">
+            Fill in the user account information.
+          </p>
+        </div>
+
+        <button
+          id="closeModal"
+          type="button"
+          class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xl flex items-center justify-center transition"
+        >
+          ×
+        </button>
+      </div>
+
+      <div class="p-6 space-y-5">
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+          <div class="md:col-span-2">
+            <label for="userName" class="block text-sm font-semibold text-gray-700">
+              Full Name
+            </label>
+
+            <input
+              id="userName"
+              type="text"
+              class="form-input mt-1"
+              placeholder="Enter full name"
+            />
+          </div>
+
+          <div>
+            <label for="userRole" class="block text-sm font-semibold text-gray-700">
+              Role
+            </label>
+
+            <select id="userRole" class="form-input mt-1">
+              <option value="Faculty Researcher">Faculty Researcher</option>
+              <option value="College Research Coordinator">College Research Coordinator</option>
+              <option value="Evaluator">Evaluator</option>
+              <option value="College Dean">College Dean</option>
+              <option value="URDS Staff">URDS Staff</option>
+              <option value="URDS Director">URDS Director</option>
+              <option value="Senior Faculty Researcher / TWG">Senior Faculty Researcher / TWG</option>
+              <option value="UREC">UREC</option>
+              <option value="Administrator">Administrator</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="userCollege" class="block text-sm font-semibold text-gray-700">
+              College
+            </label>
+
+            <input
+              id="userCollege"
+              type="text"
+              class="form-input mt-1"
+              placeholder="Enter college"
+            />
+          </div>
+
+          <div>
+            <label for="userDepartment" class="block text-sm font-semibold text-gray-700">
+              Department
+            </label>
+
+            <input
+              id="userDepartment"
+              type="text"
+              class="form-input mt-1"
+              placeholder="Enter department"
+            />
+          </div>
+
+          <div>
+            <label for="userPassword" class="block text-sm font-semibold text-gray-700">
+              Password
+            </label>
+
+            <input
+              id="userPassword"
+              type="password"
+              class="form-input mt-1"
+              placeholder="Leave blank to keep current password"
+            />
+
+            <p class="text-xs text-gray-500 mt-1">
+              Required when adding a new user.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-4 border-t border-gray-100">
+          <p class="text-xs text-gray-500">
+            Make sure the selected role matches the user’s official responsibility.
+          </p>
+
+          <div class="flex flex-col sm:flex-row gap-2">
+            <button
+              id="cancelUserBtn"
+              type="button"
+              class="px-5 py-3 bg-white border border-gray-200 hover:bg-gray-100 rounded-xl text-sm font-bold text-gray-700 active:scale-95 transition"
+            >
+              Cancel
+            </button>
+
+            <button
+              id="saveUserBtn"
+              type="button"
+              class="px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-bold active:scale-95 transition"
+            >
+              Save User
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div id="toastContainer" class="fixed bottom-6 right-6 space-y-2 z-50"></div>
+
+  <script src="js/main.js"></script>
+  <script src="js/admin-users.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FM-008 Completed Research Template</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            urds: { 900: "#172033", 800: "#1f2b3a", accent: "#0ea5a4" }
+          },
+          boxShadow: {
+            card: "0 6px 20px rgba(18,26,40,0.06)"
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-gray-50 font-inter antialiased">
+  <div class="min-h-screen flex">
+    <aside id="sidebar" class="w-72 bg-urds-900 text-white shrink-0"></aside>
+
+    <div class="flex-1">
+      <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <button id="hamburger" class="md:hidden w-10 h-10 bg-gray-100 rounded-md flex items-center justify-center">
+            ☰
+          </button>
+          <div>
+            <div class="text-lg font-semibold">FM-008 Completed Research Template</div>
+            <div class="text-xs text-gray-500">Final completed research report encoder</div>
+          </div>
+        </div>
+
+        <a href="profile.html" class="flex items-center gap-3">
+          <div class="text-right">
+            <div class="text-sm font-medium user-name">User</div>
+            <div class="text-xs text-gray-500 user-role">Role</div>
+          </div>
+          <div class="w-10 h-10 rounded-full bg-blue-500 text-white flex items-center justify-center user-initials">U</div>
+        </a>
+      </header>
+
+      <main class="p-6 max-w-6xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- LEFT -->
+          <div class="lg:col-span-1 space-y-6">
+            <div id="proposalSummary" class="bg-white p-5 rounded-2xl shadow-card border">
+              <div class="text-sm text-gray-500">Loading proposal...</div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl shadow-card border">
+              <h2 class="text-base font-semibold mb-3">Instructions</h2>
+              <div class="text-sm text-gray-600 space-y-2">
+                <p>This form is for completed research reporting.</p>
+                <p>Complete all final narrative sections and funding details before printing.</p>
+                <p>Use Appendices / Documentation for supporting evidence and outputs.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- MAIN FORM -->
+          <div class="lg:col-span-2">
+            <form id="completedResearchForm" class="bg-white p-6 rounded-2xl shadow-card border space-y-6">
+
+              <!-- I. Basic Information -->
+              <section class="space-y-4">
+                <div>
+                  <h2 class="text-lg font-semibold">I. Basic Information</h2>
+                  <p class="text-xs text-gray-500">Core information for the completed research</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="md:col-span-2">
+                    <label class="block text-sm font-medium">Program / Project / Study Title</label>
+                    <input id="reportTitle" name="report_title" type="text"
+                      class="w-full mt-1 border rounded-lg px-3 py-2 text-sm" />
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium">Researcher(s)</label>
+                    <input id="researchers" name="researchers" type="text"
+                      class="w-full mt-1 border rounded-lg px-3 py-2 text-sm" />
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium">Designation</label>
+                    <input id="designation" name="designation" type="text"
+                      class="w-full mt-1 border rounded-lg px-3 py-2 text-sm"
+                      placeholder="e.g. Faculty Researcher / Project Leader" />
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium">Funding Agency/ies</label>
+                    <input id="fundingAgency" name="funding_agency" type="text"
+                      class="w-full mt-1 border rounded-lg px-3 py-2 text-sm"
+                      placeholder="e.g. UEP / DOST / CHED" />
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium">Implementing Agency/ies</label>
+                    <input id="implementingAgency" name="implementing_agency" type="text"
+                      class="w-full mt-1 border rounded-lg px-3 py-2 text-sm"
+                      placeholder="e.g. University of Eastern Philippines" />
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium">Cooperating Agency/ies</label>
+                    <input id="cooperatingAgency" name="cooperating_agency" type="text"
+                      class="w-full mt-1 border rounded-lg px-3 py-2 text-sm" />
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium">Project Location</label>
+                    <input id="projectLocation" name="project_location" type="text"
+                      class="w-full mt-1 border rounded-lg px-3 py-2 text-sm" />
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium">Duration of the Study</label>
+                    <input id="duration" name="duration" type="text"
+                      class="w-full mt-1 border rounded-lg px-3 py-2 text-sm"
+                      placeholder="e.g. 12 months" />
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium">Total Amount of Research</label>
+                    <input id="totalAmount" name="total_amount" type="number" min="0" step="0.01"
+                      class="w-full mt-1 border rounded-lg px-3 py-2 text-sm" />
+                  </div>
+                </div>
+              </section>
+
+              <!-- II. Acknowledgement -->
+              <section class="space-y-4 border-t pt-6">
+                <div>
+                  <h2 class="text-lg font-semibold">II. Acknowledgement</h2>
+                </div>
+                <textarea id="acknowledgement" name="acknowledgement" rows="5"
+                  class="w-full border rounded-lg px-3 py-2 text-sm"></textarea>
+              </section>
+
+              <!-- III. Abstract -->
+              <section class="space-y-4 border-t pt-6">
+                <div>
+                  <h2 class="text-lg font-semibold">III. Abstract</h2>
+                  <p class="text-xs text-gray-500">Summarize the completed study, major findings, and significance</p>
+                </div>
+                <textarea id="abstract" name="abstract" rows="6"
+                  class="w-full border rounded-lg px-3 py-2 text-sm"></textarea>
+              </section>
+
+              <!-- IV. Technical Description -->
+              <section class="space-y-4 border-t pt-6">
+                <div>
+                  <h2 class="text-lg font-semibold">IV. Technical Description</h2>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium">Rationale</label>
+                  <textarea id="rationale" name="rationale" rows="5"
+                    class="w-full mt-1 border rounded-lg px-3 py-2 text-sm"></textarea>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium">Objectives</label>
+                  <textarea id="objectives" name="objectives" rows="4"
+                    class="w-full mt-1 border rounded-lg px-3 py-2 text-sm"></textarea>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium">Review of Literature</label>
+                  <textarea id="literature" name="literature" rows="5"
+                    class="w-full mt-1 border rounded-lg px-3 py-2 text-sm"></textarea>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium">Methodology</label>
+                  <textarea id="methodology" name="methodology" rows="6"
+                    class="w-full mt-1 border rounded-lg px-3 py-2 text-sm"></textarea>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium">Results and Discussion</label>
+                  <textarea id="resultsDiscussion" name="results_discussion" rows="8"
+                    class="w-full mt-1 border rounded-lg px-3 py-2 text-sm"></textarea>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium">Summary</label>
+                  <textarea id="summary" name="summary" rows="4"
+                    class="w-full mt-1 border rounded-lg px-3 py-2 text-sm"></textarea>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium">Conclusion</label>
+                  <textarea id="conclusion" name="conclusion" rows="4"
+                    class="w-full mt-1 border rounded-lg px-3 py-2 text-sm"></textarea>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium">Recommendation</label>
+                  <textarea id="recommendation" name="recommendation" rows="4"
+                    class="w-full mt-1 border rounded-lg px-3 py-2 text-sm"></textarea>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium">Literature Cited</label>
+                  <textarea id="literatureCited" name="literature_cited" rows="4"
+                    class="w-full mt-1 border rounded-lg px-3 py-2 text-sm"></textarea>
+                </div>
+              </section>
+
+              <!-- V. Appendices -->
+              <section class="space-y-4 border-t pt-6">
+                <div>
+                  <h2 class="text-lg font-semibold">V. Appendices / Documentation</h2>
+                  <p class="text-xs text-gray-500">Include tools, outputs, documentation, or supporting materials</p>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium">Appendices</label>
+                  <textarea id="appendices" name="appendices" rows="5"
+                    class="w-full mt-1 border rounded-lg px-3 py-2 text-sm"
+                    placeholder="List appendices, documentation, photos, knowledge products, attachments, etc."></textarea>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium">Documentation Notes</label>
+                  <textarea id="documentationNotes" name="documentation_notes" rows="4"
+                    class="w-full mt-1 border rounded-lg px-3 py-2 text-sm"></textarea>
+                </div>
+              </section>
+
+              <div class="flex flex-wrap justify-end gap-2 pt-2 border-t">
+                <button type="button" id="saveDraftBtn"
+                  class="px-4 py-2 bg-gray-700 hover:bg-gray-800 text-white rounded-lg text-sm">
+                  Save Draft
+                </button>
+
+                <button type="button" id="resetDraftBtn"
+                  class="px-4 py-2 bg-white border hover:bg-gray-50 rounded-lg text-sm">
+                  Reset Draft
+                </button>
+
+                <button type="button" id="previewPrintBtn"
+                  class="px-4 py-2 bg-urds-accent hover:bg-teal-500 text-white rounded-lg text-sm">
+                  Preview Print Page
+                </button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script src="js/completed_research_form.js"></script>
+  <div id="toastContainer" class="fixed bottom-6 right-6 space-y-2 z-50"></div>
+</body>
+</html>

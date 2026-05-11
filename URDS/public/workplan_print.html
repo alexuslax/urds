@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>UEP-URDS-FM-004 • Workplan</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <style>
+    /* Match form look */
+    body { font-family: Arial, Helvetica, sans-serif; }
+    .form-11 { font-size: 11pt; }
+    .form-10 { font-size: 10pt; }
+    .tight { line-height: 1.15; }
+
+    /* Divider like the form */
+    .divider-wrap { margin-top: 10px; }
+    .divider {
+      height: 0;
+      border-top: 3px solid #000;
+      border-bottom: 1px solid #000;
+      padding-top: 2px;
+    }
+
+    /* Thin table borders like the original form */
+    table { border-collapse: collapse; width: 100%; }
+    .t { border: 1px solid #000; }
+    .t td, .t th { border: 1px solid #000; }
+
+    /* Cell paddings like the form */
+    .cell { padding: 4px 6px; vertical-align: top; }
+    .cell-center { padding: 4px 6px; text-align: center; vertical-align: middle; }
+    .qcell { width: 70px; height: 24px; }
+
+    /* A4 page sizing */
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      background: #fff;
+    }
+
+    /* Print area becomes the positioning anchor for the footer */
+    .print-area {
+      position: relative;
+      min-height: 297mm;
+      padding: 12mm;
+      box-sizing: border-box;
+    }
+
+    /* Footer EXACT look like your picture */
+    .footer-table{
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid #000;
+      table-layout: fixed; /* equal columns */
+      margin-top: 10px;
+    }
+    .footer-table td{
+      border: 1px solid #000;
+      padding: 10px 8px; /* gives that “tall” footer box feel */
+      vertical-align: middle;
+      text-align: center;
+    }
+    .footer-label{
+      font-size: 11pt;
+      font-weight: bold;
+      line-height: 1.1;
+    }
+    .footer-value{
+      font-size: 11pt;
+      line-height: 1.1;
+      margin-top: 4px;
+    }
+
+    @media print {
+      .no-print { display: none !important; }
+      body { background: #fff !important; margin: 0 !important; padding: 0 !important; }
+      .page { box-shadow: none !important; }
+
+      /* Pin footer to bottom */
+      .footer-table{
+        position: absolute;
+        left: 12mm;
+        right: 12mm;
+        bottom: 12mm;
+        width: auto; /* uses left/right */
+        margin-top: 0;
+      }
+
+      /* Reserve space so content never overlaps the footer */
+      .print-area{
+        padding-bottom: 40mm !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100 py-6">
+
+  <!-- Screen controls only -->
+  <div class="no-print max-w-[210mm] mx-auto mb-4 flex items-center justify-between px-2">
+    <div class="text-sm text-gray-600">UEP-URDS-FM-004 • Print View</div>
+    <div class="flex gap-2">
+      <button id="btnSavePDF" class="px-3 py-2 rounded-lg bg-green-600 text-white text-sm hover:bg-green-700">💾 Save as PDF</button>
+      <button id="btnPrint" class="px-3 py-2 rounded-lg bg-black text-white text-sm hover:bg-gray-800">🖨️ Print</button>
+      <a class="px-3 py-2 rounded-lg bg-white border text-sm hover:bg-gray-50" href="javascript:history.back()">Back</a>
+    </div>
+  </div>
+
+  <!-- PAGE -->
+  <div class="page bg-white shadow">
+    <div class="print-area form-11">
+
+      <!-- Header -->
+      <div class="grid grid-cols-[92px_1fr_92px] items-center">
+        <div class="flex items-center justify-center">
+          <img src="../public/img/logo.jpg" alt="UEP Logo" class="w-[82px] h-[82px] object-contain">
+        </div>
+
+        <div class="text-center tight">
+          <div>Republic of the Philippines</div>
+          <div class="font-bold uppercase">UNIVERSITY OF EASTERN PHILIPPINES</div>
+          <div>University Town, Northern Samar, Philippines</div>
+          <div class="form-10">
+            Web: <span class="underline text-blue-700">http://uep.edu.ph</span>;
+            Email: <span class="underline text-blue-700">uepnsofficial@gmail.com</span>
+          </div>
+        </div>
+
+        <div></div>
+      </div>
+
+      <div class="divider-wrap">
+        <div class="divider"></div>
+      </div>
+
+      <!-- Titles -->
+      <div class="text-center mt-5 tight">
+        <div class="font-bold uppercase">UNIVERSITY RESEARCH AND DEVELOPMENT SERVICES</div>
+        <div class="font-bold uppercase mt-1">WORKPLAN</div>
+      </div>
+
+      <!-- Main form table -->
+      <div class="mt-4">
+        <table class="t">
+          <tr>
+            <td class="cell font-bold" style="width: 20%;">Program/Project/Study Title:</td>
+            <td class="cell" colspan="12" id="projectTitle">—</td>
+          </tr>
+          <tr>
+            <td class="cell font-bold">Program/Project Study Leader:</td>
+            <td class="cell" colspan="12" id="projectLeader">—</td>
+          </tr>
+          <tr>
+            <td class="cell font-bold">College/Unit/Campus:</td>
+            <td class="cell" colspan="12" id="collegeUnit">—</td>
+          </tr>
+
+          <!-- HEADER ROW 1: YEAR GROUPS -->
+          <tr>
+            <td class="cell font-bold" rowspan="2">Activities</td>
+            <td class="cell-center font-bold" colspan="4">YEAR 1</td>
+            <td class="cell-center font-bold" colspan="4">YEAR 2</td>
+            <td class="cell-center font-bold" colspan="4">YEAR 3</td>
+          </tr>
+
+          <!-- HEADER ROW 2: QUARTERS -->
+          <tr>
+            <!-- Year 1 -->
+            <td class="cell-center font-bold qcell">Q1</td>
+            <td class="cell-center font-bold qcell">Q2</td>
+            <td class="cell-center font-bold qcell">Q3</td>
+            <td class="cell-center font-bold qcell">Q4</td>
+            
+            <!-- Year 2 -->
+            <td class="cell-center font-bold qcell">Q1</td>
+            <td class="cell-center font-bold qcell">Q2</td>
+            <td class="cell-center font-bold qcell">Q3</td>
+            <td class="cell-center font-bold qcell">Q4</td>
+            
+            <!-- Year 3 -->
+            <td class="cell-center font-bold qcell">Q1</td>
+            <td class="cell-center font-bold qcell">Q2</td>
+            <td class="cell-center font-bold qcell">Q3</td>
+            <td class="cell-center font-bold qcell">Q4</td>
+          </tr>
+
+          <tbody id="activitiesBody"></tbody>
+        </table>
+      </div>
+
+      <!-- FOOTER (matches picture) -->
+      <table class="footer-table">
+        <tr>
+          <td>
+            <div class="footer-label">DOCUMENT NO.:</div>
+            <div class="footer-value">UEP-URDS-FM-004</div>
+          </td>
+          <td>
+            <div class="footer-label">REVISION NO.:</div>
+            <div class="footer-value">00</div>
+          </td>
+          <td>
+            <div class="footer-label">EFFECTIVITY:</div>
+            <div class="footer-value">SEPTEMBER 12, 2022</div>
+          </td>
+        </tr>
+      </table>
+
+    </div>
+  </div>
+
+  <script>
+    // Print
+    document.getElementById("btnPrint")?.addEventListener("click", () => window.print());
+
+    document.getElementById("btnSavePDF")?.addEventListener("click", () => {
+      const element = document.querySelector('.page');
+      const proposalTitle = document.getElementById('workplan_title')?.textContent || 'Workplan';
+      const filename = `UEP-URDS-FM-004_${proposalTitle.replace(/[^a-z0-9]/gi, '_')}.pdf`;
+      
+      const opt = {
+        margin: 12,
+        filename: filename,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+      
+      html2pdf().set(opt).from(element).save();
+    });
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      // Get proposal ID from URL parameter
+      const urlParams = new URLSearchParams(window.location.search);
+      const proposalId = urlParams.get('id') || localStorage.getItem("viewProposalId");
+
+      if (!proposalId) {
+        setMeta("—", "—", "—");
+        renderActivities(defaultActivities());
+        return;
+      }
+
+      try {
+        // Fetch proposal data from database
+        const response = await fetch(`../../backend/get_proposal.php?id=${encodeURIComponent(proposalId)}`, {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const text = await response.text();
+        const result = JSON.parse(text);
+
+        if (result.status === "success" && result.proposal) {
+          const proposal = result.proposal;
+
+          const title = proposal.title || "—";
+          const leader = proposal.studyLeader || proposal.leader || "—";
+          const college = proposal.college || "—";
+
+          setMeta(title, leader, college);
+
+          // Get workplan from database
+          const wp = Array.isArray(proposal.workplan) && proposal.workplan.length > 0 
+            ? proposal.workplan 
+            : defaultActivities();
+
+          renderActivities(wp);
+        } else {
+          console.error("Error loading proposal:", result.message);
+          setMeta("—", "—", "—");
+          renderActivities(defaultActivities());
+        }
+      } catch (error) {
+        console.error("Error fetching proposal:", error);
+        setMeta("—", "—", "—");
+        renderActivities(defaultActivities());
+      }
+    });
+
+    function setMeta(title, leader, college) {
+      document.getElementById("projectTitle").textContent = title;
+      document.getElementById("projectLeader").textContent = leader;
+      document.getElementById("collegeUnit").textContent = college;
+    }
+
+    function renderActivities(items) {
+      const tbody = document.getElementById("activitiesBody");
+      tbody.innerHTML = "";
+
+      items.forEach((a, idx) => {
+        const task = escapeHtml(a.task || a.activity || a.title || "");
+        
+        // Check all 12 quarters across 3 years
+        // Year 1
+        const y1q1 = a.y1_q1 || a['wp-y1_q1'] || false;
+        const y1q2 = a.y1_q2 || a['wp-y1_q2'] || false;
+        const y1q3 = a.y1_q3 || a['wp-y1_q3'] || false;
+        const y1q4 = a.y1_q4 || a['wp-y1_q4'] || false;
+        
+        // Year 2
+        const y2q1 = a.y2_q1 || a['wp-y2_q1'] || false;
+        const y2q2 = a.y2_q2 || a['wp-y2_q2'] || false;
+        const y2q3 = a.y2_q3 || a['wp-y2_q3'] || false;
+        const y2q4 = a.y2_q4 || a['wp-y2_q4'] || false;
+        
+        // Year 3
+        const y3q1 = a.y3_q1 || a['wp-y3_q1'] || false;
+        const y3q2 = a.y3_q2 || a['wp-y3_q2'] || false;
+        const y3q3 = a.y3_q3 || a['wp-y3_q3'] || false;
+        const y3q4 = a.y3_q4 || a['wp-y3_q4'] || false;
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td class="cell tight">${idx + 1}. ${task}</td>
+          <td class="cell-center qcell" style="${y1q1 ? 'background-color: #3b82f6;' : ''}">&nbsp;</td>
+          <td class="cell-center qcell" style="${y1q2 ? 'background-color: #3b82f6;' : ''}">&nbsp;</td>
+          <td class="cell-center qcell" style="${y1q3 ? 'background-color: #3b82f6;' : ''}">&nbsp;</td>
+          <td class="cell-center qcell" style="${y1q4 ? 'background-color: #3b82f6;' : ''}">&nbsp;</td>
+          
+          <td class="cell-center qcell" style="${y2q1 ? 'background-color: #3b82f6;' : ''}">&nbsp;</td>
+          <td class="cell-center qcell" style="${y2q2 ? 'background-color: #3b82f6;' : ''}">&nbsp;</td>
+          <td class="cell-center qcell" style="${y2q3 ? 'background-color: #3b82f6;' : ''}">&nbsp;</td>
+          <td class="cell-center qcell" style="${y2q4 ? 'background-color: #3b82f6;' : ''}">&nbsp;</td>
+          
+          <td class="cell-center qcell" style="${y3q1 ? 'background-color: #3b82f6;' : ''}">&nbsp;</td>
+          <td class="cell-center qcell" style="${y3q2 ? 'background-color: #3b82f6;' : ''}">&nbsp;</td>
+          <td class="cell-center qcell" style="${y3q3 ? 'background-color: #3b82f6;' : ''}">&nbsp;</td>
+          <td class="cell-center qcell" style="${y3q4 ? 'background-color: #3b82f6;' : ''}">&nbsp;</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function defaultActivities() {
+      return [
+        { task: "Conduct consultation with the client (Head of instruction of the two external campuses, college secretaries, department chairs, and laboratory school principals);" },
+        { task: "Presentation and approval of the research study;" },
+        { task: "Assess the effectiveness of the existing workload computation template;" },
+        { task: "Procurement of equipment and materials;" },
+        { task: "Follow up interviews and focus group discussions with the head of instruction of the two external campuses, college secretaries, department chairs, and laboratory school principals;" },
+        { task: "Conduct preliminary investigation and detailed data gathering;" },
+        { task: "Analyze and assess the scope and requirements of the research study;" },
+        { task: "Conduct the System Development Life Cycle;" },
+        { task: "Conduct training to the head of instruction of the two external campuses, college secretaries, department chairs, and laboratory school principals;" },
+        { task: "Conduct an assessment on the acceptability of the Workload Computation System through survey;" },
+        { task: "Write terminal report, present completed extension project, write, and publish paper." }
+      ];
+    }
+
+    function escapeHtml(s) {
+      if (s === null || s === undefined) return "";
+      return String(s)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+  </script>
+</body>
+</html>

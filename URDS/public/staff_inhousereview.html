@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>In-House Review (Staff)</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { urds: { 900: "#172033", 800: "#1f2b3a", accent: "#0ea5a4" } },
+          boxShadow: { card: "0 6px 20px rgba(18,26,40,0.06)" }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-gray-50 font-inter antialiased">
+
+<div class="min-h-screen flex">
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar" class="w-72 bg-urds-900 text-white shrink-0"></aside>
+
+  <div class="flex-1">
+
+    <!-- HEADER -->
+    <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <button id="hamburger" class="md:hidden w-10 h-10 bg-gray-100 rounded-md flex justify-center items-center">☰</button>
+        <div>
+          <div class="text-lg font-semibold">In-House Review</div>
+          <div class="text-xs text-gray-500">URDS Staff Management</div>
+        </div>
+      </div>
+
+      <a href="profile.html" class="flex items-center gap-3">
+        <div class="text-right">
+          <div class="user-name text-sm font-medium">User</div>
+          <div class="user-role text-xs text-gray-500">Role</div>
+        </div>
+        <div class="user-initials w-10 h-10 rounded-full bg-blue-500 text-white flex justify-center items-center">U</div>
+      </a>
+    </header>
+
+    <main class="p-6 max-w-6xl mx-auto">
+      <!-- Proposal Selector -->
+      <div class="bg-white rounded-lg shadow-sm border p-4 mb-6">
+        <div class="flex items-center gap-4">
+          <label for="proposalSelector" class="text-sm font-semibold text-gray-700 whitespace-nowrap">Select Proposal:</label>
+          <div class="relative flex-1">
+            <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            <select 
+              id="proposalSelector" 
+              class="w-full pl-10 pr-4 py-2.5 border-2 border-gray-200 rounded-lg text-sm focus:border-urds-accent focus:ring-2 focus:ring-urds-accent focus:ring-opacity-20 transition-all appearance-none bg-white cursor-pointer">
+              <option value="">Loading proposals...</option>
+            </select>
+          </div>
+          <div class="bg-urds-accent text-white rounded-lg px-3 py-2 text-sm font-semibold">
+            <span id="totalCount">0</span> proposals
+          </div>
+        </div>
+      </div>
+
+      <!-- Review Form Container -->
+      <div id="reviewFormContainer"></div>
+
+    </main>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script src="js/staff_inhousereview.js"></script>
+
+</body>
+</html>

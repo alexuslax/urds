@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>UEP-URDS-FM-006 • Notice to Proceed</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #eef0f3;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #000;
+      font-size: 11pt;
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: #ffffff;
+      border-bottom: 1px solid #d1d5db;
+      padding: 10px 16px;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .toolbar button {
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      padding: 7px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .toolbar .primary {
+      background: #16a34a;
+      color: #ffffff;
+      border-color: #16a34a;
+    }
+
+    .toolbar .dark {
+      background: #111827;
+      color: #ffffff;
+      border-color: #111827;
+    }
+
+    .page-wrap {
+      padding: 28px 0;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 14mm 18mm;
+      box-shadow: 0 8px 28px rgba(15, 23, 42, 0.16);
+      position: relative;
+    }
+
+    .page-inner {
+      width: 174mm;
+      min-height: calc(297mm - 28mm);
+      margin: 0 auto;
+      position: relative;
+      padding-bottom: 24mm;
+    }
+
+    /* HEADER - adjusted to look closer to the printed template */
+    .header {
+      position: relative;
+      min-height: 26mm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-wrap {
+      position: absolute;
+      left: 15mm;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20mm;
+      height: 20mm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo {
+      width: 20mm;
+      height: 20mm;
+      object-fit: contain;
+      display: block;
+    }
+
+    .header-text {
+      text-align: center;
+      line-height: 1.05;
+      width: 100%;
+      padding-left: 24mm;
+      padding-right: 18mm;
+    }
+
+    .republic {
+      font-size: 10.5pt;
+      font-weight: 400;
+    }
+
+    .university {
+      font-size: 11.5pt;
+      font-weight: 700;
+      letter-spacing: 0.1px;
+      text-transform: uppercase;
+    }
+
+    .address {
+      font-size: 10.5pt;
+      font-weight: 400;
+    }
+
+    .contact {
+      font-size: 9.5pt;
+      font-weight: 400;
+    }
+
+    .contact a {
+      color: #0645ad;
+      text-decoration: underline;
+    }
+
+    .top-rule {
+      border-top: 2px solid #000;
+      border-bottom: 1px solid #000;
+      height: 5px;
+      margin-top: 3mm;
+    }
+
+    .office-title {
+      text-align: center;
+      font-size: 11pt;
+      font-weight: 700;
+      margin-top: 6mm;
+      text-transform: uppercase;
+      letter-spacing: 0.1px;
+    }
+
+    .doc-title {
+      text-align: center;
+      font-size: 11pt;
+      font-weight: 700;
+      margin-top: 8mm;
+      text-transform: uppercase;
+      letter-spacing: 0.1px;
+    }
+
+    /* LETTER BODY */
+    .letter-area {
+      margin-top: 8mm;
+      font-size: 11pt;
+      line-height: 1.35;
+    }
+
+    .date-line {
+      width: 45mm;
+      margin-left: auto;
+      border-bottom: 1px solid #000;
+      text-align: center;
+      min-height: 18px;
+      padding-bottom: 2px;
+      font-size: 10.5pt;
+    }
+
+    .recipient-block {
+      margin-top: 13mm;
+      width: 66mm;
+      font-size: 11pt;
+      line-height: 1.25;
+    }
+
+    .recipient-line {
+      border-bottom: 1px solid #000;
+      min-height: 18px;
+      padding-bottom: 2px;
+    }
+
+    .dear {
+      margin-top: 8mm;
+      font-size: 11pt;
+    }
+
+    .dear span {
+      display: inline-block;
+      min-width: 42mm;
+      border-bottom: 1px solid #000;
+      text-align: center;
+      padding-bottom: 2px;
+    }
+
+    .body {
+      margin-top: 5mm;
+      font-size: 11pt;
+      line-height: 1.35;
+      text-align: justify;
+    }
+
+    .body p {
+      margin: 0 0 5mm;
+      text-indent: 12mm;
+    }
+
+    .body .no-indent {
+      text-indent: 0;
+    }
+
+    .fill-line {
+      display: inline-block;
+      border-bottom: 1px solid #000;
+      min-width: 38mm;
+      text-align: center;
+      padding: 0 2mm 1px;
+      line-height: 1.1;
+      font-weight: 400;
+    }
+
+    .fill-title {
+      display: inline;
+      font-weight: 400;
+      text-decoration: underline;
+    }
+
+    .signature {
+      margin-top: 14mm;
+      width: 67mm;
+      margin-left: auto;
+      text-align: center;
+      font-size: 11pt;
+    }
+
+    .signature .closing {
+      margin-bottom: 17mm;
+      text-align: left;
+    }
+
+    .signature .sig-name {
+      border-bottom: 1px solid #000;
+      min-height: 18px;
+      font-weight: 700;
+      padding-bottom: 2px;
+      text-transform: uppercase;
+    }
+
+    .signature .sig-position {
+      margin-top: 3px;
+      font-weight: 400;
+    }
+
+    .cc {
+      margin-top: 12mm;
+      font-size: 10pt;
+    }
+
+    .cc-title {
+      font-weight: 700;
+      margin-bottom: 3mm;
+    }
+
+    .cc-list {
+      margin-left: 10mm;
+      line-height: 1.25;
+      white-space: pre-line;
+      font-style: italic;
+    }
+
+    .footer {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      border: 1px solid #000;
+      font-size: 9.5pt;
+      font-weight: 800;
+      text-align: center;
+      background: #fff;
+    }
+
+    .footer div {
+      min-height: 10mm;
+      padding: 3px 6px;
+      border-right: 1px solid #000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      line-height: 1.1;
+    }
+
+    .footer div:last-child {
+      border-right: none;
+    }
+
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+        margin: 0;
+        padding: 0;
+      }
+
+      .toolbar {
+        display: none !important;
+      }
+
+      .page-wrap {
+        padding: 0;
+      }
+
+      .page {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 0;
+        box-shadow: none;
+        padding: 14mm 18mm;
+      }
+
+      * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="toolbar">
+    <button class="primary" type="button" id="savePdfBtn">Save as PDF</button>
+    <button class="dark" type="button" onclick="window.print()">Print</button>
+    <button type="button" onclick="goBack()">Back</button>
+  </div>
+
+  <div class="page-wrap">
+    <main class="page" id="printPage">
+      <div class="page-inner">
+
+        <header>
+          <div class="header">
+            <div class="logo-wrap">
+              <img
+                id="uepLogo"
+                class="logo"
+                src="img/logo.jpg"
+                alt="UEP Logo"
+              />
+            </div>
+
+            <div class="header-text">
+              <div class="republic">Republic of the Philippines</div>
+              <div class="university">UNIVERSITY OF EASTERN PHILIPPINES</div>
+              <div class="address">University Town, Northern Samar, Philippines</div>
+              <div class="contact">
+                Web: <a href="#">http://uep.edu.ph</a>; Email: <a href="#">uepnsofficial@gmail.com</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="top-rule"></div>
+
+          <div class="office-title">UNIVERSITY RESEARCH AND DEVELOPMENT SERVICES</div>
+          <div class="doc-title">NOTICE TO PROCEED</div>
+        </header>
+
+        <section class="letter-area">
+
+          <div class="date-line" id="letterDateDisplay"></div>
+
+          <section class="recipient-block">
+            <div class="recipient-line" id="recipientNameDisplay"></div>
+            <div class="recipient-line" id="recipientCollegeDisplay"></div>
+            <div class="recipient-line" id="recipientDepartmentDisplay"></div>
+            <div class="recipient-line" id="recipientLocationDisplay"></div>
+          </section>
+
+          <div class="dear">
+            Dear <span id="dearNameDisplay"></span>:
+          </div>
+
+          <section class="body">
+            <p>
+              Please be informed that your research proposal entitled
+              “<span class="fill-title" id="proposalTitleDisplay"></span>,”
+              was approved by the University Research and Extension Council during its meeting on
+              <span class="fill-line" id="approvalDateDisplay"></span>
+              held at the Board Room of the office of the University President. You may proceed with the conduct of your research with a duration of
+              <span class="fill-line" id="durationDisplay"></span>
+              from the approval of the special order.
+            </p>
+
+            <p>
+              Please submit two (2) copies of the detailed proposal with work plan and itemized budgetary requirements.
+            </p>
+
+            <p>
+              For queries, feel free to see us at the office of the University Research and Development Services.
+            </p>
+
+            <p>
+              Attached are copies of sample forms to be used in accomplishing your detailed proposals.
+            </p>
+
+            <p class="no-indent" id="additionalNoteBlock" style="display:none;"></p>
+          </section>
+
+          <section class="signature">
+            <div class="closing">Very truly yours,</div>
+            <div class="sig-name" id="signatoryNameDisplay"></div>
+            <div class="sig-position" id="signatoryPositionDisplay">Research Director</div>
+          </section>
+
+          <section class="cc">
+            <div class="cc-title">Cc:</div>
+            <div class="cc-list" id="ccListDisplay"></div>
+          </section>
+        </section>
+
+        <footer class="footer">
+          <div>
+            <span>DOCUMENT NO.:</span>
+            <span id="documentNoDisplay">UEP-URDS-FM-006</span>
+          </div>
+
+          <div>
+            <span>REVISION NO.:</span>
+            <span>00</span>
+          </div>
+
+          <div>
+            <span>EFFECTIVITY</span>
+            <span>SEPTEMBER 12, 2022</span>
+          </div>
+        </footer>
+
+      </div>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      const logoPaths = [
+        "img/logo.jpg",
+        "img/uep-logo.png",
+        "img/uep-logo.jpg",
+        "assets/uep-logo.png",
+        "assets/logo.png",
+        "../public/img/logo.jpg"
+      ];
+
+      const logo = document.getElementById("uepLogo");
+      let logoIndex = 0;
+
+      if (logo) {
+        logo.onerror = function () {
+          logoIndex += 1;
+
+          if (logoIndex < logoPaths.length) {
+            logo.src = logoPaths[logoIndex];
+          } else {
+            logo.style.display = "none";
+          }
+        };
+
+        logo.src = logoPaths[0];
+      }
+
+      const params = new URLSearchParams(window.location.search);
+
+      const proposalId =
+        params.get("id") ||
+        localStorage.getItem("viewProposalId") ||
+        "";
+
+      const draftKey = "notice_to_proceed_draft_" + (proposalId || "no_proposal");
+
+      const defaultData = {
+        document_no: "UEP-URDS-FM-006",
+        letter_date: "",
+        approval_date: "",
+        proposal_title: "",
+        proponent_name: "",
+        college_name: "",
+        department_name: "",
+        project_location: "",
+        proposal_duration: "",
+        approved_budget: "",
+        reference_no: "",
+        signatory_name: "",
+        signatory_position: "Research Director",
+        cc_list: "College Research Coordinator\nCollege Dean\nVP for Research, Extension and Training\nOffice of the University President",
+        additional_note: ""
+      };
+
+      let data = loadDraft();
+      fillPage(data);
+
+      document.getElementById("savePdfBtn")?.addEventListener("click", () => {
+        const element = document.getElementById("printPage");
+        const title = data.proposal_title || "Notice_to_Proceed";
+        const cleanTitle = String(title).replace(/[^a-z0-9]/gi, "_").slice(0, 70);
+
+        html2pdf()
+          .set({
+            margin: 0,
+            filename: "UEP-URDS-FM-006_" + cleanTitle + ".pdf",
+            image: { type: "jpeg", quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+          })
+          .from(element)
+          .save();
+      });
+
+      function loadDraft() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(draftKey) || "null");
+          return Object.assign({}, defaultData, saved || {});
+        } catch (error) {
+          console.warn("Unable to load Notice to Proceed draft:", error);
+          return defaultData;
+        }
+      }
+
+      function fillPage(d) {
+        setText("letterDateDisplay", formatLongDate(d.letter_date));
+        setText("recipientNameDisplay", d.proponent_name);
+        setText("recipientCollegeDisplay", d.college_name);
+        setText("recipientDepartmentDisplay", d.department_name);
+        setText("recipientLocationDisplay", d.project_location);
+
+        setText("dearNameDisplay", getSurnameOrName(d.proponent_name));
+        setText("proposalTitleDisplay", d.proposal_title);
+        setText("approvalDateDisplay", formatLongDate(d.approval_date));
+        setText("durationDisplay", d.proposal_duration);
+
+        setText("signatoryNameDisplay", d.signatory_name);
+        setText("signatoryPositionDisplay", d.signatory_position || "Research Director");
+        setText("ccListDisplay", d.cc_list);
+        setText("documentNoDisplay", d.document_no || "UEP-URDS-FM-006");
+
+        const noteBlock = document.getElementById("additionalNoteBlock");
+
+        if (noteBlock && d.additional_note) {
+          noteBlock.style.display = "block";
+          noteBlock.textContent = d.additional_note;
+        }
+      }
+
+      function setText(id, value) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.textContent = value || " ";
+      }
+
+      function formatLongDate(value) {
+        if (!value) return "";
+
+        const date = new Date(value);
+
+        if (Number.isNaN(date.getTime())) return value;
+
+        return date.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric"
+        });
+      }
+
+      function getSurnameOrName(name) {
+        const clean = String(name || "").trim();
+
+        if (!clean) return "";
+
+        const parts = clean.split(/\s+/);
+
+        return parts[parts.length - 1];
+      }
+
+      window.goBack = function () {
+        const returnTo = params.get("returnTo");
+
+        if (returnTo) {
+          window.location.href = returnTo;
+          return;
+        }
+
+        if (proposalId) {
+          window.location.href = "notice_to_proceed.html?id=" + encodeURIComponent(proposalId);
+        } else {
+          window.location.href = "notice_to_proceed.html";
+        }
+      };
+    })();
+  </script>
+</body>
+</html>

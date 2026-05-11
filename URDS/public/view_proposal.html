@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>View Proposal</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { urds:{900:"#172033",800:"#1f2b3a",accent:"#0ea5a4"} },
+          boxShadow:{ card:"0 6px 20px rgba(18,26,40,0.06)" }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-gray-50 font-inter">
+<div class="min-h-screen flex">
+
+  <aside id="sidebar" class="w-72 bg-urds-900 text-white shrink-0"></aside>
+
+  <div class="flex-1">
+
+    <!-- HEADER (keep) -->
+    <header class="bg-white border-b px-6 py-4 flex items-center justify-between">
+      <h1 class="text-xl font-semibold">Proposal Details</h1>
+
+      <div class="flex items-center gap-3 cursor-pointer" id="user-profile-link">
+        <div class="user-initials w-10 h-10 bg-urds-900 text-white rounded-full flex items-center justify-center"></div>
+        <div class="text-right">
+          <p class="user-name text-sm font-semibold"></p>
+          <p class="user-role text-xs text-gray-500"></p>
+        </div>
+      </div>
+    </header>
+
+    <main class="p-6 max-w-5xl mx-auto">
+
+      <!-- Loading / Error -->
+      <div id="viewState" class="hidden mb-4"></div>
+
+      <!-- Proposal Header -->
+      <div id="proposalHeader"></div>
+
+      <!-- ✅ NEW: Actions toolbar (JS will fill based on role/status) -->
+      <div id="proposalActions" class="mt-4"></div>
+
+      <!-- Program & Projects -->
+      <div id="proposalStructure" class="mt-6"></div>
+
+      <!-- Attachments -->
+      <div id="proposalFiles" class="mt-6"></div>
+
+      <!-- Reviews -->
+      <div id="proposalReviews" class="mt-6"></div>
+
+      <!-- Status Timeline -->
+      <div id="proposalTimeline" class="mt-6"></div>
+
+    </main>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script src="js/view_proposal.js"></script>
+</body>
+</html>

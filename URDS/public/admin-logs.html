@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>System Logs | UEP-URDS</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            urds: {
+              950: "#0f172a",
+              900: "#172033",
+              800: "#1f2b3a",
+              700: "#2f3f55",
+              accent: "#0ea5a4",
+            },
+          },
+          boxShadow: {
+            card: "0 6px 20px rgba(18,26,40,0.06)",
+            soft: "0 10px 30px rgba(15,23,42,0.08)",
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .form-input {
+      width: 100%;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      padding: 0.75rem 0.875rem;
+      border-radius: 0.75rem;
+      font-size: 0.875rem;
+      transition: all 0.15s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #0ea5a4;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(14,165,164,0.18);
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-900 antialiased h-screen overflow-hidden">
+
+  <div class="h-screen flex overflow-hidden">
+
+    <!-- SIDEBAR -->
+    <aside
+      id="sidebar"
+      class="w-72 h-screen bg-urds-900 text-white shrink-0 overflow-y-auto"
+    ></aside>
+
+    <!-- MAIN WRAPPER -->
+    <div class="flex-1 min-w-0 h-screen overflow-y-auto">
+
+      <!-- HEADER -->
+      <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-30">
+        <div class="flex items-center gap-4 min-w-0">
+          <button
+            id="hamburger"
+            type="button"
+            class="md:hidden w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition"
+          >
+            ☰
+          </button>
+
+          <div>
+            <div class="text-xs text-gray-500">UEP-URDS / Administration</div>
+            <h1 class="text-xl font-semibold mt-1">System Logs</h1>
+            <p class="hidden sm:block text-xs text-gray-500 mt-0.5">
+              Monitor user actions, proposal movement, permissions, and system changes.
+            </p>
+          </div>
+        </div>
+
+        <!-- USER PROFILE -->
+        <a
+          id="user-profile-link"
+          href="profile.html"
+          class="flex items-center gap-3 rounded-xl hover:bg-gray-50 p-2 transition"
+        >
+          <div class="text-right hidden sm:block">
+            <div class="text-sm font-semibold user-name">Loading...</div>
+            <div class="text-xs text-gray-500 user-role">Loading...</div>
+          </div>
+
+          <div class="w-10 h-10 rounded-full bg-urds-accent text-white flex items-center justify-center font-bold user-initials">
+            U
+          </div>
+        </a>
+      </header>
+
+      <!-- PAGE CONTENT -->
+      <main class="p-6 max-w-7xl mx-auto space-y-6">
+
+        <!-- HERO -->
+        <section class="bg-gradient-to-r from-urds-900 to-urds-700 text-white p-6 rounded-2xl shadow-soft overflow-hidden relative">
+          <div class="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-white/10"></div>
+          <div class="absolute right-20 -bottom-16 w-44 h-44 rounded-full bg-white/5"></div>
+
+          <div class="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+            <div>
+              <div class="text-sm text-white/70">Activity Monitoring</div>
+              <h2 class="text-2xl md:text-3xl font-bold mt-1">Activity Logs</h2>
+              <p class="text-sm text-white/75 mt-2 max-w-2xl">
+                Track important actions performed across the system, including account updates,
+                permissions, proposal reviews, and administrative changes.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 text-center">
+              <div class="bg-white/10 border border-white/10 rounded-2xl px-5 py-4">
+                <div id="totalLogsCount" class="text-2xl font-bold">-</div>
+                <div class="text-xs text-white/70 mt-1">Total Logs</div>
+              </div>
+
+              <div class="bg-white/10 border border-white/10 rounded-2xl px-5 py-4">
+                <div id="todayLogsCount" class="text-2xl font-bold">-</div>
+                <div class="text-xs text-white/70 mt-1">Today</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- FILTERS -->
+        <section class="bg-white p-5 rounded-2xl shadow-card border border-gray-100">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+
+            <div class="md:col-span-2 relative">
+              <input
+                id="search"
+                type="search"
+                placeholder="Search logs, user, action, or category..."
+                class="form-input pl-10"
+              />
+              <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">
+                🔎
+              </span>
+            </div>
+
+            <select id="typeFilter" class="form-input">
+              <option value="">All Types</option>
+              <option value="User Accounts">User Accounts</option>
+              <option value="System Changes">System Changes</option>
+              <option value="Permissions">Permissions</option>
+              <option value="Proposals">Proposals</option>
+            </select>
+
+            <select id="dateFilter" class="form-input">
+              <option value="">All Dates</option>
+              <option value="today">Today</option>
+              <option value="week">This Week</option>
+              <option value="month">This Month</option>
+            </select>
+
+          </div>
+
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-4 pt-4 border-t border-gray-100">
+            <div id="logCount" class="text-xs text-gray-500">
+              Loading logs...
+            </div>
+
+            <button
+              id="clearFilters"
+              type="button"
+              class="px-4 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-bold transition"
+            >
+              Clear Filters
+            </button>
+          </div>
+        </section>
+
+        <!-- LOG LIST -->
+        <section class="bg-white rounded-2xl shadow-card border border-gray-100 overflow-hidden">
+
+          <div class="px-5 py-4 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900">Recent System Activity</h3>
+              <p class="text-xs text-gray-500 mt-1">
+                Latest logs are displayed first.
+              </p>
+            </div>
+
+            <a
+              href="admin-dashboard.html"
+              class="text-sm font-bold text-urds-accent hover:underline"
+            >
+              Back to Dashboard
+            </a>
+          </div>
+
+          <div id="logList" class="divide-y divide-gray-100">
+
+            <!-- Sample logs. You can replace these using admin-logs.js later. -->
+
+            <article
+              class="log-item p-5 hover:bg-gray-50 transition"
+              data-type="User Accounts"
+              data-date="today"
+            >
+              <div class="flex items-start gap-4">
+                <div class="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl shrink-0">
+                  👤
+                </div>
+
+                <div class="flex-1 min-w-0">
+                  <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+                    <div>
+                      <h4 class="font-semibold text-gray-900">
+                        New user added: Dr. Santos
+                      </h4>
+
+                      <p class="text-sm text-gray-500 mt-1">
+                        A new user account was created by the administrator.
+                      </p>
+                    </div>
+
+                    <span class="inline-flex w-fit items-center px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold">
+                      User Accounts
+                    </span>
+                  </div>
+
+                  <div class="flex flex-wrap items-center gap-2 text-xs text-gray-400 mt-3">
+                    <span>Administrator</span>
+                    <span>•</span>
+                    <span>2 hours ago</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article
+              class="log-item p-5 hover:bg-gray-50 transition"
+              data-type="System Changes"
+              data-date="today"
+            >
+              <div class="flex items-start gap-4">
+                <div class="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shrink-0">
+                  🏛️
+                </div>
+
+                <div class="flex-1 min-w-0">
+                  <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+                    <div>
+                      <h4 class="font-semibold text-gray-900">
+                        College of Engineering dean updated
+                      </h4>
+
+                      <p class="text-sm text-gray-500 mt-1">
+                        College information was modified in the administration panel.
+                      </p>
+                    </div>
+
+                    <span class="inline-flex w-fit items-center px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold">
+                      System Changes
+                    </span>
+                  </div>
+
+                  <div class="flex flex-wrap items-center gap-2 text-xs text-gray-400 mt-3">
+                    <span>Admin User</span>
+                    <span>•</span>
+                    <span>5 hours ago</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article
+              class="log-item p-5 hover:bg-gray-50 transition"
+              data-type="Proposals"
+              data-date="week"
+            >
+              <div class="flex items-start gap-4">
+                <div class="w-11 h-11 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-xl shrink-0">
+                  📄
+                </div>
+
+                <div class="flex-1 min-w-0">
+                  <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+                    <div>
+                      <h4 class="font-semibold text-gray-900">
+                        Proposal reviewed and forwarded to URDS
+                      </h4>
+
+                      <p class="text-sm text-gray-500 mt-1">
+                        A research proposal was reviewed and moved to the next routing stage.
+                      </p>
+                    </div>
+
+                    <span class="inline-flex w-fit items-center px-3 py-1 rounded-full bg-purple-50 text-purple-700 text-xs font-bold">
+                      Proposals
+                    </span>
+                  </div>
+
+                  <div class="flex flex-wrap items-center gap-2 text-xs text-gray-400 mt-3">
+                    <span>CRC Officer</span>
+                    <span>•</span>
+                    <span>Yesterday</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <article
+              class="log-item p-5 hover:bg-gray-50 transition"
+              data-type="Permissions"
+              data-date="week"
+            >
+              <div class="flex items-start gap-4">
+                <div class="w-11 h-11 rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center text-xl shrink-0">
+                  🔐
+                </div>
+
+                <div class="flex-1 min-w-0">
+                  <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+                    <div>
+                      <h4 class="font-semibold text-gray-900">
+                        User permissions updated for Evaluator role
+                      </h4>
+
+                      <p class="text-sm text-gray-500 mt-1">
+                        Access permissions were modified for evaluator accounts.
+                      </p>
+                    </div>
+
+                    <span class="inline-flex w-fit items-center px-3 py-1 rounded-full bg-orange-50 text-orange-700 text-xs font-bold">
+                      Permissions
+                    </span>
+                  </div>
+
+                  <div class="flex flex-wrap items-center gap-2 text-xs text-gray-400 mt-3">
+                    <span>Administrator</span>
+                    <span>•</span>
+                    <span>2 days ago</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+          </div>
+
+          <!-- EMPTY STATE -->
+          <div
+            id="emptyLogs"
+            class="hidden p-10 text-center"
+          >
+            <div class="mx-auto w-14 h-14 rounded-2xl bg-gray-100 flex items-center justify-center text-2xl mb-4">
+              📋
+            </div>
+
+            <h3 class="text-lg font-bold text-gray-900">
+              No logs found
+            </h3>
+
+            <p class="text-sm text-gray-500 mt-2">
+              Try changing your search keyword or selected filters.
+            </p>
+          </div>
+
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- MAIN JS -->
+  <script src="js/main.js"></script>
+  <script src="js/admin-logs.js"></script>
+
+</body>
+</html>

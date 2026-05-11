@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>UEP-URDS-FM-009 • Terminal Report Template</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: #eef0f3;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #000;
+      font-size: 11pt;
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: #fff;
+      border-bottom: 1px solid #d1d5db;
+      padding: 10px 16px;
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .toolbar button {
+      border: 1px solid #cbd5e1;
+      background: #fff;
+      padding: 7px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .toolbar .primary {
+      background: #16a34a;
+      color: #fff;
+      border-color: #16a34a;
+    }
+
+    .toolbar .dark {
+      background: #111827;
+      color: #fff;
+      border-color: #111827;
+    }
+
+    .page-wrap { padding: 28px 0; }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      background: #fff;
+      padding: 14mm 18mm;
+      box-shadow: 0 8px 28px rgba(15, 23, 42, 0.16);
+      position: relative;
+    }
+
+    .page-inner {
+      width: 174mm;
+      min-height: calc(297mm - 28mm);
+      margin: 0 auto;
+      position: relative;
+      padding-bottom: 24mm;
+    }
+
+    .header {
+      position: relative;
+      min-height: 32mm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-wrap {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 28mm;
+      height: 28mm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo {
+      width: 27mm;
+      height: 27mm;
+      object-fit: contain;
+      display: block;
+    }
+
+    .header-text {
+      text-align: center;
+      line-height: 1.08;
+      padding-left: 32mm;
+      padding-right: 20mm;
+      width: 100%;
+    }
+
+    .republic { font-size: 14pt; }
+    .university {
+      font-size: 15pt;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+      text-transform: uppercase;
+    }
+
+    .address { font-size: 13pt; }
+    .contact { font-size: 11pt; }
+
+    .contact a {
+      color: #0645ad;
+      text-decoration: underline;
+    }
+
+    .top-rule {
+      border-top: 3px solid #000;
+      border-bottom: 1px solid #000;
+      height: 6px;
+      margin-top: 4mm;
+    }
+
+    .office-title {
+      text-align: center;
+      font-size: 13pt;
+      font-weight: 800;
+      margin-top: 5mm;
+      text-transform: uppercase;
+      letter-spacing: 0.2px;
+    }
+
+    .doc-title {
+      text-align: center;
+      font-size: 13pt;
+      font-weight: 800;
+      margin-top: 9mm;
+    }
+
+    .content {
+      margin-top: 8mm;
+      font-size: 11pt;
+      line-height: 1.35;
+    }
+
+    .field-section {
+      margin-bottom: 5mm;
+    }
+
+    .field-label {
+      font-weight: 800;
+      margin-bottom: 1.5mm;
+    }
+
+    .field-line {
+      border-bottom: 1px solid #000;
+      min-height: 8mm;
+      padding: 1mm 2mm;
+      white-space: pre-line;
+    }
+
+    .long-section {
+      margin-top: 5mm;
+    }
+
+    .long-title {
+      font-weight: 800;
+      margin-bottom: 1.5mm;
+    }
+
+    .long-box {
+      min-height: 16mm;
+      white-space: pre-line;
+      text-align: justify;
+      line-height: 1.4;
+    }
+
+    .footer {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      border: 1px solid #000;
+      font-size: 9.5pt;
+      font-weight: 800;
+      text-align: center;
+      background: #fff;
+    }
+
+    .footer div {
+      min-height: 10mm;
+      padding: 3px 6px;
+      border-right: 1px solid #000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      line-height: 1.1;
+    }
+
+    .footer div:last-child { border-right: none; }
+
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        margin: 0;
+        padding: 0;
+      }
+
+      .toolbar { display: none !important; }
+      .page-wrap { padding: 0; }
+
+      .page {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 0;
+        box-shadow: none;
+        padding: 14mm 18mm;
+      }
+
+      * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="toolbar">
+    <button class="primary" type="button" id="savePdfBtn">Save as PDF</button>
+    <button class="dark" type="button" onclick="window.print()">Print</button>
+    <button type="button" onclick="goBack()">Back</button>
+  </div>
+
+  <div class="page-wrap">
+    <main class="page" id="printPage">
+      <div class="page-inner">
+
+        <header>
+          <div class="header">
+            <div class="logo-wrap">
+              <img id="uepLogo" class="logo" src="img/logo.jpg" alt="UEP Logo" />
+            </div>
+
+            <div class="header-text">
+              <div class="republic">Republic of the Philippines</div>
+              <div class="university">UNIVERSITY OF EASTERN PHILIPPINES</div>
+              <div class="address">University Town, Northern Samar, Philippines</div>
+              <div class="contact">
+                Web: <a href="#">http://uep.edu.ph</a>; Email: <a href="#">uepnsofficial@gmail.com</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="top-rule"></div>
+
+          <div class="office-title">UNIVERSITY RESEARCH AND DEVELOPMENT SERVICES</div>
+          <div class="doc-title">Terminal Report Template</div>
+        </header>
+
+        <section class="content">
+          <div class="field-section">
+            <div class="field-label">Study / Project Title</div>
+            <div class="field-line" id="studyProjectTitle"></div>
+          </div>
+
+          <div class="field-section">
+            <div class="field-label">Author / Researcher</div>
+            <div class="field-line" id="authorResearcher"></div>
+          </div>
+
+          <div class="long-section">
+            <div class="long-title">Abstract (200 to 300 words)</div>
+            <div class="long-box" id="abstractText"></div>
+          </div>
+
+          <div class="long-section">
+            <div class="long-title">Keywords</div>
+            <div class="long-box" id="keywordsText"></div>
+          </div>
+
+          <div class="long-section">
+            <div class="long-title">Introduction</div>
+            <div class="long-box" id="introductionText"></div>
+          </div>
+
+          <div class="long-section">
+            <div class="long-title">Methodology</div>
+            <div class="long-box" id="methodologyText"></div>
+          </div>
+
+          <div class="long-section">
+            <div class="long-title">Results and Discussion</div>
+            <div class="long-box" id="resultsDiscussionText"></div>
+          </div>
+
+          <div class="long-section">
+            <div class="long-title">Conclusions</div>
+            <div class="long-box" id="conclusionsText"></div>
+          </div>
+
+          <div class="long-section">
+            <div class="long-title">Acknowledgement</div>
+            <div class="long-box" id="acknowledgementText"></div>
+          </div>
+
+          <div class="long-section">
+            <div class="long-title">Literature cited</div>
+            <div class="long-box" id="literatureCitedText"></div>
+          </div>
+        </section>
+
+        <footer class="footer">
+          <div>
+            <span>DOCUMENT NO.:</span>
+            <span>UEP-URDS-FM-009</span>
+          </div>
+
+          <div>
+            <span>REVISION NO.:</span>
+            <span>00</span>
+          </div>
+
+          <div>
+            <span>EFFECTIVITY</span>
+            <span>SEPTEMBER 12, 2022</span>
+          </div>
+        </footer>
+
+      </div>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      const logoPaths = [
+        "img/logo.jpg",
+        "img/uep-logo.png",
+        "img/uep-logo.jpg",
+        "assets/uep-logo.png",
+        "assets/logo.png",
+        "../public/img/logo.jpg"
+      ];
+
+      const logo = document.getElementById("uepLogo");
+      let logoIndex = 0;
+
+      if (logo) {
+        logo.onerror = function () {
+          logoIndex += 1;
+
+          if (logoIndex < logoPaths.length) {
+            logo.src = logoPaths[logoIndex];
+          } else {
+            logo.style.display = "none";
+          }
+        };
+
+        logo.src = logoPaths[0];
+      }
+
+      const params = new URLSearchParams(window.location.search);
+
+      const proposalId =
+        params.get("id") ||
+        localStorage.getItem("viewProposalId") ||
+        "";
+
+      const draftKeys = [
+        "terminal_report_draft_" + (proposalId || "no_proposal"),
+        "terminalReportDraft:" + (proposalId || "no_proposal"),
+        "fm009_terminal_draft_" + (proposalId || "no_proposal")
+      ];
+
+      const defaultData = {
+        study_project_title: "",
+        author_researcher: "",
+        abstract: "",
+        keywords: "",
+        introduction: "",
+        methodology: "",
+        results_discussion: "",
+        conclusions: "",
+        acknowledgement: "",
+        literature_cited: ""
+      };
+
+      const data = loadDraft();
+      fillPage(data);
+
+      document.getElementById("savePdfBtn")?.addEventListener("click", () => {
+        const element = document.getElementById("printPage");
+        const title = data.study_project_title || "Terminal_Report";
+        const cleanTitle = String(title).replace(/[^a-z0-9]/gi, "_").slice(0, 70);
+
+        html2pdf()
+          .set({
+            margin: 0,
+            filename: "UEP-URDS-FM-009_" + cleanTitle + ".pdf",
+            image: { type: "jpeg", quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+          })
+          .from(element)
+          .save();
+      });
+
+      function loadDraft() {
+        for (const key of draftKeys) {
+          try {
+            const raw = localStorage.getItem(key);
+            if (!raw) continue;
+
+            const saved = JSON.parse(raw);
+            return normalizeData(Object.assign({}, defaultData, saved || {}));
+          } catch (error) {
+            console.warn("Unable to load draft key:", key, error);
+          }
+        }
+
+        return defaultData;
+      }
+
+      function normalizeData(raw) {
+        return {
+          study_project_title:
+            raw.study_project_title ||
+            raw.studyProjectTitle ||
+            raw.report_title ||
+            raw.study_title ||
+            raw.title ||
+            "",
+
+          author_researcher:
+            raw.author_researcher ||
+            raw.authorResearcher ||
+            raw.researchers ||
+            raw.researcher ||
+            raw.proponent ||
+            "",
+
+          abstract: raw.abstract || "",
+          keywords: raw.keywords || "",
+          introduction: raw.introduction || "",
+          methodology: raw.methodology || "",
+          results_discussion: raw.results_discussion || raw.resultsDiscussion || "",
+          conclusions: raw.conclusions || raw.conclusion || "",
+          acknowledgement: raw.acknowledgement || raw.acknowledgment || "",
+          literature_cited: raw.literature_cited || raw.literatureCited || ""
+        };
+      }
+
+      function fillPage(d) {
+        setText("studyProjectTitle", d.study_project_title);
+        setText("authorResearcher", d.author_researcher);
+        setParagraph("abstractText", d.abstract);
+        setParagraph("keywordsText", d.keywords);
+        setParagraph("introductionText", d.introduction);
+        setParagraph("methodologyText", d.methodology);
+        setParagraph("resultsDiscussionText", d.results_discussion);
+        setParagraph("conclusionsText", d.conclusions);
+        setParagraph("acknowledgementText", d.acknowledgement);
+        setParagraph("literatureCitedText", d.literature_cited);
+      }
+
+      function setText(id, value) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.textContent = String(value || "").trim() || " ";
+      }
+
+      function setParagraph(id, value) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.textContent = String(value || "").trim() || "";
+      }
+
+      window.goBack = function () {
+        if (proposalId) {
+          window.location.href = "terminal_report_form.html?id=" + encodeURIComponent(proposalId);
+        } else {
+          window.location.href = "terminal_report_form.html";
+        }
+      };
+    })();
+  </script>
+</body>
+</html>

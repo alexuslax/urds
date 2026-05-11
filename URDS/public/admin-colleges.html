@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Manage Colleges | UEP-URDS</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            urds: {
+              950: "#0f172a",
+              900: "#172033",
+              800: "#1f2b3a",
+              700: "#2f3f55",
+              accent: "#0ea5a4"
+            }
+          },
+          boxShadow: {
+            card: "0 6px 20px rgba(18,26,40,0.06)",
+            soft: "0 10px 30px rgba(15,23,42,0.08)"
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .form-input {
+      width: 100%;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      padding: 0.75rem 0.875rem;
+      border-radius: 0.75rem;
+      font-size: 0.875rem;
+      transition: all 0.15s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #0ea5a4;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(14,165,164,0.18);
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-900 antialiased h-screen overflow-hidden">
+  <div class="h-screen flex overflow-hidden">
+
+    <aside id="sidebar" class="w-72 h-screen bg-urds-900 text-white shrink-0 overflow-y-auto"></aside>
+
+    <div class="flex-1 min-w-0 h-screen overflow-y-auto">
+
+      <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-30">
+        <div class="flex items-center gap-4">
+          <button
+            id="hamburger"
+            type="button"
+            class="md:hidden w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition"
+          >
+            ☰
+          </button>
+
+          <div>
+            <div class="text-xs text-gray-500">UEP-URDS / Administration</div>
+            <h1 class="text-xl font-semibold mt-1">Manage Colleges</h1>
+            <p class="text-xs text-gray-500 mt-0.5">
+              Add colleges, assign deans, upload logos, and organize departments.
+            </p>
+          </div>
+        </div>
+
+        <a href="profile.html" class="flex items-center gap-3 rounded-xl hover:bg-gray-50 p-2 transition">
+          <div class="text-right">
+            <div class="text-sm font-semibold user-name">User</div>
+            <div class="text-xs text-gray-500 user-role">Role</div>
+          </div>
+          <div class="w-10 h-10 rounded-full bg-urds-accent text-white flex items-center justify-center font-bold user-initials">
+            U
+          </div>
+        </a>
+      </header>
+
+      <main class="p-6 max-w-7xl mx-auto space-y-6">
+
+        <section class="bg-gradient-to-r from-urds-900 to-urds-700 text-white p-6 rounded-2xl shadow-soft">
+          <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            <div>
+              <div class="text-sm text-white/70">College Management</div>
+              <h2 class="text-2xl font-bold mt-1">Colleges and Departments</h2>
+              <p class="text-sm text-white/75 mt-2 max-w-2xl">
+                Maintain the official college list used for proposal submission, routing, review, and dean endorsement.
+              </p>
+            </div>
+
+            <button
+              id="addCollege"
+              type="button"
+              class="px-5 py-3 rounded-xl bg-emerald-600 text-white text-sm font-bold hover:bg-emerald-700 active:bg-emerald-800 active:scale-95 transition"
+            >
+              + Add College
+            </button>
+          </div>
+        </section>
+
+        <section class="bg-white p-5 rounded-2xl shadow-card border border-gray-100">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <input
+              id="collegeSearch"
+              type="search"
+              placeholder="Search college, code, dean, department..."
+              class="form-input md:col-span-2"
+            />
+
+            <select id="sortColleges" class="form-input">
+              <option value="name">Sort by College Name</option>
+              <option value="code">Sort by Code</option>
+              <option value="departments">Sort by Department Count</option>
+            </select>
+          </div>
+
+          <div id="collegeCount" class="text-xs text-gray-500 mt-3"></div>
+        </section>
+
+        <section>
+          <div id="collegeContainer" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div class="col-span-full bg-white p-6 rounded-2xl shadow-card text-sm text-gray-500">
+              Loading colleges...
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div
+    id="collegeFormWrap"
+    class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+  >
+    <form
+      id="collegeForm"
+      class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden"
+    >
+      <input type="hidden" name="id" />
+
+      <div class="bg-gradient-to-r from-urds-900 to-urds-800 px-6 py-4 flex items-center justify-between">
+        <div>
+          <h3 id="modalTitle" class="text-lg font-semibold text-white">Add College</h3>
+          <p class="text-xs text-white/70 mt-1">Fill in college details and departments.</p>
+        </div>
+
+        <button
+          type="button"
+          id="cancelCollege"
+          class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xl flex items-center justify-center transition"
+        >
+          ×
+        </button>
+      </div>
+
+      <div class="p-6 space-y-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+          <div class="md:col-span-2">
+            <label class="block text-sm font-semibold text-gray-700">College Name</label>
+            <input
+              name="name"
+              class="form-input mt-1"
+              placeholder="Example: College of Business Administration"
+              required
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700">College Code</label>
+            <input
+              name="college_code"
+              class="form-input mt-1 uppercase"
+              placeholder="Example: CBA"
+              required
+            />
+            <p class="text-xs text-gray-500 mt-1">Short identifier for the college.</p>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700">Dean Name</label>
+            <input
+              name="dean_name"
+              class="form-input mt-1"
+              placeholder="Enter dean name"
+            />
+          </div>
+
+          <div class="md:col-span-2">
+            <label class="block text-sm font-semibold text-gray-700">College Logo URL</label>
+            <input
+              name="college_logo"
+              type="url"
+              class="form-input mt-1"
+              placeholder="https://example.com/logo.png"
+            />
+          </div>
+
+          <div class="md:col-span-2">
+            <label class="block text-sm font-semibold text-gray-700">Departments</label>
+            <textarea
+              name="departments"
+              rows="4"
+              class="form-input mt-1"
+              placeholder="Department of Accountancy, Department of Management, Department of Marketing"
+            ></textarea>
+            <p class="text-xs text-gray-500 mt-1">
+              Separate departments using commas.
+            </p>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-4 border-t border-gray-100">
+          <button
+            type="button"
+            id="deleteCollege"
+            class="hidden px-4 py-2 rounded-xl bg-red-50 text-red-700 text-sm font-bold hover:bg-red-100 active:scale-95 transition"
+          >
+            Delete College
+          </button>
+
+          <div class="flex flex-col sm:flex-row gap-2 sm:ml-auto">
+            <button
+              type="button"
+              id="cancelCollegeBottom"
+              class="px-5 py-3 bg-white border border-gray-200 hover:bg-gray-100 rounded-xl text-sm font-bold text-gray-700 active:scale-95 transition"
+            >
+              Cancel
+            </button>
+
+            <button
+              type="submit"
+              class="px-5 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-bold active:scale-95 transition"
+            >
+              Save College
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div id="toastContainer" class="fixed bottom-6 right-6 space-y-2 z-50"></div>
+
+  <script src="js/main.js"></script>
+  <script src="js/admin-colleges.js"></script>
+</body>
+</html>

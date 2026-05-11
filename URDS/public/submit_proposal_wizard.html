@@ -1,0 +1,1064 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Submit Proposal | UEP-URDS</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            urds: {
+              950: "#0f172a",
+              900: "#172033",
+              800: "#1f2b3a",
+              700: "#2f3f55",
+              accent: "#0ea5a4"
+            }
+          },
+          boxShadow: {
+            card: "0 6px 20px rgba(18,26,40,0.06)",
+            soft: "0 10px 30px rgba(15,23,42,0.08)"
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .form-input {
+      width: 100%;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      padding: 0.75rem 0.875rem;
+      border-radius: 0.75rem;
+      font-size: 0.875rem;
+      transition: all 0.15s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #0ea5a4;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(14, 165, 164, 0.18);
+    }
+
+    select:disabled {
+      appearance: none;
+      background-image: none;
+      background-color: #f3f4f6;
+      color: #6b7280;
+      cursor: not-allowed;
+    }
+
+    .section-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 1rem;
+      padding: 1.25rem;
+      background: #ffffff;
+    }
+
+    .table-input {
+      width: 100%;
+      padding: 0.45rem 0.5rem;
+      font-size: 0.875rem;
+      outline: none;
+      background: transparent;
+    }
+
+    .table-input:focus {
+      background: #ffffff;
+      box-shadow: inset 0 0 0 2px rgba(14, 165, 164, 0.25);
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-900 antialiased h-screen overflow-hidden">
+  <div class="h-screen flex overflow-hidden">
+
+    <aside id="sidebar" class="w-72 h-screen bg-urds-900 text-white shrink-0 overflow-y-auto"></aside>
+
+    <div class="flex-1 min-w-0 h-screen overflow-y-auto">
+
+      <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-30">
+        <div class="flex items-center gap-4">
+          <button
+            id="hamburger"
+            type="button"
+            class="md:hidden w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition"
+          >
+            ☰
+          </button>
+
+          <div>
+            <div class="text-xs text-gray-500">UEP-URDS / Proposal Submission</div>
+            <h1 class="text-xl font-semibold mt-1">Submit Research Proposal</h1>
+            <p class="text-xs text-gray-500 mt-0.5">
+              Complete the proposal details, capsule, workplan, budget, and final review.
+            </p>
+          </div>
+        </div>
+
+        <a href="profile.html" class="flex items-center gap-3 rounded-xl hover:bg-gray-50 p-2 transition">
+          <div class="text-right">
+            <div class="text-sm font-semibold user-name">User</div>
+            <div class="text-xs text-gray-500 user-role">Role</div>
+          </div>
+          <div class="w-10 h-10 rounded-full bg-urds-accent text-white flex items-center justify-center font-bold user-initials">U</div>
+        </a>
+      </header>
+
+      <main class="p-6 max-w-7xl mx-auto space-y-6">
+
+        <section class="bg-gradient-to-r from-urds-900 to-urds-700 text-white p-6 rounded-2xl shadow-soft">
+          <div>
+            <div class="text-sm text-white/70">Research Proposal Wizard</div>
+            <h2 class="text-2xl font-bold mt-1">Online Proposal Submission</h2>
+            <p class="text-sm text-white/75 mt-2 max-w-3xl">
+              Fill out the required information based on official URDS forms. You may save as draft before final submission.
+            </p>
+          </div>
+        </section>
+
+        <section class="bg-white p-5 rounded-2xl shadow-card border border-gray-100">
+          <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div id="progressLine" class="h-2 bg-urds-accent w-1/5 rounded-full transition-all"></div>
+          </div>
+
+          <div class="grid grid-cols-5 gap-2 text-xs mt-4 text-gray-500">
+            <span data-step-icon="1" class="font-bold text-urds-accent">1. Basic Info</span>
+            <span data-step-icon="2">2. Capsule</span>
+            <span data-step-icon="3">3. Workplan</span>
+            <span data-step-icon="4">4. Budget</span>
+            <span data-step-icon="6">5. Review</span>
+          </div>
+        </section>
+
+        <form id="wizardForm" class="bg-white rounded-2xl shadow-card border border-gray-100 overflow-hidden" novalidate>
+
+          <div class="p-6 space-y-8">
+
+            <!-- STEP 1 -->
+            <section class="wizard-step space-y-6" data-step="1">
+              <div>
+                <h2 class="text-xl font-semibold">I. Basic Information</h2>
+                <p class="text-sm text-gray-500 mt-1">
+                  Provide the main proposal details and research hierarchy.
+                </p>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="md:col-span-2">
+                  <label class="block text-sm font-semibold text-gray-700">Research Title</label>
+                  <input required name="title" class="form-input mt-1" placeholder="Full research title..." />
+                </div>
+
+                <div class="md:col-span-2">
+                  <label class="block text-sm font-semibold text-gray-700">Research Type</label>
+                  <select id="researchTypeSelect" name="research_type" class="form-input mt-1" required>
+                    <option value="">Select research type...</option>
+                    <option value="Social Science">Social Science / Social Studies</option>
+                    <option value="Education">Education</option>
+                    <option value="Health Sciences">Health Sciences</option>
+                    <option value="Agriculture">Agriculture</option>
+                    <option value="Fisheries & Marine">Fisheries & Marine</option>
+                    <option value="Engineering & Technology">Engineering & Technology</option>
+                    <option value="Information Technology">Information Technology</option>
+                    <option value="Business & Management">Business & Management</option>
+                    <option value="Arts & Humanities">Arts & Humanities</option>
+                    <option value="Natural Sciences">Natural Sciences</option>
+                    <option value="Environmental Studies">Environmental Studies</option>
+                    <option value="Extension/Community-Based">Extension / Community-Based</option>
+                    <option value="Others">Others</option>
+                  </select>
+
+                  <div id="researchTypeOtherWrap" class="hidden mt-3">
+                    <label class="block text-sm font-semibold text-gray-700">Specify Other Research Type</label>
+                    <input name="research_type_other" class="form-input mt-1" placeholder="Example: Indigenous Studies, DRRM, etc." />
+                  </div>
+                </div>
+
+                <div class="md:col-span-2">
+                  <label class="block text-sm font-semibold text-gray-700">Nature of Research</label>
+                  <select id="natureSelect" name="nature" class="form-input mt-1" required>
+                    <option value="">Select nature...</option>
+                    <option value="Program">Program</option>
+                    <option value="Project">Project</option>
+                    <option value="Study">Study</option>
+                  </select>
+
+                  <div id="hierarchyCard" class="hidden mt-4 p-5 rounded-2xl border border-gray-200 bg-gray-50">
+                    <div id="projectsContainer" class="space-y-4 mb-4">
+                      <!-- Cards will be rendered here -->
+                    </div>
+
+                    <button type="button" id="addProjectBtn" class="hidden px-4 py-2 bg-urds-900 text-white rounded-xl text-sm font-bold hover:bg-urds-800">
+                      + Add Project
+                    </button>
+
+                    <p id="hierarchyNotice" class="hidden mt-3 text-xs font-semibold"></p>
+
+                    <div class="text-xs text-gray-600 mt-4 leading-relaxed">
+                      <strong>Rules:</strong><br />
+                      Program requires at least 2 projects.<br />
+                      Project requires at least 2 studies.<br />
+                      Study applies directly to capsule, workplan, and budget.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="md:col-span-2">
+                  <label class="block text-sm font-semibold text-gray-700">Research Cluster</label>
+                  <select name="cluster" class="form-input mt-1" required>
+                    <option value="">Select cluster...</option>
+                    <option value="Cluster A">Cluster A</option>
+                    <option value="Cluster B">Cluster B</option>
+                    <option value="Cluster C">Cluster C</option>
+                    <option value="Others">Others</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700">College</label>
+                  <select id="collegeSelect" name="college" class="form-input mt-1" required>
+                    <option value="">Select college...</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700">Department</label>
+                  <select id="departmentSelect" name="department" class="form-input mt-1" required>
+                    <option value="">Select department...</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700">Study Leader</label>
+                  <input name="leader" class="form-input mt-1" placeholder="Main proponent" />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700">Project Location</label>
+                  <input name="location" class="form-input mt-1" placeholder="Example: UEP Main Campus" />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700">Duration in Months</label>
+                  <input name="duration" type="number" min="1" class="form-input mt-1" />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700">Estimated Budget</label>
+                  <input name="budgetYear" type="number" min="0" step="0.01" class="form-input mt-1" placeholder="0.00" />
+                </div>
+
+                <div class="md:col-span-2">
+                  <label class="block text-sm font-semibold text-gray-700">Other Personnel</label>
+                  <textarea name="personnel" rows="3" class="form-input mt-1" placeholder="Comma-separated names..."></textarea>
+                </div>
+
+                <div class="md:col-span-2">
+                  <label class="block text-sm font-semibold text-gray-700">Proposal File (Optional)</label>
+                  <input id="fileProposal" type="file" class="form-input mt-1 bg-white" />
+                </div>
+              </div>
+            </section>
+
+            <!-- STEP 2 -->
+            <section class="wizard-step hidden space-y-5" data-step="2">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <h2 class="text-xl font-semibold">II. Capsule Proposal</h2>
+                  <p class="text-sm text-gray-500 mt-1">
+                    Saving for <span class="font-semibold" id="contextInline">Study</span>.
+                  </p>
+                </div>
+
+                <div id="contextBadge" class="hidden text-xs px-3 py-1 rounded-full border bg-gray-50">
+                  Current: <span class="font-semibold" id="contextText">Study 1</span>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-sm font-semibold text-gray-700">Rationale / Significance</label>
+                <textarea name="rationale" rows="5" class="form-input mt-1"></textarea>
+              </div>
+
+              <div>
+                <label class="block text-sm font-semibold text-gray-700">Objectives</label>
+                <textarea name="objectives" rows="4" class="form-input mt-1"></textarea>
+              </div>
+
+              <div>
+                <label class="block text-sm font-semibold text-gray-700">Review of Literature</label>
+                <textarea name="literature" rows="5" class="form-input mt-1"></textarea>
+              </div>
+
+              <div>
+                <label class="block text-sm font-semibold text-gray-700">Detailed Methodology</label>
+                <textarea name="methodology" rows="10" class="form-input mt-1"></textarea>
+              </div>
+
+              <div>
+                <label class="block text-sm font-semibold text-gray-700">Expected Output Optional</label>
+                <textarea name="output" rows="3" class="form-input mt-1"></textarea>
+              </div>
+
+              <div>
+                <label class="block text-sm font-semibold text-gray-700">Impact Optional</label>
+                <textarea name="impact" rows="3" class="form-input mt-1"></textarea>
+              </div>
+            </section>
+
+            <!-- STEP 3 -->
+            <section class="wizard-step hidden space-y-5" data-step="3">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <h2 class="text-xl font-semibold">III. Workplan - Activities Timeline</h2>
+                  <p class="text-xs text-gray-500 mt-1">Click quarter tiles to mark activity schedule.</p>
+                </div>
+
+                <div id="contextBadge2" class="hidden text-xs px-3 py-1 rounded-full border bg-gray-50">
+                  Current: <span class="font-semibold" id="contextText2">Study 1</span>
+                </div>
+              </div>
+
+              <div class="rounded-xl border bg-white p-4">
+                <div class="overflow-x-auto">
+                <table class="w-full border-collapse text-sm">
+                  <thead class="bg-gray-100">
+                    <tr>
+                      <th class="border px-3 py-2 text-left min-w-[18rem] w-[20rem]" rowspan="2">Activities</th>
+                      <th class="border px-3 py-2 text-center" colspan="4">Year 1</th>
+                      <th class="border px-3 py-2 text-center" colspan="4">Year 2</th>
+                      <th class="border px-3 py-2 text-center" colspan="4">Year 3</th>
+                      <th class="border px-2 py-2 text-center w-12" rowspan="2"></th>
+                    </tr>
+                    <tr>
+                      <th class="border px-2 py-2 text-center w-14">Q1</th><th class="border px-2 py-2 text-center w-14">Q2</th><th class="border px-2 py-2 text-center w-14">Q3</th><th class="border px-2 py-2 text-center w-14">Q4</th>
+                      <th class="border px-2 py-2 text-center w-14">Q1</th><th class="border px-2 py-2 text-center w-14">Q2</th><th class="border px-2 py-2 text-center w-14">Q3</th><th class="border px-2 py-2 text-center w-14">Q4</th>
+                      <th class="border px-2 py-2 text-center w-14">Q1</th><th class="border px-2 py-2 text-center w-14">Q2</th><th class="border px-2 py-2 text-center w-14">Q3</th><th class="border px-2 py-2 text-center w-14">Q4</th>
+                    </tr>
+                  </thead>
+                  <tbody id="workplanBody"></tbody>
+                </table>
+              </div>
+
+              <p class="text-xs text-gray-600 mt-3">Click the quarter tile(s). Selected tiles turn blue.</p>
+
+              <div class="flex justify-end mt-4">
+                <button type="button" id="addWorkplanRow" class="px-4 py-2 bg-urds-900 text-white rounded-lg text-sm hover:bg-urds-800 transition-colors">
+                  + Add Activity Row
+                </button>
+              </div>
+              </div>
+            </section>
+
+            <!-- STEP 4 -->
+            <section class="wizard-step hidden space-y-8" data-step="4">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <h2 class="text-xl font-semibold">IV. Financial Components</h2>
+                  <p class="text-sm text-gray-500 mt-1">Budget details for the selected study.</p>
+                </div>
+
+                <div id="contextBadge3" class="hidden text-xs px-3 py-1 rounded-full border bg-gray-50">
+                  Current: <span class="font-semibold" id="contextText3">Study 1</span>
+                </div>
+              </div>
+
+              <div id="budgetSections" class="space-y-10">
+
+                <div class="section-card">
+                  <h3 class="font-semibold text-lg mb-3">I. Personal Services</h3>
+                  <div class="overflow-x-auto">
+                    <table class="w-full border text-sm">
+                      <thead class="bg-gray-100">
+                        <tr>
+                          <th class="border px-2 py-2">Item</th>
+                          <th class="border px-2 py-2">Q1</th>
+                          <th class="border px-2 py-2">Q2</th>
+                          <th class="border px-2 py-2">Q3</th>
+                          <th class="border px-2 py-2">Q4</th>
+                          <th class="border px-2 py-2">Year 1</th>
+                          <th class="border px-2 py-2">Year 2</th>
+                          <th class="border px-2 py-2">Year 3</th>
+                          <th class="border px-2 py-2"></th>
+                        </tr>
+                      </thead>
+                      <tbody id="psRows">
+                        <tr class="entry">
+                          <td class="border px-2 py-2">A. Wages</td>
+                          <td class="border"><input type="number" class="table-input text-right"></td>
+                          <td class="border"><input type="number" class="table-input text-right"></td>
+                          <td class="border"><input type="number" class="table-input text-right"></td>
+                          <td class="border"><input type="number" class="table-input text-right"></td>
+                          <td class="border"><input type="number" class="y1 table-input text-right"></td>
+                          <td class="border"><input type="number" class="y2 table-input text-right"></td>
+                          <td class="border"><input type="number" class="y3 table-input text-right"></td>
+                          <td class="border text-center"><button type="button" class="removeRow text-red-600 text-xs font-bold">✕</button></td>
+                        </tr>
+
+                        <tr class="entry">
+                          <td class="border px-2 py-2">B. Honorarium</td>
+                          <td class="border"><input type="number" class="table-input text-right"></td>
+                          <td class="border"><input type="number" class="table-input text-right"></td>
+                          <td class="border"><input type="number" class="table-input text-right"></td>
+                          <td class="border"><input type="number" class="table-input text-right"></td>
+                          <td class="border"><input type="number" class="y1 table-input text-right"></td>
+                          <td class="border"><input type="number" class="y2 table-input text-right"></td>
+                          <td class="border"><input type="number" class="y3 table-input text-right"></td>
+                          <td class="border text-center"><button type="button" class="removeRow text-red-600 text-xs font-bold">✕</button></td>
+                        </tr>
+
+                        <tr class="bg-gray-50 font-bold">
+                          <td class="border px-2 py-2 text-right" colspan="5">TOTAL</td>
+                          <td class="border px-2 py-2 text-right" id="psTotalY1">₱0.00</td>
+                          <td class="border px-2 py-2 text-right" id="psTotalY2">₱0.00</td>
+                          <td class="border px-2 py-2 text-right" id="psTotalY3">₱0.00</td>
+                          <td class="border"></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Keep these IDs for your existing JS -->
+                <div class="section-card">
+                  <h3 class="font-semibold text-lg mb-3">II. MOOE — Travel</h3>
+                  <div class="overflow-x-auto">
+                    <table class="w-full border text-sm">
+                      <thead class="bg-gray-100">
+                        <tr>
+                          <th class="border px-2 py-2">Date</th>
+                          <th class="border px-2 py-2">Places to Visit</th>
+                          <th class="border px-2 py-2">Purpose</th>
+                          <th class="border px-2 py-2">Transport</th>
+                          <th class="border px-2 py-2">Est. Cost</th>
+                          <th class="border px-2 py-2">Year 1</th>
+                          <th class="border px-2 py-2">Year 2</th>
+                          <th class="border px-2 py-2">Year 3</th>
+                          <th class="border px-2 py-2"></th>
+                        </tr>
+                      </thead>
+                      <tbody id="travelRows">
+                        <tr class="entry">
+                          <td class="border"><input class="table-input" placeholder="mm/dd/yyyy"></td>
+                          <td class="border"><input class="table-input"></td>
+                          <td class="border"><input class="table-input"></td>
+                          <td class="border"><input class="table-input"></td>
+                          <td class="border"><input type="number" class="table-input text-right"></td>
+                          <td class="border"><input type="number" class="y1 table-input text-right"></td>
+                          <td class="border"><input type="number" class="y2 table-input text-right"></td>
+                          <td class="border"><input type="number" class="y3 table-input text-right"></td>
+                          <td class="border text-center"><button type="button" class="removeRow text-red-600 text-xs font-bold">✕</button></td>
+                        </tr>
+                        <tr class="bg-gray-50 font-bold">
+                          <td colspan="5" class="border px-2 py-2 text-right">TOTAL</td>
+                          <td class="border px-2 py-2 text-right" id="travelTotalY1">₱0.00</td>
+                          <td class="border px-2 py-2 text-right" id="travelTotalY2">₱0.00</td>
+                          <td class="border px-2 py-2 text-right" id="travelTotalY3">₱0.00</td>
+                          <td class="border"></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <button type="button" id="addTravel" class="mt-3 px-4 py-2 bg-urds-900 text-white rounded-xl text-sm font-bold hover:bg-urds-800">+ Add Travel Entry</button>
+                </div>
+
+                <div class="section-card">
+                  <h3 class="font-semibold text-lg mb-3">II. MOOE — Supplies & Materials</h3>
+                  <div class="overflow-x-auto">
+                    <table class="w-full border text-sm">
+                      <thead class="bg-gray-100">
+                        <tr>
+                          <th class="border">Date</th><th class="border">Unit</th><th class="border">Item Description</th><th class="border">Purpose</th><th class="border">Qty</th><th class="border">Unit Cost</th><th class="border">Year 1</th><th class="border">Year 2</th><th class="border">Year 3</th><th class="border"></th>
+                        </tr>
+                      </thead>
+                      <tbody id="suppliesRows">
+                        <tr class="entry">
+                          <td class="border"><input class="table-input" placeholder="mm/dd/yyyy"></td>
+                          <td class="border"><input class="table-input"></td>
+                          <td class="border"><input class="table-input"></td>
+                          <td class="border"><input class="table-input"></td>
+                          <td class="border"><input type="number" class="table-input"></td>
+                          <td class="border"><input type="number" class="table-input text-right"></td>
+                          <td class="border"><input type="number" class="y1 table-input text-right"></td>
+                          <td class="border"><input type="number" class="y2 table-input text-right"></td>
+                          <td class="border"><input type="number" class="y3 table-input text-right"></td>
+                          <td class="border text-center"><button type="button" class="removeRow text-red-600 text-xs font-bold">✕</button></td>
+                        </tr>
+                        <tr class="bg-gray-50 font-bold">
+                          <td colspan="6" class="border px-2 py-2 text-right">TOTAL</td>
+                          <td class="border px-2 py-2 text-right" id="suppliesTotalY1">₱0.00</td>
+                          <td class="border px-2 py-2 text-right" id="suppliesTotalY2">₱0.00</td>
+                          <td class="border px-2 py-2 text-right" id="suppliesTotalY3">₱0.00</td>
+                          <td class="border"></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <button id="addSupply" type="button" class="mt-3 px-4 py-2 bg-urds-900 text-white rounded-xl text-sm font-bold hover:bg-urds-800">+ Add Supply</button>
+                </div>
+
+                <div class="section-card">
+                  <h3 class="font-semibold text-lg mb-3">II. MOOE — Communications</h3>
+                  <div class="overflow-x-auto">
+                    <table class="w-full border text-sm">
+                      <thead class="bg-gray-100">
+                        <tr>
+                          <th class="border">Date</th><th class="border">Nature</th><th class="border">Purpose</th><th class="border">Qty</th><th class="border">Est. Cost</th><th class="border">Year 1</th><th class="border">Year 2</th><th class="border">Year 3</th><th class="border"></th>
+                        </tr>
+                      </thead>
+                      <tbody id="commRows">
+                        <tr class="entry">
+                          <td class="border"><input class="table-input" placeholder="mm/dd/yyyy"></td>
+                          <td class="border"><input class="table-input"></td>
+                          <td class="border"><input class="table-input"></td>
+                          <td class="border"><input type="number" class="table-input"></td>
+                          <td class="border"><input type="number" class="table-input text-right"></td>
+                          <td class="border"><input type="number" class="y1 table-input text-right"></td>
+                          <td class="border"><input type="number" class="y2 table-input text-right"></td>
+                          <td class="border"><input type="number" class="y3 table-input text-right"></td>
+                          <td class="border text-center"><button type="button" class="removeRow text-red-600 text-xs font-bold">✕</button></td>
+                        </tr>
+                        <tr class="bg-gray-50 font-bold">
+                          <td colspan="5" class="border px-2 py-2 text-right">TOTAL</td>
+                          <td class="border px-2 py-2 text-right" id="commTotalY1">₱0.00</td>
+                          <td class="border px-2 py-2 text-right" id="commTotalY2">₱0.00</td>
+                          <td class="border px-2 py-2 text-right" id="commTotalY3">₱0.00</td>
+                          <td class="border"></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <button id="addComm" type="button" class="mt-3 px-4 py-2 bg-urds-900 text-white rounded-xl text-sm font-bold hover:bg-urds-800">+ Add Communication</button>
+                </div>
+
+                <div class="section-card">
+                  <h3 class="font-semibold text-lg mb-3">II. Other MOOE — Contract Labor</h3>
+                  <div class="overflow-x-auto">
+                    <table class="w-full border text-sm">
+                      <thead class="bg-gray-100">
+                        <tr>
+                          <th class="border">Date</th><th class="border">Job Description</th><th class="border">Purpose</th><th class="border">Days/Cost</th><th class="border">Est. Cost</th><th class="border">Year 1</th><th class="border">Year 2</th><th class="border">Year 3</th><th class="border"></th>
+                        </tr>
+                      </thead>
+                      <tbody id="laborRows">
+                        <tr class="entry">
+                          <td class="border"><input class="table-input" placeholder="mm/dd/yyyy"></td>
+                          <td class="border"><input class="table-input"></td>
+                          <td class="border"><input class="table-input"></td>
+                          <td class="border"><input class="table-input"></td>
+                          <td class="border"><input type="number" class="table-input text-right"></td>
+                          <td class="border"><input type="number" class="y1 table-input text-right"></td>
+                          <td class="border"><input type="number" class="y2 table-input text-right"></td>
+                          <td class="border"><input type="number" class="y3 table-input text-right"></td>
+                          <td class="border text-center"><button type="button" class="removeRow text-red-600 text-xs font-bold">✕</button></td>
+                        </tr>
+                        <tr class="bg-gray-50 font-bold">
+                          <td colspan="5" class="border px-2 py-2 text-right">TOTAL</td>
+                          <td class="border px-2 py-2 text-right" id="laborTotalY1">₱0.00</td>
+                          <td class="border px-2 py-2 text-right" id="laborTotalY2">₱0.00</td>
+                          <td class="border px-2 py-2 text-right" id="laborTotalY3">₱0.00</td>
+                          <td class="border"></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <button id="addLabor" type="button" class="mt-3 px-4 py-2 bg-urds-900 text-white rounded-xl text-sm font-bold hover:bg-urds-800">+ Add Labor Entry</button>
+                </div>
+
+                <div class="section-card">
+                  <h3 class="font-semibold text-lg mb-3">III. Equipment Outlay</h3>
+                  <div class="overflow-x-auto">
+                    <table class="w-full border text-sm">
+                      <thead class="bg-gray-100">
+                        <tr>
+                          <th class="border">Date</th><th class="border">Unit</th><th class="border">Item Description</th><th class="border">Purpose</th><th class="border">Qty</th><th class="border">Est. Cost</th><th class="border">Year 1</th><th class="border">Year 2</th><th class="border">Year 3</th><th class="border"></th>
+                        </tr>
+                      </thead>
+                      <tbody id="equipmentRows">
+                        <tr class="entry">
+                          <td class="border"><input class="table-input" placeholder="mm/dd/yyyy"></td>
+                          <td class="border"><input class="table-input"></td>
+                          <td class="border"><input class="table-input"></td>
+                          <td class="border"><input class="table-input"></td>
+                          <td class="border"><input class="table-input"></td>
+                          <td class="border"><input type="number" class="table-input text-right"></td>
+                          <td class="border"><input type="number" class="y1 table-input text-right"></td>
+                          <td class="border"><input type="number" class="y2 table-input text-right"></td>
+                          <td class="border"><input type="number" class="y3 table-input text-right"></td>
+                          <td class="border text-center"><button type="button" class="removeRow text-red-600 text-xs font-bold">✕</button></td>
+                        </tr>
+                        <tr class="bg-gray-50 font-bold">
+                          <td colspan="6" class="border px-2 py-2 text-right">TOTAL</td>
+                          <td class="border px-2 py-2 text-right" id="equipmentTotalY1">₱0.00</td>
+                          <td class="border px-2 py-2 text-right" id="equipmentTotalY2">₱0.00</td>
+                          <td class="border px-2 py-2 text-right" id="equipmentTotalY3">₱0.00</td>
+                          <td class="border"></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <button id="addEquipmentRow" type="button" class="mt-3 px-4 py-2 bg-urds-900 text-white rounded-xl text-sm font-bold hover:bg-urds-800">+ Add Equipment</button>
+                </div>
+
+                <div class="text-right text-xl font-extrabold">
+                  GRAND TOTAL:
+                  <span id="grandTotal" class="text-urds-accent">₱0.00</span>
+                </div>
+              </div>
+            </section>
+
+            <!-- STEP 6 -->
+            <section class="wizard-step hidden space-y-5" data-step="6">
+              <div>
+                <h2 class="text-xl font-semibold">V. Review & Final Submission</h2>
+                <p class="text-sm text-gray-500 mt-1">
+                  Review all encoded information before submitting.
+                </p>
+              </div>
+
+              <div id="reviewBox" class="bg-gray-50 p-5 rounded-2xl border text-sm"></div>
+
+              <div class="flex justify-end">
+                <button type="button" id="saveDraftBtn" class="px-5 py-3 bg-gray-700 text-white rounded-xl text-sm font-bold hover:bg-gray-800">
+                  Save Draft
+                </button>
+              </div>
+            </section>
+
+          </div>
+
+          <div class="flex justify-between gap-3 p-6 border-t border-gray-100 bg-gray-50">
+            <button type="button" id="prevBtn" class="px-5 py-3 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-700 hover:bg-gray-100">
+              Back
+            </button>
+
+            <div class="flex gap-2">
+              <button type="button" id="nextBtn" class="px-5 py-3 bg-blue-700 text-white rounded-xl text-sm font-bold hover:bg-blue-800">
+                Next
+              </button>
+
+              <button type="submit" id="finalSubmitBtn" class="hidden px-5 py-3 bg-urds-900 text-white rounded-xl text-sm font-bold hover:bg-urds-800">
+                Submit
+              </button>
+            </div>
+          </div>
+
+        </form>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script src="js/submit_proposal_wizard.js"></script>
+
+  <script>
+    (function () {
+      const nature = document.getElementById("natureSelect");
+      const card = document.getElementById("hierarchyCard");
+
+      const projectPicker = document.getElementById("projectPicker");
+      const studyPicker = document.getElementById("studyPicker");
+
+      const projectsContainer = document.getElementById("projectsContainer");
+      const addProjectBtn = document.getElementById("addProjectBtn");
+      const hierarchyNotice = document.getElementById("hierarchyNotice");
+
+      const badge1 = document.getElementById("contextBadge");
+      const badge2 = document.getElementById("contextBadge2");
+      const badge3 = document.getElementById("contextBadge3");
+
+      const contextInline = document.getElementById("contextInline");
+      const ctx1 = document.getElementById("contextText");
+      const ctx2 = document.getElementById("contextText2");
+      const ctx3 = document.getElementById("contextText3");
+
+      const researchType = document.getElementById("researchTypeSelect");
+      const researchTypeOtherWrap = document.getElementById("researchTypeOtherWrap");
+
+      let hierarchyState = {
+        projects: [],  // used when nature = Program [{name}]
+        studies: []    // used when nature = Project  [{name}]
+      };
+
+      let catalogProjects = [];   // [{name, studies:[]}]
+      let catalogAllStudies = []; // flat unique study names across all catalog projects
+      let catalogLoaded = false;
+      let catalogLoadFailed = false;
+
+      let lastNature = "";
+
+      function setContextText(text) {
+        const value = text || "Study";
+        if (contextInline) contextInline.textContent = value;
+        if (ctx1) ctx1.textContent = value;
+        if (ctx2) ctx2.textContent = value;
+        if (ctx3) ctx3.textContent = value;
+      }
+
+      function showHierarchyNotice(message, kind) {
+        if (!hierarchyNotice) return;
+
+        hierarchyNotice.textContent = message || "";
+        hierarchyNotice.classList.remove("hidden", "text-red-600", "text-emerald-700", "text-gray-600");
+
+        if (!message) {
+          hierarchyNotice.classList.add("hidden");
+          return;
+        }
+
+        if (kind === "error") hierarchyNotice.classList.add("text-red-600");
+        else if (kind === "success") hierarchyNotice.classList.add("text-emerald-700");
+        else hierarchyNotice.classList.add("text-gray-600");
+      }
+
+      function closeAddPanels() {}
+
+      function cloneCatalogProjects() {
+        return catalogProjects.map(function (p) {
+          return { name: p.name, studies: [...(p.studies || [])] };
+        });
+      }
+
+      function uniqueTrimmed(values) {
+        const out = [];
+        (values || []).forEach(function (value) {
+          const text = String(value || "").trim();
+          if (!text) return;
+          if (out.indexOf(text) === -1) out.push(text);
+        });
+        return out;
+      }
+
+      async function loadHierarchyCatalog() {
+        if (catalogLoaded) return;
+
+        try {
+          const response = await fetch("../../backend/get_hierarchy_catalog.php", {
+            method: "GET",
+            credentials: "same-origin"
+          });
+
+          if (!response.ok) {
+            throw new Error("HTTP " + response.status);
+          }
+
+          const result = await response.json();
+
+          if (result.status !== "success") {
+            throw new Error(result.message || "Unable to load hierarchy catalog.");
+          }
+
+          const normalized = (result.projects || []).map(function (project) {
+            return {
+              name: String(project.project_name || "").trim(),
+              studies: uniqueTrimmed(project.studies || [])
+            };
+          }).filter(function (project) {
+            return project.name && project.studies.length > 0;
+          });
+
+          catalogProjects = normalized;
+          catalogAllStudies = uniqueTrimmed(
+            normalized.flatMap(function (p) { return p.studies || []; })
+          );
+          catalogLoaded = true;
+          catalogLoadFailed = false;
+        } catch (error) {
+          console.error("Failed to load hierarchy catalog:", error);
+          catalogProjects = [];
+          catalogLoaded = true;
+          catalogLoadFailed = true;
+          showHierarchyNotice("Unable to load projects/studies from database.", "error");
+        }
+      }
+
+      function resetHierarchyByNature(value) {
+        if (value === "Program") {
+          hierarchyState.projects = catalogProjects.slice(0, 2).map(function (p) {
+            return { name: p.name };
+          });
+          hierarchyState.studies = [];
+        } else if (value === "Project") {
+          hierarchyState.studies = catalogAllStudies.slice(0, 2).map(function (s) {
+            return { name: s };
+          });
+          hierarchyState.projects = [];
+        } else {
+          hierarchyState.projects = [];
+          hierarchyState.studies = [];
+        }
+      }
+
+      function getProjectByName(name) {
+        return catalogProjects.find(function (p) { return p.name === name; }) || null;
+      }
+
+      function renderProjectCards() {
+        if (!projectsContainer) return;
+        projectsContainer.innerHTML = "";
+
+        const value = (nature?.value || "").trim();
+
+        if (value === "Program") {
+          // Render project cards
+          hierarchyState.projects.forEach(function (project, index) {
+            const card = document.createElement("div");
+            card.className = "p-5 border border-gray-200 rounded-xl bg-white shadow-sm hover:shadow-md transition-shadow";
+            card.dataset.projectIndex = index;
+
+            const header = document.createElement("div");
+            header.className = "flex items-center justify-between pb-4 mb-4 border-b border-gray-100";
+            header.innerHTML = `
+              <div class="flex items-center gap-3">
+                <span class="flex items-center justify-center w-9 h-9 bg-urds-accent text-white rounded-lg font-bold text-base">${index + 1}</span>
+                <h3 class="font-semibold text-gray-900 text-lg">Project ${index + 1}</h3>
+              </div>
+              <button type="button" class="removeItem px-3 py-1 bg-red-50 text-red-600 text-xs font-bold rounded-lg hover:bg-red-100 transition" data-index="${index}">Remove</button>
+            `;
+            card.appendChild(header);
+
+            const label = document.createElement("label");
+            label.className = "block text-sm font-semibold text-gray-700 mb-2";
+            label.textContent = "Project Name";
+            card.appendChild(label);
+
+            const select = document.createElement("select");
+            select.className = "itemSelect form-input";
+            select.dataset.index = index;
+            select.innerHTML = '<option value="">Select Project from Database</option>';
+            catalogProjects.forEach(function (p) {
+              const opt = document.createElement("option");
+              opt.value = p.name;
+              opt.textContent = p.name;
+              if (p.name === project.name) opt.selected = true;
+              select.appendChild(opt);
+            });
+            card.appendChild(select);
+            projectsContainer.appendChild(card);
+          });
+
+        } else if (value === "Project") {
+          // Render study cards
+          hierarchyState.studies.forEach(function (study, index) {
+            const card = document.createElement("div");
+            card.className = "p-5 border border-gray-200 rounded-xl bg-white shadow-sm hover:shadow-md transition-shadow";
+            card.dataset.studyIndex = index;
+
+            const header = document.createElement("div");
+            header.className = "flex items-center justify-between pb-4 mb-4 border-b border-gray-100";
+            header.innerHTML = `
+              <div class="flex items-center gap-3">
+                <span class="flex items-center justify-center w-9 h-9 bg-blue-500 text-white rounded-lg font-bold text-base">${index + 1}</span>
+                <h3 class="font-semibold text-gray-900 text-lg">Study ${index + 1}</h3>
+              </div>
+              <button type="button" class="removeItem px-3 py-1 bg-red-50 text-red-600 text-xs font-bold rounded-lg hover:bg-red-100 transition" data-index="${index}">Remove</button>
+            `;
+            card.appendChild(header);
+
+            const label = document.createElement("label");
+            label.className = "block text-sm font-semibold text-gray-700 mb-2";
+            label.textContent = "Study Name";
+            card.appendChild(label);
+
+            const select = document.createElement("select");
+            select.className = "itemSelect form-input";
+            select.dataset.index = index;
+            select.innerHTML = '<option value="">Select Study from Database</option>';
+            catalogAllStudies.forEach(function (s) {
+              const opt = document.createElement("option");
+              opt.value = s;
+              opt.textContent = s;
+              if (s === study.name) opt.selected = true;
+              select.appendChild(opt);
+            });
+            card.appendChild(select);
+            projectsContainer.appendChild(card);
+          });
+        }
+
+        attachCardListeners();
+      }
+
+      function attachCardListeners() {
+        const value = (nature?.value || "").trim();
+
+        document.querySelectorAll(".removeItem").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            const index = parseInt(btn.dataset.index, 10);
+            removeItem(index);
+          });
+        });
+
+        document.querySelectorAll(".itemSelect").forEach(function (sel) {
+          sel.addEventListener("change", function () {
+            const index = parseInt(sel.dataset.index, 10);
+            const selectedName = sel.value;
+            if (value === "Program") {
+              hierarchyState.projects[index] = { name: selectedName };
+            } else if (value === "Project") {
+              hierarchyState.studies[index] = { name: selectedName };
+            }
+          });
+        });
+      }
+
+      function removeItem(index) {
+        const value = (nature?.value || "").trim();
+        if (value === "Program") {
+          if (hierarchyState.projects.length <= 2) {
+            showHierarchyNotice("Program requires at least 2 projects.", "error");
+            return;
+          }
+          hierarchyState.projects.splice(index, 1);
+          renderProjectCards();
+          showHierarchyNotice("Project removed.", "success");
+        } else if (value === "Project") {
+          if (hierarchyState.studies.length <= 2) {
+            showHierarchyNotice("Project requires at least 2 studies.", "error");
+            return;
+          }
+          hierarchyState.studies.splice(index, 1);
+          renderProjectCards();
+          showHierarchyNotice("Study removed.", "success");
+        }
+      }
+
+      function addNewProjectCard() {
+        const value = (nature?.value || "").trim();
+        if (value === "Program") {
+          const selectedNames = hierarchyState.projects.map(function (p) { return p.name; });
+          const available = catalogProjects.filter(function (p) {
+            return selectedNames.indexOf(p.name) === -1;
+          });
+          if (!available.length) {
+            showHierarchyNotice("No more projects available in database.", "error");
+            return;
+          }
+          hierarchyState.projects.push({ name: available[0].name });
+          renderProjectCards();
+          showHierarchyNotice("Project " + hierarchyState.projects.length + " added.", "success");
+
+        } else if (value === "Project") {
+          const selectedNames = hierarchyState.studies.map(function (s) { return s.name; });
+          const available = catalogAllStudies.filter(function (s) {
+            return selectedNames.indexOf(s) === -1;
+          });
+          if (!available.length) {
+            showHierarchyNotice("No more studies available in database.", "error");
+            return;
+          }
+          hierarchyState.studies.push({ name: available[0] });
+          renderProjectCards();
+          showHierarchyNotice("Study " + hierarchyState.studies.length + " added.", "success");
+        }
+      }
+
+      async function toggleHierarchy() {
+        const value = (nature?.value || "").trim();
+
+        const isProgram = value === "Program";
+        const isProject = value === "Project";
+        const showHierarchy = isProgram || isProject;
+
+        card?.classList.toggle("hidden", !showHierarchy);
+
+        badge1?.classList.toggle("hidden", !showHierarchy);
+        badge2?.classList.toggle("hidden", !showHierarchy);
+        badge3?.classList.toggle("hidden", !showHierarchy);
+
+        if (addProjectBtn) {
+          addProjectBtn.classList.toggle("hidden", !showHierarchy);
+          addProjectBtn.textContent = isProgram ? "+ Add Project" : "+ Add Study";
+        }
+
+        if (showHierarchy && !catalogLoaded) {
+          await loadHierarchyCatalog();
+        }
+
+        if (value !== lastNature) {
+          resetHierarchyByNature(value);
+          lastNature = value;
+          showHierarchyNotice("", "");
+        }
+
+        if (showHierarchy) {
+          renderProjectCards();
+          if (isProgram) {
+            setContextText(hierarchyState.projects[0]?.name || "Project 1");
+          } else {
+            setContextText(hierarchyState.studies[0]?.name || "Study 1");
+          }
+        } else {
+          setContextText("Study");
+        }
+      }
+
+      function toggleResearchTypeOther() {
+        const show = (researchType?.value || "") === "Others";
+        researchTypeOtherWrap?.classList.toggle("hidden", !show);
+      }
+
+      addProjectBtn?.addEventListener("click", addNewProjectCard);
+
+      window.getWizardHierarchyRows = function () {
+        const value = (nature?.value || "").trim();
+        if (value === "Program") {
+          return hierarchyState.projects.map(function (project, i) {
+            return { project_name: project.name, study_name: null, project_order: i + 1, study_order: 0 };
+          });
+        } else if (value === "Project") {
+          return hierarchyState.studies.map(function (study, i) {
+            return { project_name: null, study_name: study.name, project_order: 0, study_order: i + 1 };
+          });
+        }
+        return [];
+      };
+
+      window.getWizardHierarchySummary = function () {
+        const value = (nature?.value || "").trim();
+        return {
+          nature: value,
+          projects: hierarchyState.projects.map(function (p) { return p.name; }),
+          studies: hierarchyState.studies.map(function (s) { return s.name; })
+        };
+      };
+
+      function closeAddPanels() {}
+      function cloneCatalogProjects() {
+        return catalogProjects.map(function (p) {
+          return {
+            name: p.name,
+            studies: (p.studies || []).map(function (studyName) {
+              return { name: studyName };
+            }),
+            catalogStudies: [...(p.studies || [])]
+          };
+        });
+      }
+
+      nature?.addEventListener("change", function () {
+        toggleHierarchy();
+      });
+      researchType?.addEventListener("change", toggleResearchTypeOther);
+
+      toggleHierarchy();
+      toggleResearchTypeOther();
+    })();
+  </script>
+</body>
+</html>

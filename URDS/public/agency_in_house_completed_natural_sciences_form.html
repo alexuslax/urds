@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FM-014 Entry Form • Completed Research Natural Sciences</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            urds: {
+              900: "#172033",
+              800: "#1f2b3a",
+              accent: "#0ea5a4"
+            }
+          },
+          boxShadow: {
+            card: "0 6px 20px rgba(18,26,40,0.06)",
+            soft: "0 10px 30px rgba(15,23,42,0.08)"
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .form-input {
+      width: 100%;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      padding: 0.75rem 0.875rem;
+      border-radius: 0.75rem;
+      font-size: 0.875rem;
+      transition: all 0.15s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #0ea5a4;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(14,165,164,0.18);
+    }
+
+    textarea.form-input {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .section-card {
+      background: white;
+      border: 1px solid #f3f4f6;
+      border-radius: 1rem;
+      box-shadow: 0 6px 20px rgba(18,26,40,0.06);
+      overflow: hidden;
+    }
+
+    .section-header {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid #f3f4f6;
+      background: #ffffff;
+    }
+
+    .section-body {
+      padding: 1.25rem;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-900 antialiased">
+
+  <!-- TOP BAR -->
+  <header class="sticky top-0 z-40 bg-white border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+
+      <div>
+        <div class="text-xs text-gray-500">UEP-URDS-FM-014</div>
+
+        <h1 class="text-xl font-bold text-urds-900">
+          Completed Research Evaluation Form
+        </h1>
+
+        <p class="text-sm text-gray-500">
+          Natural Sciences Category entry form
+        </p>
+      </div>
+
+      <div class="flex flex-wrap gap-2">
+        <button
+          id="backBtn"
+          type="button"
+          class="px-4 py-2.5 rounded-xl bg-white border border-gray-200 hover:bg-gray-100 text-gray-700 text-sm font-bold transition"
+        >
+          ← Back
+        </button>
+
+        <button
+          id="saveDraftBtn"
+          type="button"
+          class="px-4 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-bold transition"
+        >
+          Save Draft
+        </button>
+
+        <button
+          id="previewBtn"
+          type="button"
+          class="px-4 py-2.5 rounded-xl bg-urds-accent hover:opacity-90 text-white text-sm font-bold transition"
+        >
+          Preview / Print
+        </button>
+
+        <button
+          id="clearBtn"
+          type="button"
+          class="px-4 py-2.5 rounded-xl bg-red-50 hover:bg-red-100 text-red-700 text-sm font-bold transition"
+        >
+          Clear
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto p-6 space-y-6">
+
+    <!-- HERO -->
+    <section class="bg-gradient-to-r from-urds-900 to-urds-800 text-white rounded-2xl shadow-soft p-6">
+      <div class="max-w-3xl">
+        <div class="text-sm text-white/70">
+          Agency In-House Review Evaluation Form
+        </div>
+
+        <h2 class="text-2xl md:text-3xl font-bold mt-1">
+          For Completed Research – Natural Sciences Category
+        </h2>
+
+        <p class="text-sm text-white/75 mt-2">
+          Fill out the evaluation details below, save the draft, then open the printable FM-014 template.
+        </p>
+      </div>
+    </section>
+
+    <form id="reviewForm" class="space-y-6">
+
+      <!-- BASIC INFORMATION -->
+      <section class="section-card">
+        <div class="section-header">
+          <h3 class="text-lg font-bold text-gray-900">Basic Information</h3>
+          <p class="text-xs text-gray-500 mt-1">
+            These fields appear on the first page of the evaluation form.
+          </p>
+        </div>
+
+        <div class="section-body grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="form_year" class="block text-sm font-semibold text-gray-700 mb-1">
+              Year
+            </label>
+            <input
+              id="form_year"
+              name="form_year"
+              type="text"
+              class="form-input"
+              placeholder="Example: 2024"
+            />
+          </div>
+
+          <div>
+            <label for="duration_definite_date" class="block text-sm font-semibold text-gray-700 mb-1">
+              Duration / Definite Date
+            </label>
+            <input
+              id="duration_definite_date"
+              name="duration_definite_date"
+              type="text"
+              class="form-input"
+              placeholder="Example: Jan. 2024 - Dec. 2024"
+            />
+          </div>
+
+          <div class="md:col-span-2">
+            <label for="project_study_activity_title" class="block text-sm font-semibold text-gray-700 mb-1">
+              Project / Study / Activity Title
+            </label>
+            <input
+              id="project_study_activity_title"
+              name="project_study_activity_title"
+              type="text"
+              class="form-input"
+            />
+          </div>
+
+          <div class="md:col-span-2">
+            <label for="program_project_leaders" class="block text-sm font-semibold text-gray-700 mb-1">
+              Program / Project Leader(s) / Proponents
+            </label>
+            <input
+              id="program_project_leaders"
+              name="program_project_leaders"
+              type="text"
+              class="form-input"
+            />
+          </div>
+
+          <div>
+            <label for="implementing_college_department" class="block text-sm font-semibold text-gray-700 mb-1">
+              Implementing College / Department
+            </label>
+            <input
+              id="implementing_college_department"
+              name="implementing_college_department"
+              type="text"
+              class="form-input"
+            />
+          </div>
+
+          <div>
+            <label for="funding_agency" class="block text-sm font-semibold text-gray-700 mb-1">
+              Funding Agency
+            </label>
+            <input
+              id="funding_agency"
+              name="funding_agency"
+              type="text"
+              class="form-input"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- EVALUATOR COMMENTS -->
+      <section class="section-card">
+        <div class="section-header">
+          <h3 class="text-lg font-bold text-gray-900">
+            Evaluator’s Analysis / Recommendations / Comments
+          </h3>
+          <p class="text-xs text-gray-500 mt-1">
+            These comments appear under Section F.
+          </p>
+        </div>
+
+        <div class="section-body grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="title_comments" class="block text-sm font-semibold text-gray-700 mb-1">
+              Title
+            </label>
+            <textarea id="title_comments" name="title_comments" class="form-input"></textarea>
+          </div>
+
+          <div>
+            <label for="objectives_comments" class="block text-sm font-semibold text-gray-700 mb-1">
+              Objectives
+            </label>
+            <textarea id="objectives_comments" name="objectives_comments" class="form-input"></textarea>
+          </div>
+
+          <div>
+            <label for="methodology_comments" class="block text-sm font-semibold text-gray-700 mb-1">
+              Methodology
+            </label>
+            <textarea id="methodology_comments" name="methodology_comments" class="form-input"></textarea>
+          </div>
+
+          <div>
+            <label for="output_comments" class="block text-sm font-semibold text-gray-700 mb-1">
+              Output
+            </label>
+            <textarea id="output_comments" name="output_comments" class="form-input"></textarea>
+          </div>
+
+          <div>
+            <label for="impact_sustainability_comments" class="block text-sm font-semibold text-gray-700 mb-1">
+              Impact / Sustainability
+            </label>
+            <textarea id="impact_sustainability_comments" name="impact_sustainability_comments" class="form-input"></textarea>
+          </div>
+
+          <div>
+            <label for="general_comments" class="block text-sm font-semibold text-gray-700 mb-1">
+              General Comments
+            </label>
+            <textarea id="general_comments" name="general_comments" class="form-input"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- EVALUATOR RATING -->
+      <section class="section-card">
+        <div class="section-header">
+          <h3 class="text-lg font-bold text-gray-900">Evaluator’s Rating</h3>
+          <p class="text-xs text-gray-500 mt-1">
+            Enter the rating for each criterion. The Basic and Applied columns show the template weights.
+          </p>
+        </div>
+
+        <div class="section-body overflow-x-auto">
+          <table class="w-full min-w-[900px] text-sm border border-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="text-left px-4 py-3 border-b border-gray-200">Criteria</th>
+                <th class="text-center px-4 py-3 border-b border-gray-200 w-28">Basic</th>
+                <th class="text-center px-4 py-3 border-b border-gray-200 w-28">Applied</th>
+                <th class="text-center px-4 py-3 border-b border-gray-200 w-40">Rating</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td class="px-4 py-3 border-b">Originality of the research</td>
+                <td class="px-4 py-3 border-b text-center">25%</td>
+                <td class="px-4 py-3 border-b text-center"></td>
+                <td class="px-4 py-3 border-b">
+                  <input
+                    id="originality_rating"
+                    name="originality_rating"
+                    type="number"
+                    min="0"
+                    class="form-input text-center rating-field"
+                  />
+                </td>
+              </tr>
+
+              <tr>
+                <td class="px-4 py-3 border-b">Relevance of the research/project</td>
+                <td class="px-4 py-3 border-b text-center"></td>
+                <td class="px-4 py-3 border-b text-center">20%</td>
+                <td class="px-4 py-3 border-b">
+                  <input
+                    id="relevance_rating"
+                    name="relevance_rating"
+                    type="number"
+                    min="0"
+                    class="form-input text-center rating-field"
+                  />
+                </td>
+              </tr>
+
+              <tr>
+                <td class="px-4 py-3 border-b">Generation of new knowledge</td>
+                <td class="px-4 py-3 border-b text-center">20%</td>
+                <td class="px-4 py-3 border-b text-center"></td>
+                <td class="px-4 py-3 border-b">
+                  <input
+                    id="new_knowledge_rating"
+                    name="new_knowledge_rating"
+                    type="number"
+                    min="0"
+                    class="form-input text-center rating-field"
+                  />
+                </td>
+              </tr>
+
+              <tr>
+                <td class="px-4 py-3 border-b">Generation of new technology/information</td>
+                <td class="px-4 py-3 border-b text-center"></td>
+                <td class="px-4 py-3 border-b text-center">10%</td>
+                <td class="px-4 py-3 border-b">
+                  <input
+                    id="new_technology_rating"
+                    name="new_technology_rating"
+                    type="number"
+                    min="0"
+                    class="form-input text-center rating-field"
+                  />
+                </td>
+              </tr>
+
+              <tr>
+                <td class="px-4 py-3 border-b">Methodology (adequacy and appropriateness)</td>
+                <td class="px-4 py-3 border-b text-center">30%</td>
+                <td class="px-4 py-3 border-b text-center">20%</td>
+                <td class="px-4 py-3 border-b">
+                  <input
+                    id="methodology_rating"
+                    name="methodology_rating"
+                    type="number"
+                    min="0"
+                    class="form-input text-center rating-field"
+                  />
+                </td>
+              </tr>
+
+              <tr>
+                <td class="px-4 py-3 border-b">Potential impacts (socio-economic, environmental)</td>
+                <td class="px-4 py-3 border-b text-center"></td>
+                <td class="px-4 py-3 border-b text-center">25%</td>
+                <td class="px-4 py-3 border-b">
+                  <input
+                    id="potential_impacts_rating"
+                    name="potential_impacts_rating"
+                    type="number"
+                    min="0"
+                    class="form-input text-center rating-field"
+                  />
+                </td>
+              </tr>
+
+              <tr>
+                <td class="px-4 py-3 border-b">
+                  Presentation
+                  <div class="text-xs text-gray-500 mt-1">
+                    Written — adequacy and efficiency of design/procedure, clarity and style.
+                  </div>
+                </td>
+                <td class="px-4 py-3 border-b text-center">25%</td>
+                <td class="px-4 py-3 border-b text-center">25%</td>
+                <td class="px-4 py-3 border-b">
+                  <input
+                    id="presentation_rating"
+                    name="presentation_rating"
+                    type="number"
+                    min="0"
+                    class="form-input text-center rating-field"
+                  />
+                </td>
+              </tr>
+
+              <tr class="bg-gray-50">
+                <td class="px-4 py-3 font-bold">Total</td>
+                <td class="px-4 py-3 text-center font-bold">100%</td>
+                <td class="px-4 py-3 text-center font-bold">100%</td>
+                <td class="px-4 py-3">
+                  <input
+                    id="total_rating"
+                    name="total_rating"
+                    type="number"
+                    class="form-input text-center font-bold"
+                    readonly
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TECHNOLOGY / INFORMATION STATUS -->
+      <section class="section-card">
+        <div class="section-header">
+          <h3 class="text-lg font-bold text-gray-900">Status of Technology / Information</h3>
+          <p class="text-xs text-gray-500 mt-1">
+            Specify name of technology or information and status.
+          </p>
+        </div>
+
+        <div class="section-body overflow-x-auto">
+          <table class="w-full min-w-[1000px] text-sm border border-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="text-left px-4 py-3 border-b border-gray-200">Type</th>
+                <th class="text-left px-4 py-3 border-b border-gray-200">Name of Technology / Significant Information</th>
+                <th class="text-center px-4 py-3 border-b border-gray-200">As Reported</th>
+                <th class="text-center px-4 py-3 border-b border-gray-200">As Evaluated</th>
+              </tr>
+            </thead>
+
+            <tbody id="technologyRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- RECOMMENDATION -->
+      <section class="section-card">
+        <div class="section-header">
+          <h3 class="text-lg font-bold text-gray-900">Recommendation</h3>
+          <p class="text-xs text-gray-500 mt-1">
+            Select the recommendation for the completed research.
+          </p>
+        </div>
+
+        <div class="section-body space-y-4">
+          <label class="flex items-start gap-3 p-4 border border-gray-100 rounded-xl bg-gray-50">
+            <input
+              id="recommend_presentation"
+              name="recommend_presentation"
+              type="checkbox"
+              class="mt-1 accent-urds-accent"
+            />
+            <span>
+              <span class="block text-sm font-semibold text-gray-800">
+                For presentation in the Inter-agency In-House Review
+              </span>
+            </span>
+          </label>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pl-0 md:pl-8">
+            <label class="flex items-center gap-3">
+              <input
+                id="presentation_as_paper"
+                name="presentation_as_paper"
+                type="checkbox"
+                class="accent-urds-accent"
+              />
+              <span class="text-sm text-gray-700">as paper</span>
+            </label>
+
+            <label class="flex items-center gap-3">
+              <input
+                id="presentation_as_poster"
+                name="presentation_as_poster"
+                type="checkbox"
+                class="accent-urds-accent"
+              />
+              <span class="text-sm text-gray-700">as poster</span>
+            </label>
+          </div>
+
+          <label class="flex items-start gap-3 p-4 border border-gray-100 rounded-xl bg-gray-50">
+            <input
+              id="recommend_terminal_report"
+              name="recommend_terminal_report"
+              type="checkbox"
+              class="mt-1 accent-urds-accent"
+            />
+            <span>
+              <span class="block text-sm font-semibold text-gray-800">
+                Submission of Terminal Report
+              </span>
+            </span>
+          </label>
+        </div>
+      </section>
+
+      <!-- BOTTOM ACTIONS -->
+      <section class="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3">
+        <button
+          id="saveDraftBtnBottom"
+          type="button"
+          class="px-5 py-3 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-bold transition"
+        >
+          Save Draft
+        </button>
+
+        <button
+          id="previewBtnBottom"
+          type="button"
+          class="px-5 py-3 rounded-xl bg-urds-accent hover:opacity-90 text-white text-sm font-bold transition"
+        >
+          Preview / Print
+        </button>
+      </section>
+
+    </form>
+  </main>
+
+  <div id="toastContainer" class="fixed bottom-6 right-6 space-y-2 z-50"></div>
+
+  <script src="js/agency_in_house_completed_natural_sciences_form.js"></script>
+</body>
+</html>
