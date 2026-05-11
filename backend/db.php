@@ -31,7 +31,13 @@ $conn = @new mysqli($host, $user, $pass, $dbname);
 
 if ($conn->connect_error) {
     // Don't die with HTML, let calling script handle error
-    error_log("Database Connection Failed: " . $conn->connect_error);
+    error_log(
+        "Database Connection Failed: " . $conn->connect_error .
+        " | host=" . $host .
+        " | port=" . $port .
+        " | database=" . $dbname .
+        " | user=" . $user
+    );
     throw new Exception("Database connection failed");
 }
 
