@@ -2,7 +2,7 @@
 // LOAD USER INFORMATION
 // =========================
 const userName = localStorage.getItem("userName") || "User";
-const userRole = localStorage.getItem("userRole") || "Faculty Researcher";
+const userRole = normalizeSidebarRole(localStorage.getItem("userRole") || "Faculty Researcher");
 const userInitials = (userName.split(" ").map(n => n[0]).join("") || "U").toUpperCase();
 
 // UI elements
@@ -30,58 +30,61 @@ localStorage.removeItem("userLogo");
 const menuByRole = {
   "Faculty Researcher": [
     { name: "Dashboard", link: "dashboard.html" },
-    { name: "Announcements", link: "view_announcement.html" },
+    { name: "Announcements", link: "view_announcement.html", badge: "announcementAttention" },
     { name: "Submit Proposal", link: "submit_proposal_wizard.html" },
-    { name: "My Proposals", link: "my_proposals.html" },
+    { name: "My Proposals", link: "my_proposals.html", badge: "proposalAttention" },
     { name: "Revisions", link: "revisions.html" },
     { name: "Status Tracking", link: "status_tracking.html" }
   ],
 
   "College Research Coordinator": [
     { name: "Dashboard", link: "dashboard.html" },
-    { name: "Announcements", link: "view_announcement.html" },
-    { name: "College Proposals", link: "proposal_list.html" },
+    { name: "Announcements", link: "view_announcement.html", badge: "announcementAttention" },
+    { name: "College Proposals", link: "proposal_list.html", badge: "proposalAttention" },
     { name: "Status Tracking", link: "status_tracking.html" }
   ],
 
   "College Dean": [
     { name: "Dashboard", link: "dashboard.html" },
-    { name: "Announcements", link: "view_announcement.html" },
-    { name: "College Proposals", link: "proposal_list.html" },
+    { name: "Announcements", link: "view_announcement.html", badge: "announcementAttention" },
+    { name: "College Proposals", link: "proposal_list.html", badge: "proposalAttention" },
     { name: "Status Tracking", link: "status_tracking.html" }
   ],
 
   "URDS Director": [
     { name: "Dashboard", link: "dashboard.html" },
-    { name: "Announcements", link: "create_announcement.html" },
-    { name: "Proposals", link: "proposal_list.html" },
+    { name: "Announcements", link: "view_announcement.html", badge: "announcementAttention" },
+    { name: "Proposals", link: "proposal_list.html", badge: "proposalAttention" },
     { name: "Status Tracking", link: "status_tracking.html" }
   ],
 
   "URDS Staff": [
     { name: "Dashboard", link: "dashboard.html" },
-    { name: "Announcements", link: "view_announcement.html" },
-    { name: "Proposals", link: "proposal_list.html" },
-    { name: "Status Tracking", link: "status_tracking.html" }
+    { name: "Announcements", link: "view_announcement.html", badge: "announcementAttention" },
+    { name: "Proposals", link: "proposal_list.html", badge: "proposalAttention" },
+    { name: "Status Tracking", link: "status_tracking.html" },
+    { name: "Completed Research", link: "completed_research_form.html" },
+    { name: "Publication Incentive", link: "publication_incentive.html" },
+    { name: "Completed Research Incentive", link: "completed-research-incentive.html" }
   ],
 
   "UREC": [
     { name: "Dashboard", link: "dashboard.html" },
-    { name: "Announcements", link: "view_announcement.html" },
-    { name: "Proposals", link: "proposal_list.html" },
+    { name: "Announcements", link: "view_announcement.html", badge: "announcementAttention" },
+    { name: "Proposals", link: "proposal_list.html", badge: "proposalAttention" },
     { name: "Status Tracking", link: "status_tracking.html" }
   ],
 
   "Senior Faculty Researcher / TWG": [
     { name: "Dashboard", link: "dashboard.html" },
-    { name: "Announcements", link: "view_announcement.html" },
-    { name: "TWG Review", link: "proposal_list.html" },
+    { name: "Announcements", link: "view_announcement.html", badge: "announcementAttention" },
+    { name: "TWG Review", link: "proposal_list.html", badge: "proposalAttention" },
     { name: "Status Tracking", link: "status_tracking.html" }
   ],
   
     "Evaluator": [
     { name: "Dashboard", link: "dashboard.html" },
-    { name: "Announcements", link: "view_announcement.html" },
+    { name: "Announcements", link: "view_announcement.html", badge: "announcementAttention" },
     { name: "Assigned Evaluations", link: "evaluator-assigned.html" },
     { name: "Evaluation History", link: "evaluator-history.html" },
     { name: "Status Tracking", link: "status_tracking.html" }
@@ -120,14 +123,22 @@ let menuHTML = `
 
 (menuByRole[userRole] || menuByRole["Faculty Researcher"]).forEach(item => {
   menuHTML += `
-    <a href="${item.link}" class="flex items-center gap-3 px-3 py-2 hover:bg-white/10 rounded-md text-sm">
+    <a href="${item.link}" class="sidebar-link flex items-center justify-between gap-3 px-3 py-2 hover:bg-white/10 rounded-md text-sm" data-badge-key="${item.badge || ""}">
       <span>${item.name}</span>
+      ${
+        item.badge
+          ? `<span class="sidebar-badge hidden min-w-5 h-5 px-1.5 rounded-full bg-red-500 text-white text-[11px] leading-5 text-center font-bold" data-badge="${item.badge}"></span>`
+          : ""
+      }
     </a>
   `;
 });
 
 menuHTML += `</nav>`;
 sidebar.innerHTML = menuHTML;
+setupSidebarNotificationClicks();
+updateAnnouncementNotifications();
+updateSidebarNotifications();
 
 // Initialize responsive state immediately
 function initializeSidebarState() {
@@ -236,4 +247,270 @@ if (profileArea) {
   profileArea.addEventListener("click", () => {
     window.location.href = "profile.html";
   });
+}
+
+function normalizeSidebarText(value) {
+  return String(value || "")
+    .toLowerCase()
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function normalizeSidebarRole(role) {
+  const r = normalizeSidebarText(role);
+
+  if (r.includes("administrator") || r === "admin") return "Administrator";
+  if (r.includes("college research coordinator") || r === "crc" || r.includes("research coordinator")) return "College Research Coordinator";
+  if (r.includes("college dean") || r.includes("dean")) return "College Dean";
+  if (r.includes("senior faculty") || r.includes("twg") || r.includes("technical working group")) return "Senior Faculty Researcher / TWG";
+  if (r.includes("urec")) return "UREC";
+  if (r.includes("director")) return "URDS Director";
+  if (r.includes("staff")) return "URDS Staff";
+  if (r.includes("evaluator")) return "Evaluator";
+  if (r.includes("faculty researcher") || r === "researcher") return "Faculty Researcher";
+
+  return role || "Faculty Researcher";
+}
+
+function getSidebarProposalStatus(proposal) {
+  return normalizeSidebarText(
+    proposal?.status ||
+    proposal?.proposal_status ||
+    proposal?.current_status ||
+    proposal?.currentStatus ||
+    ""
+  );
+}
+
+function getSidebarProposalId(proposal) {
+  return String(
+    proposal?.id ||
+    proposal?.proposal_id ||
+    proposal?.proposalId ||
+    proposal?.research_id ||
+    proposal?.researchId ||
+    ""
+  );
+}
+
+function sidebarProposalNeedsAttention(proposal, role) {
+  const status = getSidebarProposalStatus(proposal);
+
+  if (!status) return false;
+
+  if (role === "Faculty Researcher") {
+    return status.includes("returned") || status.includes("revision") || status.includes("revise");
+  }
+
+  const statusByRole = {
+    "College Research Coordinator": ["for screening"],
+    "College Dean": ["for dean endorsement"],
+    "URDS Staff": ["for urds review"],
+    "Senior Faculty Researcher / TWG": ["for twg evaluation"],
+    "UREC": ["for urec review"],
+    "URDS Director": ["for director review"]
+  };
+
+  return (statusByRole[role] || []).some((needle) => status.includes(needle));
+}
+
+function sidebarSeenStorageKey(role) {
+  return `urds_seen_sidebar_notifications_${normalizeSidebarRole(role).replace(/\W+/g, "_").toLowerCase()}`;
+}
+
+function announcementSeenStorageKey(role) {
+  return `urds_seen_announcement_notifications_${normalizeSidebarRole(role).replace(/\W+/g, "_").toLowerCase()}`;
+}
+
+function getSeenSidebarNotifications(role) {
+  try {
+    const saved = JSON.parse(localStorage.getItem(sidebarSeenStorageKey(role)) || "[]");
+    return new Set(Array.isArray(saved) ? saved.map(String) : []);
+  } catch {
+    return new Set();
+  }
+}
+
+function saveSeenSidebarNotifications(role, ids) {
+  localStorage.setItem(sidebarSeenStorageKey(role), JSON.stringify([...ids]));
+}
+
+function getSeenAnnouncementNotifications(role) {
+  try {
+    const saved = JSON.parse(localStorage.getItem(announcementSeenStorageKey(role)) || "[]");
+    return new Set(Array.isArray(saved) ? saved.map(String) : []);
+  } catch {
+    return new Set();
+  }
+}
+
+function saveSeenAnnouncementNotifications(role, ids) {
+  localStorage.setItem(announcementSeenStorageKey(role), JSON.stringify([...ids]));
+}
+
+function getAnnouncementId(announcement) {
+  return String(announcement?.id || announcement?.createdAt || announcement?.date || announcement?.title || "");
+}
+
+function announcementVisibleToRole(announcement, role) {
+  if (normalizeSidebarText(role).includes("director")) return true;
+
+  const audience = normalizeSidebarText(announcement?.audience || "All Users");
+  const normalizedRole = normalizeSidebarText(role);
+
+  if (!audience || audience === "all users") return true;
+  if (audience === normalizedRole) return true;
+
+  if (normalizedRole === "college dean" && audience === "dean") return true;
+  if (normalizedRole === "senior faculty researcher / twg" && audience === "twg") return true;
+
+  return false;
+}
+
+function loadSidebarAnnouncements() {
+  try {
+    const saved = JSON.parse(localStorage.getItem("urds_announcements") || "[]");
+    return Array.isArray(saved) ? saved : [];
+  } catch {
+    return [];
+  }
+}
+
+async function fetchSidebarJson(url) {
+  const response = await fetch(url, {
+    method: "GET",
+    credentials: "include",
+    cache: "no-store"
+  });
+
+  if (!response.ok) return null;
+
+  const text = await response.text();
+
+  try {
+    return JSON.parse(text);
+  } catch (error) {
+    console.warn("Sidebar notification response was not JSON:", url, text.slice(0, 200));
+    return null;
+  }
+}
+
+function extractSidebarProposals(result) {
+  if (Array.isArray(result)) return result;
+
+  if (!result || typeof result !== "object") return [];
+
+  return result.proposals || result.data || [];
+}
+
+function setSidebarBadge(name, count) {
+  document.querySelectorAll(`[data-badge="${name}"]`).forEach((badge) => {
+    if (!count) {
+      badge.classList.add("hidden");
+      badge.textContent = "";
+      return;
+    }
+
+    badge.textContent = count > 99 ? "99+" : String(count);
+    badge.classList.remove("hidden");
+    badge.setAttribute("aria-label", `${count} notification${count === 1 ? "" : "s"}`);
+  });
+}
+
+async function updateSidebarNotifications() {
+  const hasBadge = document.querySelector('[data-badge="proposalAttention"]');
+
+  if (!hasBadge || userRole === "Administrator" || userRole === "Evaluator") return;
+
+  try {
+    const endpoint =
+      userRole === "Faculty Researcher"
+        ? "../../backend/get_my_proposals.php"
+        : "../../backend/get_all_proposals.php";
+
+    const result = await fetchSidebarJson(endpoint);
+    const proposals = extractSidebarProposals(result);
+    const seenIds = getSeenSidebarNotifications(userRole);
+    const count = proposals.filter((proposal) => {
+      const id = getSidebarProposalId(proposal);
+      return id && sidebarProposalNeedsAttention(proposal, userRole) && !seenIds.has(id);
+    }).length;
+
+    setSidebarBadge("proposalAttention", count);
+  } catch (error) {
+    console.warn("Unable to update sidebar notifications:", error);
+  }
+}
+
+function updateAnnouncementNotifications() {
+  const hasBadge = document.querySelector('[data-badge="announcementAttention"]');
+
+  if (!hasBadge) return;
+
+  const announcements = loadSidebarAnnouncements();
+  const seenIds = getSeenAnnouncementNotifications(userRole);
+  const count = announcements.filter((announcement) => {
+    const id = getAnnouncementId(announcement);
+    return id && announcementVisibleToRole(announcement, userRole) && !seenIds.has(id);
+  }).length;
+
+  setSidebarBadge("announcementAttention", count);
+}
+
+async function markSidebarNotificationsSeen() {
+  if (userRole === "Administrator" || userRole === "Evaluator") return;
+
+  try {
+    const endpoint =
+      userRole === "Faculty Researcher"
+        ? "../../backend/get_my_proposals.php"
+        : "../../backend/get_all_proposals.php";
+
+    const result = await fetchSidebarJson(endpoint);
+    const proposals = extractSidebarProposals(result);
+    const seenIds = getSeenSidebarNotifications(userRole);
+
+    proposals.forEach((proposal) => {
+      const id = getSidebarProposalId(proposal);
+
+      if (id && sidebarProposalNeedsAttention(proposal, userRole)) {
+        seenIds.add(id);
+      }
+    });
+
+    saveSeenSidebarNotifications(userRole, seenIds);
+    setSidebarBadge("proposalAttention", 0);
+  } catch (error) {
+    console.warn("Unable to mark sidebar notifications as seen:", error);
+  }
+}
+
+function setupSidebarNotificationClicks() {
+  document.querySelectorAll('.sidebar-link[data-badge-key="proposalAttention"]').forEach((link) => {
+    link.addEventListener("click", () => {
+      markSidebarNotificationsSeen();
+    });
+  });
+
+  document.querySelectorAll('.sidebar-link[data-badge-key="announcementAttention"]').forEach((link) => {
+    link.addEventListener("click", () => {
+      markAnnouncementNotificationsSeen();
+    });
+  });
+}
+
+function markAnnouncementNotificationsSeen() {
+  const seenIds = getSeenAnnouncementNotifications(userRole);
+
+  loadSidebarAnnouncements().forEach((announcement) => {
+    const id = getAnnouncementId(announcement);
+
+    if (id && announcementVisibleToRole(announcement, userRole)) {
+      seenIds.add(id);
+    }
+  });
+
+  saveSeenAnnouncementNotifications(userRole, seenIds);
+  setSidebarBadge("announcementAttention", 0);
 }

@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Publication Incentive | UEP-URDS</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            urds: {
+              950: "#0f172a",
+              900: "#172033",
+              800: "#1f2b3a",
+              700: "#2f3f55",
+              accent: "#0ea5a4"
+            }
+          },
+          boxShadow: {
+            card: "0 6px 20px rgba(18,26,40,0.06)",
+            soft: "0 10px 30px rgba(15,23,42,0.08)"
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .form-input {
+      width: 100%;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      padding: 0.75rem 0.875rem;
+      border-radius: 0.75rem;
+      font-size: 0.875rem;
+      transition: all 0.15s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #0ea5a4;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(14,165,164,0.18);
+    }
+
+    .check-row {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      padding: 0.9rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.75rem;
+      background: #ffffff;
+    }
+
+    .check-row input {
+      width: 1.05rem;
+      height: 1.05rem;
+      margin-top: 0.15rem;
+      accent-color: #0ea5a4;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-900 antialiased h-screen overflow-hidden">
+  <div class="h-screen flex overflow-hidden">
+    <aside id="sidebar" class="w-72 h-screen bg-urds-900 text-white shrink-0 overflow-y-auto"></aside>
+
+    <div class="flex-1 min-w-0 h-screen overflow-y-auto">
+      <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-30">
+        <div class="flex items-center gap-4 min-w-0">
+          <button
+            id="hamburger"
+            type="button"
+            class="md:hidden w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition"
+            aria-label="Open sidebar"
+          >
+            ☰
+          </button>
+
+          <div>
+            <div class="text-xs text-gray-500">UEP-URDS / Incentives</div>
+            <h1 class="text-xl font-semibold mt-1">Publication Research Incentive</h1>
+            <p class="hidden sm:block text-xs text-gray-500 mt-0.5">
+              Review claimant requirements and connect the request to an existing research record.
+            </p>
+          </div>
+        </div>
+
+        <a href="profile.html" class="flex items-center gap-3 rounded-xl hover:bg-gray-50 p-2 transition">
+          <div class="text-right hidden sm:block">
+            <div class="text-sm font-semibold user-name">User</div>
+            <div class="text-xs text-gray-500 user-role">Role</div>
+          </div>
+          <div class="w-10 h-10 rounded-full bg-urds-accent text-white flex items-center justify-center font-bold user-initials">
+            U
+          </div>
+        </a>
+      </header>
+
+      <main class="p-6 max-w-6xl mx-auto space-y-6">
+        <section class="bg-gradient-to-r from-urds-900 to-urds-700 text-white p-6 rounded-2xl shadow-soft overflow-hidden relative">
+          <div class="absolute right-0 top-0 w-64 h-64 bg-white/10 rounded-full translate-x-20 -translate-y-28"></div>
+          <div class="absolute right-24 bottom-0 w-36 h-36 bg-white/10 rounded-full translate-y-20"></div>
+
+          <div class="relative flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
+            <div>
+              <div class="text-sm text-white/70">Claimants for Publication Research Incentive</div>
+              <h2 class="text-2xl font-bold mt-1">Requirement Checklist</h2>
+              <p class="text-sm text-white/75 mt-2 max-w-2xl">
+                Track submitted documents for publication incentive claims, agency-funded research, and thesis or dissertation claims.
+              </p>
+            </div>
+
+            <div class="bg-white/10 border border-white/15 rounded-2xl px-4 py-3 min-w-44">
+              <div class="text-xs text-white/70">Checklist Progress</div>
+              <div id="progressText" class="text-2xl font-bold mt-1">0/0</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="lg:col-span-2 space-y-6">
+            <section class="bg-white p-5 rounded-2xl shadow-card border border-gray-100">
+              <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                <div>
+                  <h2 class="text-lg font-semibold">Research Details</h2>
+                  <p class="text-xs text-gray-500 mt-0.5">
+                    Select the research connected to this publication incentive claim.
+                  </p>
+                </div>
+                <span id="researchStatus" class="inline-flex w-fit px-3 py-1 rounded-full bg-gray-100 text-gray-600 text-xs font-bold">
+                  Loading researches
+                </span>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-5">
+                <div class="md:col-span-2">
+                  <label for="researchSelect" class="block text-sm font-semibold text-gray-700">
+                    Research
+                  </label>
+                  <select id="researchSelect" class="form-input mt-1">
+                    <option value="">Loading researches...</option>
+                  </select>
+                </div>
+
+              </div>
+            </section>
+
+            <section class="bg-white p-5 rounded-2xl shadow-card border border-gray-100">
+              <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                <div>
+                  <h2 class="text-lg font-semibold">Required Documents</h2>
+                  <p class="text-xs text-gray-500 mt-0.5">
+                    Mark each document once received and verified.
+                  </p>
+                </div>
+                <button
+                  id="clearChecklist"
+                  type="button"
+                  class="px-4 py-2 rounded-xl bg-gray-100 text-gray-700 text-sm font-bold hover:bg-gray-200 active:scale-95 transition"
+                >
+                  Clear Checklist
+                </button>
+              </div>
+
+              <div class="grid grid-cols-1 gap-3 mt-5">
+                <label class="check-row">
+                  <input type="checkbox" class="requirement-check" data-label="Letter Request" />
+                  <span>
+                    <span class="block text-sm font-semibold text-gray-900">Letter Request</span>
+                    <span class="block text-xs text-gray-500 mt-0.5">Addressed to OP through the URDS Director.</span>
+                  </span>
+                </label>
+
+                <label class="check-row">
+                  <input type="checkbox" class="requirement-check" data-label="Coordinator and Dean Endorsement" />
+                  <span>
+                    <span class="block text-sm font-semibold text-gray-900">Endorsement</span>
+                    <span class="block text-xs text-gray-500 mt-0.5">Endorsed by the College Research Coordinator and the Dean.</span>
+                  </span>
+                </label>
+
+                <label class="check-row">
+                  <input type="checkbox" class="requirement-check" data-label="Journal Copies" />
+                  <span>
+                    <span class="block text-sm font-semibold text-gray-900">5 hard copies of the journal</span>
+                    <span class="block text-xs text-gray-500 mt-0.5">Include cover page and table of contents.</span>
+                  </span>
+                </label>
+
+                <label class="check-row">
+                  <input type="checkbox" class="requirement-check" data-label="Terminal Report Copies" />
+                  <span>
+                    <span class="block text-sm font-semibold text-gray-900">2 copies of terminal report</span>
+                    <span class="block text-xs text-gray-500 mt-0.5">Required for completed research documentation.</span>
+                  </span>
+                </label>
+                
+                <label class="check-row">
+                  <input type="checkbox" class="requirement-check optional-check" data-label="Authenticated S.O." />
+                  <span>
+                    <span class="block text-sm font-semibold text-gray-900">Agency or externally funded researches</span>
+                    <span class="block text-xs text-gray-500 mt-0.5">1 authenticated copy of Special Order.</span>
+                  </span>
+                </label>
+
+                <label class="check-row">
+                  <input type="checkbox" class="requirement-check optional-check" data-label="Approval Sheet and Manuscript Cover Page" />
+                  <span>
+                    <span class="block text-sm font-semibold text-gray-900">MA Thesis / Doctoral Dissertation</span>
+                    <span class="block text-xs text-gray-500 mt-0.5">1 authenticated copy of approval sheet and cover page of the manuscript.</span>
+                  </span>
+                </label>
+              </div>
+            </section>
+          </div>
+
+          <aside class="space-y-6">
+            <section class="bg-white p-5 rounded-2xl shadow-card border border-gray-100">
+              <h2 class="text-lg font-semibold">Selected Research</h2>
+              <div id="selectedResearchCard" class="mt-4 p-4 rounded-xl border border-dashed border-gray-200 text-sm text-gray-500">
+                Choose a research from the dropdown.
+              </div>
+            </section>
+
+            <section class="bg-white p-5 rounded-2xl shadow-card border border-gray-100">
+              <h2 class="text-lg font-semibold">Checklist Summary</h2>
+              <div class="mt-4">
+                <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div id="progressBar" class="h-full bg-urds-accent rounded-full transition-all" style="width: 0%;"></div>
+                </div>
+                <p id="summaryText" class="text-sm text-gray-600 mt-3">
+                  No requirements checked yet.
+                </p>
+              </div>
+            </section>
+          </aside>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      "use strict";
+
+      const researchSelect = document.getElementById("researchSelect");
+      const researchStatus = document.getElementById("researchStatus");
+      const selectedResearchCard = document.getElementById("selectedResearchCard");
+      const progressText = document.getElementById("progressText");
+      const progressBar = document.getElementById("progressBar");
+      const summaryText = document.getElementById("summaryText");
+      const clearChecklist = document.getElementById("clearChecklist");
+      const checks = Array.from(document.querySelectorAll(".requirement-check"));
+      let researches = [];
+
+      checks.forEach((check) => check.addEventListener("change", updateProgress));
+      clearChecklist?.addEventListener("click", () => {
+        checks.forEach((check) => {
+          check.checked = false;
+        });
+        updateProgress();
+      });
+      researchSelect?.addEventListener("change", renderSelectedResearch);
+
+      loadResearches();
+      updateProgress();
+
+      async function loadResearches() {
+        const endpoints = ["../../backend/get_my_proposals.php", "../../backend/get_all_proposals.php"];
+
+        for (const endpoint of endpoints) {
+          const loaded = await fetchResearches(endpoint);
+          if (loaded.length) {
+            researches = loaded;
+            break;
+          }
+        }
+
+        if (!researches.length) {
+          researches = loadLocalResearches();
+        }
+
+        populateResearchDropdown();
+      }
+
+      async function fetchResearches(endpoint) {
+        try {
+          const response = await fetch(endpoint, {
+            credentials: "include",
+            cache: "no-store"
+          });
+
+          if (!response.ok) return [];
+
+          const result = await response.json();
+          if (Array.isArray(result)) return result;
+          if (result?.status === "success" || result?.success === true) {
+            return result.proposals || result.data || [];
+          }
+        } catch (error) {
+          console.warn("Unable to load researches:", endpoint, error);
+        }
+
+        return [];
+      }
+
+      function loadLocalResearches() {
+        const keys = ["myProposals", "proposals", "allProposals"];
+
+        for (const key of keys) {
+          try {
+            const value = JSON.parse(localStorage.getItem(key) || "[]");
+            if (Array.isArray(value) && value.length) return value;
+          } catch {
+            continue;
+          }
+        }
+
+        return [];
+      }
+
+      function populateResearchDropdown() {
+        if (!researchSelect) return;
+
+        if (!researches.length) {
+          researchSelect.innerHTML = `<option value="">No researches available</option>`;
+          researchStatus.textContent = "No records found";
+          researchStatus.className = "inline-flex w-fit px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-bold";
+          renderSelectedResearch();
+          return;
+        }
+
+        researchSelect.innerHTML =
+          `<option value="">Select research...</option>` +
+          researches
+            .map((research, index) => {
+              const title = getTitle(research);
+              const leader = getLeader(research);
+              return `<option value="${index}">${escapeHtml(title)} - ${escapeHtml(leader)}</option>`;
+            })
+            .join("");
+
+        researchStatus.textContent = `${researches.length} research record${researches.length === 1 ? "" : "s"}`;
+        researchStatus.className = "inline-flex w-fit px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold";
+      }
+
+      function renderSelectedResearch() {
+        const index = researchSelect?.value;
+        const research = index !== "" ? researches[Number(index)] : null;
+
+        if (!research) {
+          selectedResearchCard.innerHTML = "Choose a research from the dropdown.";
+          return;
+        }
+
+        selectedResearchCard.innerHTML = `
+          <div class="font-semibold text-gray-900">${escapeHtml(getTitle(research))}</div>
+          <div class="text-xs text-gray-500 mt-2">Leader: ${escapeHtml(getLeader(research))}</div>
+          <div class="text-xs text-gray-500 mt-1">College: ${escapeHtml(getCollege(research))}</div>
+          <div class="text-xs text-gray-500 mt-1">Status: ${escapeHtml(getStatus(research))}</div>
+        `;
+      }
+
+      function updateProgress() {
+        const checked = checks.filter((check) => check.checked);
+        const total = checks.length;
+        const percent = total ? Math.round((checked.length / total) * 100) : 0;
+
+        progressText.textContent = `${checked.length}/${total}`;
+        progressBar.style.width = `${percent}%`;
+        summaryText.textContent = checked.length
+          ? `${checked.length} of ${total} requirement${total === 1 ? "" : "s"} checked.`
+          : "No requirements checked yet.";
+      }
+
+      function getTitle(research) {
+        return research?.title || research?.program_title || research?.proposal_title || research?.research_title || research?.project_title || "Untitled Research";
+      }
+
+      function getLeader(research) {
+        return research?.leader || research?.studyLeader || research?.study_leader || research?.researcher || research?.researcher_name || research?.proponent || "Unknown";
+      }
+
+      function getCollege(research) {
+        return research?.college || research?.college_name || "Unknown College";
+      }
+
+      function getStatus(research) {
+        return research?.status || research?.proposal_status || research?.current_status || research?.currentStatus || "No status";
+      }
+
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+    });
+  </script>
+</body>
+</html>

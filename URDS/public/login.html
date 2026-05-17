@@ -194,52 +194,82 @@
 
             <!-- Rows -->
             <div class="demo-row">
+              <button type="button" class="copy-btn" onclick="fillLogin('researcher','researcher123')">Use</button>
               <span class="demo-role">Researcher</span>
               <div class="flex items-center gap-1.5">
                 <span class="demo-cred">researcher</span>
                 <span class="text-gray-300">/</span>
                 <span class="demo-cred">researcher123</span>
-                <button class="copy-btn" onclick="fillLogin('researcher','researcher123')">Use</button>
               </div>
             </div>
 
             <div class="demo-row">
+              <button type="button" class="copy-btn" onclick="fillLogin('coordinator','coordinator123')">Use</button>
               <span class="demo-role">College Coordinator</span>
               <div class="flex items-center gap-1.5">
                 <span class="demo-cred">coordinator</span>
                 <span class="text-gray-300">/</span>
                 <span class="demo-cred">coordinator123</span>
-                <button class="copy-btn" onclick="fillLogin('coordinator','coordinator123')">Use</button>
               </div>
             </div>
 
             <div class="demo-row">
+              <button type="button" class="copy-btn" onclick="fillLogin('dean','dean123')">Use</button>
               <span class="demo-role">College Dean</span>
               <div class="flex items-center gap-1.5">
                 <span class="demo-cred">dean</span>
                 <span class="text-gray-300">/</span>
                 <span class="demo-cred">dean123</span>
-                <button class="copy-btn" onclick="fillLogin('dean','dean123')">Use</button>
               </div>
             </div>
 
             <div class="demo-row">
+              <button type="button" class="copy-btn" onclick="fillLogin('staff','staff123')">Use</button>
               <span class="demo-role">Staff</span>
               <div class="flex items-center gap-1.5">
                 <span class="demo-cred">staff</span>
                 <span class="text-gray-300">/</span>
                 <span class="demo-cred">staff123</span>
-                <button class="copy-btn" onclick="fillLogin('staff','staff123')">Use</button>
               </div>
             </div>
 
             <div class="demo-row">
+              <button type="button" class="copy-btn" onclick="fillLogin('twg','twg123')">Use</button>
+              <span class="demo-role">TWG</span>
+              <div class="flex items-center gap-1.5">
+                <span class="demo-cred">twg</span>
+                <span class="text-gray-300">/</span>
+                <span class="demo-cred">twg123</span>
+              </div>
+            </div>
+
+            <div class="demo-row">
+              <button type="button" class="copy-btn" onclick="fillLogin('urec','urec123')">Use</button>
+              <span class="demo-role">UREC</span>
+              <div class="flex items-center gap-1.5">
+                <span class="demo-cred">urec</span>
+                <span class="text-gray-300">/</span>
+                <span class="demo-cred">urec123</span>
+              </div>
+            </div>
+
+            <div class="demo-row">
+              <button type="button" class="copy-btn" onclick="fillLogin('evaluator','evaluator123')">Use</button>
+              <span class="demo-role">Evaluator</span>
+              <div class="flex items-center gap-1.5">
+                <span class="demo-cred">evaluator</span>
+                <span class="text-gray-300">/</span>
+                <span class="demo-cred">evaluator123</span>
+              </div>
+            </div>
+
+            <div class="demo-row">
+              <button type="button" class="copy-btn" onclick="fillLogin('researcher','researcher123')">Use</button>
               <span class="demo-role">Director</span>
               <div class="flex items-center gap-1.5">
                 <span class="demo-cred">director</span>
                 <span class="text-gray-300">/</span>
                 <span class="demo-cred">director123</span>
-                <button class="copy-btn" onclick="fillLogin('director','director123')">Use</button>
               </div>
             </div>
 
@@ -268,13 +298,27 @@ document.getElementById("loginForm").addEventListener("submit", async function(e
   errorMsg.textContent = "";
 
   try {
-    const response = await fetch("/backend/login.php", {
+    const loginUrl = new URL("login.php", window.location.href);
+    const response = await fetch(loginUrl, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
+      body: new URLSearchParams({ username, password })
     });
 
-    const data = await response.json();
+    const contentType = response.headers.get("content-type") || "";
+    const responseText = await response.text();
+
+    if (!contentType.includes("application/json")) {
+      console.error("Login endpoint returned non-JSON", {
+        url: response.url,
+        status: response.status,
+        contentType,
+        responsePreview: responseText.slice(0, 300)
+      });
+      throw new Error(`Login endpoint did not return JSON (${response.status}) from ${response.url}`);
+    }
+
+    const data = JSON.parse(responseText);
 
     if (data.status === "success") {
 

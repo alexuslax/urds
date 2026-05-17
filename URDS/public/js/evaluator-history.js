@@ -38,79 +38,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   };
 
-  const SAMPLE_HISTORY = [
-    {
-      id: "EV-2026-001",
-      proposal_id: "P-2026-001",
-      title: "Development of a Smart Irrigation Monitoring System",
-      proponent: "Dr. Maria Santos",
-      college: "College of Engineering",
-      department: "Electrical Engineering",
-      category: "completed_natural_sciences",
-      score: 92,
-      recommendation: "For presentation in the Inter-agency In-House Review",
-      recommendation_type: "presentation",
-      submitted_at: "2026-04-26",
-      remarks: "The research is well-developed, technically sound, and ready for presentation."
-    },
-    {
-      id: "EV-2026-002",
-      proposal_id: "P-2026-002",
-      title: "Community-Based Livelihood Assessment in Northern Samar",
-      proponent: "Prof. Juan Dela Cruz",
-      college: "College of Arts and Communication",
-      department: "Social Sciences",
-      category: "completed_social_sciences",
-      score: 88,
-      recommendation: "Submission of Terminal Report",
-      recommendation_type: "terminal_report",
-      submitted_at: "2026-04-24",
-      remarks: "The completed study has acceptable documentation and clear social relevance."
-    },
-    {
-      id: "EV-2026-003",
-      proposal_id: "P-2026-003",
-      title: "Biodiversity Mapping of Coastal Resources",
-      proponent: "Dr. Ana Reyes",
-      college: "College of Science",
-      department: "Biology",
-      category: "ongoing_natural_sciences",
-      score: 84,
-      recommendation: "Project/study for continuation",
-      recommendation_type: "approved",
-      submitted_at: "2026-04-22",
-      remarks: "The project shows good progress and should continue with minor documentation improvements."
-    },
-    {
-      id: "EV-2026-004",
-      proposal_id: "P-2026-004",
-      title: "Feasibility of Digital Records Management for Research Offices",
-      proponent: "Dr. Elena Cruz",
-      college: "College of Business Administration",
-      department: "Management",
-      category: "new_proposal",
-      score: 79,
-      recommendation: "For revision before approval",
-      recommendation_type: "revision",
-      submitted_at: "2026-03-29",
-      remarks: "The proposal needs clearer methodology and stronger expected output indicators."
-    },
-    {
-      id: "EV-2026-005",
-      proposal_id: "P-2026-005",
-      title: "Local Governance and Disaster Preparedness Practices",
-      proponent: "Prof. Ramon Lim",
-      college: "College of Arts and Communication",
-      department: "Political Science",
-      category: "ongoing_social_sciences",
-      score: 81,
-      recommendation: "Project/study for continuation",
-      recommendation_type: "approved",
-      submitted_at: "2026-03-20",
-      remarks: "The research remains relevant and may continue subject to improved timeline monitoring."
-    }
-  ];
-
   let historyRecords = [];
 
   const qs = (id) => document.getElementById(id);
@@ -150,10 +77,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   async function loadHistory() {
     setTableLoading();
 
-    const result = await fetchJson(API.history, {
-      status: "fallback",
-      history: SAMPLE_HISTORY
-    });
+    const result = await fetchJson(API.history);
 
     const rows = getRowsFromResponse(result);
     historyRecords = rows.map(normalizeHistoryRecord);
@@ -166,10 +90,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (Array.isArray(result?.history)) return result.history;
     if (Array.isArray(result?.evaluations)) return result.evaluations;
     if (Array.isArray(result?.data)) return result.data;
-    return SAMPLE_HISTORY;
+    return [];
   }
 
-  async function fetchJson(url, fallback) {
+  async function fetchJson(url) {
     try {
       const response = await fetch(url, {
         method: "GET",
@@ -189,11 +113,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         return JSON.parse(text);
       } catch (error) {
         console.error("Invalid JSON response:", text.slice(0, 500));
-        return fallback;
+        return { status: "error", history: [] };
       }
     } catch (error) {
-      console.warn("Unable to load evaluator history. Using fallback data.", error);
-      return fallback;
+      console.warn("Unable to load evaluator history from database.", error);
+      return { status: "error", history: [] };
     }
   }
 

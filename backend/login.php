@@ -3,7 +3,7 @@ session_start();
 header("Content-Type: application/json");
 
 try {
-    require_once "db.php";
+    require_once __DIR__ . "/db.php";
 } catch (Throwable $e) {
     error_log("Login database connection failed: " . $e->getMessage());
     http_response_code(500);

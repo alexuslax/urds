@@ -17,6 +17,11 @@ document.addEventListener("DOMContentLoaded", () => {
   init();
 
   function init() {
+    if (!isDirector(localStorage.getItem("userRole"))) {
+      window.location.replace("view_announcement.html");
+      return;
+    }
+
     announcements = loadAnnouncements();
     bindEvents();
     renderAnnouncements();
@@ -95,6 +100,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function renderAnnouncements() {
+    if (!list) return;
+
     const query = (searchInput?.value || "").toLowerCase();
 
     const filtered = announcements.filter(a =>
@@ -103,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .includes(query)
     );
 
-    countLine.textContent = `${filtered.length} announcement(s)`;
+    if (countLine) countLine.textContent = `${filtered.length} announcement(s)`;
 
     if (!filtered.length) {
       list.innerHTML = `<div class="text-sm text-gray-500">No announcements found.</div>`;
@@ -259,5 +266,9 @@ document.addEventListener("DOMContentLoaded", () => {
     toastContainer.appendChild(el);
 
     setTimeout(() => el.remove(), 3000);
+  }
+
+  function isDirector(role) {
+    return String(role || "").toLowerCase().includes("director");
   }
 });

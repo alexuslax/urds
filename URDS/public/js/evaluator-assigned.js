@@ -68,64 +68,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   };
 
-  const SAMPLE_ASSIGNMENTS = [
-    {
-      id: "P-2026-001",
-      title: "Development of a Smart Irrigation Monitoring System",
-      proponent: "Dr. Maria Santos",
-      college: "College of Engineering",
-      department: "Electrical Engineering",
-      category: "completed_natural_sciences",
-      status: "pending",
-      assigned_at: "2026-04-25",
-      deadline: "2026-05-10"
-    },
-    {
-      id: "P-2026-002",
-      title: "Community-Based Livelihood Assessment in Northern Samar",
-      proponent: "Prof. Juan Dela Cruz",
-      college: "College of Arts and Communication",
-      department: "Social Sciences",
-      category: "completed_social_sciences",
-      status: "pending",
-      assigned_at: "2026-04-24",
-      deadline: "2026-05-12"
-    },
-    {
-      id: "P-2026-003",
-      title: "Biodiversity Mapping of Coastal Resources",
-      proponent: "Dr. Ana Reyes",
-      college: "College of Science",
-      department: "Biology",
-      category: "ongoing_natural_sciences",
-      status: "returned",
-      assigned_at: "2026-04-23",
-      deadline: "2026-05-15"
-    },
-    {
-      id: "P-2026-004",
-      title: "Feasibility of Digital Records Management for Research Offices",
-      proponent: "Dr. Elena Cruz",
-      college: "College of Business Administration",
-      department: "Management",
-      category: "new_proposal",
-      status: "pending",
-      assigned_at: "2026-04-22",
-      deadline: "2026-05-18"
-    },
-    {
-      id: "P-2026-005",
-      title: "Local Governance and Disaster Preparedness Practices",
-      proponent: "Prof. Ramon Lim",
-      college: "College of Arts and Communication",
-      department: "Political Science",
-      category: "ongoing_social_sciences",
-      status: "submitted",
-      assigned_at: "2026-04-21",
-      deadline: "2026-05-20"
-    }
-  ];
-
   let assignments = [];
 
   const qs = (id) => document.getElementById(id);
@@ -157,10 +99,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   async function loadAssignments() {
     setTableLoading();
 
-    const result = await fetchJson(API.assignments, {
-      status: "fallback",
-      assignments: SAMPLE_ASSIGNMENTS
-    });
+    const result = await fetchJson(API.assignments);
 
     const rows = getRowsFromResponse(result);
     assignments = rows.map(normalizeAssignment);
@@ -172,10 +111,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (Array.isArray(result)) return result;
     if (Array.isArray(result?.assignments)) return result.assignments;
     if (Array.isArray(result?.data)) return result.data;
-    return SAMPLE_ASSIGNMENTS;
+    return [];
   }
 
-  async function fetchJson(url, fallback) {
+  async function fetchJson(url) {
     try {
       const response = await fetch(url, {
         method: "GET",
@@ -195,11 +134,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         return JSON.parse(text);
       } catch (error) {
         console.error("Invalid JSON response:", text.slice(0, 500));
-        return fallback;
+        return { status: "error", assignments: [] };
       }
     } catch (error) {
-      console.warn("Unable to load evaluator assignments. Using fallback data.", error);
-      return fallback;
+      console.warn("Unable to load evaluator assignments from database.", error);
+      return { status: "error", assignments: [] };
     }
   }
 

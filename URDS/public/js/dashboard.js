@@ -107,42 +107,6 @@
     }
   };
 
-  const SAMPLE_EVALUATOR_ASSIGNMENTS = [
-    {
-      id: "P-2024-001",
-      title: "Development of a Smart Irrigation Monitoring System",
-      proponent: "Dr. Maria Santos",
-      college: "College of Engineering",
-      department: "Electrical Engineering",
-      category: "completed_natural_sciences",
-      status: "pending",
-      deadline: "2026-05-10",
-      assigned_at: "2026-04-25"
-    },
-    {
-      id: "P-2024-002",
-      title: "Community-Based Livelihood Assessment in Northern Samar",
-      proponent: "Prof. Juan Dela Cruz",
-      college: "College of Arts and Communication",
-      department: "Social Sciences",
-      category: "completed_social_sciences",
-      status: "draft",
-      deadline: "2026-05-12",
-      assigned_at: "2026-04-24"
-    },
-    {
-      id: "P-2024-003",
-      title: "Biodiversity Mapping of Coastal Resources",
-      proponent: "Dr. Ana Reyes",
-      college: "College of Science",
-      department: "Biology",
-      category: "ongoing_natural_sciences",
-      status: "returned",
-      deadline: "2026-05-15",
-      assigned_at: "2026-04-23"
-    }
-  ];
-
   // =========================================================
   // Helpers
   // =========================================================
@@ -683,8 +647,8 @@
 
   async function loadEvaluatorAssignments() {
     const result = await fetchJson("../../backend/get_evaluator_assignments.php", {
-      status: "fallback",
-      assignments: SAMPLE_EVALUATOR_ASSIGNMENTS
+      status: "error",
+      assignments: []
     });
 
     const assignments =
@@ -694,7 +658,7 @@
         ? result.assignments
         : Array.isArray(result?.data)
         ? result.data
-        : SAMPLE_EVALUATOR_ASSIGNMENTS;
+        : [];
 
     return assignments.map((item) => {
       const id = getProposalId(item);

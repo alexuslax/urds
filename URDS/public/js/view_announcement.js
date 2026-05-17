@@ -7,8 +7,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchInput = document.getElementById("announcement-search");
   const filterInput = document.getElementById("announcement-filter");
   const countLine = document.getElementById("announcement-count");
+  const manageLink = document.getElementById("manageAnnouncementsLink");
 
   let announcements = loadAnnouncements();
+
+  if (manageLink && isDirector(localStorage.getItem("userRole"))) {
+    manageLink.hidden = false;
+  }
 
   renderAnnouncements();
 
@@ -33,8 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const filtered = announcements
       .filter((item) => {
-        const audience = item.audience || "All Users";
-        return audience === "All Users" || audience === userRole;
+        return announcementVisibleToRole(item, userRole);
       })
       .filter((item) => {
         return !priority || item.priority === priority;
@@ -143,5 +147,32 @@ document.addEventListener("DOMContentLoaded", () => {
       .replaceAll(">", "&gt;")
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#039;");
+  }
+
+  function isDirector(role) {
+    return String(role || "").toLowerCase().includes("director");
+  }
+
+  function normalizeRoleText(value) {
+    return String(value || "")
+      .toLowerCase()
+      .replace(/[_-]+/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function announcementVisibleToRole(announcement, role) {
+    if (isDirector(role)) return true;
+
+    const audience = normalizeRoleText(announcement?.audience || "All Users");
+    const normalizedRole = normalizeRoleText(role);
+
+    if (!audience || audience === "all users") return true;
+    if (audience === normalizedRole) return true;
+
+    if (normalizedRole.includes("dean") && audience === "dean") return true;
+    if (normalizedRole.includes("twg") && audience === "twg") return true;
+
+    return false;
   }
 });
