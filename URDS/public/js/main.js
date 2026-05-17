@@ -118,7 +118,7 @@ let menuHTML = `
       </div>
   </div>
 
-  <nav class="px-3 py-4 space-y-1">
+  <nav class="px-3 pt-4 pb-24 space-y-1">
 `;
 
 (menuByRole[userRole] || menuByRole["Faculty Researcher"]).forEach(item => {
@@ -143,12 +143,14 @@ updateSidebarNotifications();
 // Initialize responsive state immediately
 function initializeSidebarState() {
   if (!sidebar) return;
+
+  sidebar.classList.add("h-screen", "overflow-y-auto", "transition-transform", "duration-300");
   
   if (window.innerWidth < 1024) {
-    sidebar.classList.add("fixed", "z-50", "-translate-x-full", "lg:static");
+    sidebar.classList.add("fixed", "top-0", "left-0", "bottom-0", "z-50", "-translate-x-full", "lg:static");
     sidebar.classList.remove("sticky");
   } else {
-    sidebar.classList.remove("fixed", "z-50", "-translate-x-full");
+    sidebar.classList.remove("fixed", "top-0", "left-0", "bottom-0", "z-50", "-translate-x-full");
     sidebar.classList.add("sticky");
   }
 }
@@ -204,11 +206,11 @@ function setupMobileMenu() {
       resizeTimeout = setTimeout(() => {
         if (window.innerWidth >= 1024) {
           // Desktop: remove mobile classes
-          sidebar.classList.remove("-translate-x-full", "fixed", "z-50");
+          sidebar.classList.remove("-translate-x-full", "fixed", "top-0", "left-0", "bottom-0", "z-50");
           sidebar.classList.add("sticky");
         } else {
           // Mobile: add mobile classes and hide sidebar
-          sidebar.classList.add("fixed", "z-50", "-translate-x-full");
+          sidebar.classList.add("fixed", "top-0", "left-0", "bottom-0", "z-50", "-translate-x-full", "h-screen", "overflow-y-auto");
           sidebar.classList.remove("sticky");
         }
       }, 100);
