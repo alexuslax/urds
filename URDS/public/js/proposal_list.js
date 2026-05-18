@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       border: "border-l-gray-400"
     },
     pending: {
-      label: "Submitted / Pending",
+      label: "For Screening / Pending",
       badge: "bg-yellow-100 text-yellow-800",
       border: "border-l-yellow-400"
     },
@@ -187,12 +187,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       proposal.proposal_status ||
       proposal.current_status ||
       proposal.currentStatus ||
-      "Submitted"
+      "draft"
     );
   }
 
   function makeReadableStatus(status) {
-    const text = String(status || "Submitted")
+    const text = String(status || "draft")
       .replace(/_/g, " ")
       .replace(/-/g, " ")
       .replace(/\s+/g, " ")
@@ -325,7 +325,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       "Dean": "College Proposals for Dean Endorsement",
       "URDS Staff": "URDS Review and Evaluation Proposals",
       "TWG": "Proposals for TWG Evaluation",
-      "UREC": "Proposals for UREC Review",
+      "UREC": "Proposals for Evaluator Review",
       "URDS Director": "Proposals for Director Review",
       "Administrator": "All Proposals",
       "Faculty Researcher": "My Proposals"
@@ -579,23 +579,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   function getStatusOptionsByRole() {
     const common = [
       "Draft",
-      "Submitted",
+      "For Screening",
       "For Screening",
       "For Dean Endorsement",
       "For URDS Review",
       "For TWG Evaluation",
-      "For In-House Review",
-      "For UREC Review",
+      "For Evaluator Review",
       "For Director Review",
       "Returned for Revision",
       "Approved",
       "Rejected",
-      "Special Order Issued",
-      "Notice to Proceed Issued",
-      "Ongoing",
-      "Monitoring",
+      "For Implementation",
       "Completed",
-      "Terminated"
     ];
 
     const roleStatuses = {
@@ -616,21 +611,26 @@ document.addEventListener("DOMContentLoaded", async () => {
       "URDS Staff": [
         "For URDS Review",
         "For TWG Evaluation",
-        "For UREC Review",
+        "For Evaluator Review",
         "For Director Review",
         "Returned for Revision",
         "Approved",
-        "Rejected"
+        "Rejected",
+        "For Implementation",
+        "Completed"
       ],
       "TWG": [
         "For TWG Evaluation",
-        "For UREC Review",
+        "For Evaluator Review",
+        "For Director Review",
         "Returned for Revision",
         "Approved",
-        "Rejected"
+        "Rejected",
+        "For Implementation",
+        "Completed"
       ],
       "UREC": [
-        "For UREC Review",
+        "For Evaluator Review",
         "For Director Review",
         "Returned for Revision",
         "Approved",
@@ -640,7 +640,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         "For Director Review",
         "Returned for Revision",
         "Approved",
-        "Rejected"
+        "Rejected",
+        "For Implementation",
+        "Completed"
       ]
     };
 
@@ -757,7 +759,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       if (
         status === "for twg evaluation" ||
-        status === "for urec review" ||
+        status === "for evaluator review" ||
         status === "for director review"
       ) {
         return readOnlyPill(`Monitoring: ${statusText}`, "bg-purple-50 border-purple-200 text-purple-700");
@@ -769,14 +771,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         return actionButton("Evaluate Proposal", "twg", "bg-purple-600 hover:bg-purple-700 active:bg-purple-800");
       }
 
-      if (status === "for urec review") {
-        return readOnlyPill("Monitoring: At UREC Review", "bg-indigo-50 border-indigo-200 text-indigo-700");
+      if (status === "for evaluator review") {
+        return readOnlyPill("Monitoring: At Evaluator Review", "bg-indigo-50 border-indigo-200 text-indigo-700");
       }
     }
 
     if (userRole === "UREC") {
-      if (status === "for urec review") {
-        return actionButton("UREC Review", "urec", "bg-blue-600 hover:bg-blue-700 active:bg-blue-800");
+      if (status === "for evaluator review") {
+        return readOnlyPill("Monitoring: At Evaluator Review", "bg-blue-50 border-blue-200 text-blue-700");
       }
 
       if (status === "for director review") {
@@ -792,7 +794,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (
         status === "for urds review" ||
         status === "for twg evaluation" ||
-        status === "for urec review" ||
+        status === "for evaluator review" ||
         status === "returned for revision"
       ) {
         return readOnlyPill(`Monitoring: ${statusText}`, "bg-yellow-50 border-yellow-200 text-yellow-700");

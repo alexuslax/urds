@@ -207,7 +207,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const newStatus =
         decision === "return"
           ? "returned for revision"
-          : "for urds review";
+          : "for URDS review";
 
       const actionLabel =
         decision === "return"

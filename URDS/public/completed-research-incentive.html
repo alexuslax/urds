@@ -124,10 +124,12 @@
               </p>
             </div>
 
-            <div class="bg-white/10 border border-white/15 rounded-2xl px-4 py-3 min-w-44">
-              <div class="text-xs text-white/70">Checklist Progress</div>
-              <div id="progressText" class="text-2xl font-bold mt-1">0/0</div>
-            </div>
+            <a
+              href="view_completed_incentive.html"
+              class="inline-flex items-center px-5 py-3 rounded-xl bg-emerald-600 text-white text-sm font-bold hover:bg-emerald-700 active:bg-emerald-800 active:scale-95 transition"
+            >
+              View List
+            </a>
           </div>
         </section>
 
@@ -252,6 +254,14 @@
                 <p id="summaryText" class="text-sm text-gray-600 mt-3">
                   No requirements checked yet.
                 </p>
+                <button
+                  id="submitIncentive"
+                  type="button"
+                  class="mt-4 w-full px-4 py-3 rounded-xl bg-emerald-600 text-white text-sm font-bold hover:bg-emerald-700 active:bg-emerald-800 active:scale-95 transition"
+                >
+                  Submit
+                </button>
+                <p id="submitMessage" class="hidden text-xs font-semibold mt-3"></p>
               </div>
             </section>
           </aside>
@@ -272,7 +282,18 @@
       const progressBar = document.getElementById("progressBar");
       const summaryText = document.getElementById("summaryText");
       const clearChecklist = document.getElementById("clearChecklist");
+      const submitIncentive = document.getElementById("submitIncentive");
+      const submitMessage = document.getElementById("submitMessage");
       const checks = Array.from(document.querySelectorAll(".requirement-check"));
+      const requirementKeys = {
+        "Letter Request": "letterRequest",
+        "CRC and Dean Recommendation": "recommendation",
+        "Completed Paper Copies": "completedPaperCopies",
+        "Terminal Report Copies": "terminalReports",
+        "Special Order Certified Copy": "specialOrderCertifiedCopy",
+        "Panel Evaluation Recommendation": "panelEvaluationRecommendation",
+        "Research Activity Monitoring Form": "researchActivityMonitoringForm"
+      };
       let researches = [];
 
       checks.forEach((check) => check.addEventListener("change", updateProgress));
@@ -283,6 +304,7 @@
         updateProgress();
       });
       researchSelect?.addEventListener("change", renderSelectedResearch);
+      submitIncentive?.addEventListener("click", submitClaim);
 
       loadResearches();
       updateProgress();
@@ -388,11 +410,65 @@
         const total = checks.length;
         const percent = total ? Math.round((checked.length / total) * 100) : 0;
 
-        progressText.textContent = `${checked.length}/${total}`;
+        if (progressText) {
+          progressText.textContent = `${checked.length}/${total}`;
+        }
         progressBar.style.width = `${percent}%`;
         summaryText.textContent = checked.length
           ? `${checked.length} of ${total} requirement${total === 1 ? "" : "s"} checked.`
           : "No requirements checked yet.";
+      }
+
+      function submitClaim() {
+        const selectedIndex = researchSelect?.value;
+        const research = selectedIndex !== "" ? researches[Number(selectedIndex)] : null;
+
+        if (!research) {
+          showSubmitMessage("Please select a research before submitting.", "error");
+          researchSelect?.focus();
+          return;
+        }
+
+        const requirements = {};
+        checks.forEach((check) => {
+          const key = requirementKeys[check.dataset.label] || check.dataset.label;
+          requirements[key] = check.checked;
+        });
+
+        const claim = {
+          id: `completed-${Date.now()}`,
+          researchTitle: getTitle(research),
+          claimant: getLeader(research),
+          college: getCollege(research),
+          claimCategory: "Completed Research Incentive",
+          submittedAt: new Date().toISOString(),
+          requirements
+        };
+
+        const claims = readCompletedClaims();
+        claims.unshift(claim);
+        localStorage.setItem("urds_completed_research_incentive_claims", JSON.stringify(claims));
+
+        showSubmitMessage("Completed research incentive claim submitted.", "success");
+        setTimeout(() => {
+          window.location.reload();
+        }, 800);
+      }
+
+      function readCompletedClaims() {
+        try {
+          const value = JSON.parse(localStorage.getItem("urds_completed_research_incentive_claims") || "[]");
+          return Array.isArray(value) ? value : [];
+        } catch {
+          return [];
+        }
+      }
+
+      function showSubmitMessage(message, type) {
+        if (!submitMessage) return;
+
+        submitMessage.textContent = message;
+        submitMessage.className = `text-xs font-semibold mt-3 ${type === "success" ? "text-emerald-700" : "text-red-600"}`;
       }
 
       function getTitle(research) {

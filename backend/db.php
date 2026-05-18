@@ -16,7 +16,9 @@ if ($url) {
     $dbname = getenv("MYSQLDATABASE") ?: getenv("DB_NAME") ?: "research_db";
 }
 
-// Suppress connection warnings
+// Keep connection failures catchable by callers instead of throwing before $conn exists.
+mysqli_report(MYSQLI_REPORT_OFF);
+
 $conn = @new mysqli($host, $user, $pass, $dbname, (int) $port);
 
 if ($conn->connect_error) {

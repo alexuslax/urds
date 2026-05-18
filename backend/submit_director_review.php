@@ -97,7 +97,7 @@ try {
                 break;
 
             case "Return to Staff":
-                $newStatus = "for urds review";
+                $newStatus = "for URDS review";
                 break;
         }
 

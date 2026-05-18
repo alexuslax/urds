@@ -66,22 +66,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       statusKeywords: ["for urds review", "urds", "in house", "inhouse"]
     },
     {
-      key: "EVALUATOR",
-      label: "Assigned Evaluator Review",
-      description: "The assigned evaluator reviews the proposal, encodes ratings, and provides recommendations.",
-      statusKeywords: ["for evaluator", "evaluator", "evaluation", "assigned evaluation"]
-    },
-    {
       key: "TWG",
       label: "TWG Technical Evaluation",
       description: "The Technical Working Group evaluates the research proposal.",
       statusKeywords: ["for twg evaluation", "twg", "technical working group"]
     },
     {
-      key: "UREC",
-      label: "UREC Review",
-      description: "The proposal and budget are reviewed for approval requirements.",
-      statusKeywords: ["for urec review", "urec", "ethical"]
+      key: "EVALUATOR",
+      label: "Assigned Evaluator Review",
+      description: "The assigned evaluator reviews the proposal, encodes ratings, and provides recommendations.",
+      statusKeywords: ["for evaluator", "evaluator", "evaluation", "assigned evaluation"]
     },
     {
       key: "DIRECTOR",

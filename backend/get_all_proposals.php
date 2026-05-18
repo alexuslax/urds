@@ -52,26 +52,24 @@ try {
         $types = "i";
     } else if ($userRole === "URDS Staff") {
         // URDS Staff see all proposals that have left the Dean level
-        // For "returned for revision", only show if it's past dean level (dean_endorsed = 1) - meaning returned by URDS/TWG/UREC/Director
+        // For "returned for revision", only show if it's past dean level (dean_endorsed = 1) - meaning returned by URDS/TWG/Evaluator/Director
         // Exclude those returned at college level
         $whereClause = "WHERE (
-            rp.status IN ('for URDS review', 'for TWG evaluation', 'for UREC review', 'for director review', 'approved', 'rejected')
+            rp.status IN ('for URDS review', 'for TWG evaluation', 'for evaluator review', 'for director review', 'approved', 'rejected', 'for implementation', 'completed')
             OR (rp.status = 'returned for revision' AND rp.dean_endorsed = 1)
         )";
     } else if ($userRole === "Senior Faculty Researcher / TWG" || $userRole === "TWG") {
         // TWG see only proposals forwarded to them
-        // For "for UREC review", only show if there is a TWG review for the proposal
         // For "returned for revision", only show if it's past dean level (dean_endorsed = 1)
         $whereClause = "WHERE (
-            rp.status IN ('for TWG evaluation', 'approved', 'rejected')
-            OR (rp.status = 'for UREC review' AND EXISTS (SELECT 1 FROM proposal_history ph WHERE ph.proposal_id = rp.proposal_id AND ph.role IN ('TWG', 'Senior Faculty Researcher / TWG')))
+            rp.status IN ('for TWG evaluation', 'for evaluator review', 'for director review', 'approved', 'rejected', 'for implementation', 'completed')
             OR (rp.status = 'returned for revision' AND rp.dean_endorsed = 1)
         )";
     } else if ($userRole === "UREC") {
-        // UREC see only proposals requiring ethics review
+        // Legacy UREC users see proposals that have reached evaluator/director stages.
         // For "returned for revision", only show if it's past dean level (dean_endorsed = 1)
         $whereClause = "WHERE (
-            rp.status IN ('for UREC review', 'for director review', 'rejected', 'approved')
+            rp.status IN ('for evaluator review', 'for director review', 'rejected', 'approved')
             OR (rp.status = 'returned for revision' AND rp.dean_endorsed = 1)
         )";
     } else if ($userRole === "URDS Director") {

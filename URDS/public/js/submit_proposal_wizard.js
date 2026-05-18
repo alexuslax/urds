@@ -852,7 +852,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return toNumber(numeric);
   }
 
-  function buildPayload(status = "submitted") {
+  function buildPayload(status = "for screening") {
     const fd = new FormData(formEl);
     const disabled = unlockDisabledFields();
 
@@ -934,7 +934,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    const payload = buildPayload("submitted");
+    const payload = buildPayload("for screening");
     await sendProposal(payload, "Proposal submitted successfully!");
   }
 

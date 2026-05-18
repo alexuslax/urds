@@ -41,7 +41,9 @@ const menuByRole = {
     { name: "Dashboard", link: "dashboard.html" },
     { name: "Announcements", link: "view_announcement.html", badge: "announcementAttention" },
     { name: "College Proposals", link: "proposal_list.html", badge: "proposalAttention" },
+    { name: "TWG Evaluation", link: "twg_evaluation.html" },
     { name: "Status Tracking", link: "status_tracking.html" }
+
   ],
 
   "College Dean": [
@@ -55,6 +57,7 @@ const menuByRole = {
     { name: "Dashboard", link: "dashboard.html" },
     { name: "Announcements", link: "view_announcement.html", badge: "announcementAttention" },
     { name: "Proposals", link: "proposal_list.html", badge: "proposalAttention" },
+    { name: "TWG Evaluation", link: "twg_evaluation.html" },
     { name: "Status Tracking", link: "status_tracking.html" }
   ],
 
@@ -63,6 +66,7 @@ const menuByRole = {
     { name: "Announcements", link: "view_announcement.html", badge: "announcementAttention" },
     { name: "Proposals", link: "proposal_list.html", badge: "proposalAttention" },
     { name: "Status Tracking", link: "status_tracking.html" },
+    { name: "Special Orders", link: "special_order_repository.html" },
     { name: "Completed Research", link: "completed_research_form.html" },
     { name: "Publication Incentive", link: "publication_incentive.html" },
     { name: "Completed Research Incentive", link: "completed-research-incentive.html" }
@@ -310,7 +314,8 @@ function sidebarProposalNeedsAttention(proposal, role) {
     "College Dean": ["for dean endorsement"],
     "URDS Staff": ["for urds review"],
     "Senior Faculty Researcher / TWG": ["for twg evaluation"],
-    "UREC": ["for urec review"],
+    "Evaluator": ["for evaluator review"],
+    "UREC": ["for evaluator review"],
     "URDS Director": ["for director review"]
   };
 

@@ -495,14 +495,6 @@ function renderReviewForm() {
           </div>
         </label>
 
-        <label class="flex items-start gap-3 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer border-2 border-transparent has-[:checked]:border-urds-accent has-[:checked]:bg-urds-50">
-          <input type="radio" name="routingDecision" value="urec" class="w-5 h-5 text-urds-accent mt-0.5 flex-shrink-0" id="route_urec" />
-          <div>
-            <div class="font-semibold text-gray-900">Send to UREC (Ethics Review Committee)</div>
-            <div class="text-xs text-gray-600 mt-1">Study involves human participants or ethical risk</div>
-          </div>
-        </label>
-
         <label class="flex items-start gap-3 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer border-2 border-transparent has-[:checked]:border-yellow-500 has-[:checked]:bg-yellow-50">
           <input type="radio" name="routingDecision" value="revision" class="w-5 h-5 text-yellow-600 mt-0.5 flex-shrink-0" id="route_revision" />
           <div>
@@ -643,9 +635,6 @@ async function handleSubmitDecision() {
   switch (reviewData.routing.decision) {
     case 'twg':
       newStatus = 'for TWG evaluation';
-      break;
-    case 'urec':
-      newStatus = 'for UREC review';
       break;
     case 'revision':
       newStatus = 'returned for revision';

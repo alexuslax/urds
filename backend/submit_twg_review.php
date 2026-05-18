@@ -58,14 +58,14 @@ $stmt->close();
     $newStatus = null;
     if (!empty($data["submit"]) && !empty($review["recommendation"])) {
         $rec = strtolower($review["recommendation"]);
-        if (strpos($rec, 'urec') !== false) {
-            $newStatus = 'for UREC review';
+        if (strpos($rec, 'evaluator') !== false || strpos($rec, 'evaluation') !== false || strpos($rec, 'urec') !== false) {
+            $newStatus = 'for evaluator review';
         } else if (strpos($rec, 'director') !== false) {
             $newStatus = 'for director review';
         } else if (strpos($rec, 'revision') !== false || strpos($rec, 'return') !== false) {
             $newStatus = 'returned for revision';
         } else {
-            $newStatus = 'For Dean Review';
+            $newStatus = 'for evaluator review';
         }
 
         $update = $conn->prepare("UPDATE researchproposals SET status = ? WHERE proposal_id = ?");

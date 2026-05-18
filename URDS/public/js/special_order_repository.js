@@ -20,6 +20,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const uploadPanel = $("uploadPanel");
   const uploadForm = $("uploadForm");
+  const folderModal = $("folderModal");
+  const folderForm = $("folderForm");
+  const folderNameInput = $("folderNameInput");
+  const folderModalError = $("folderModalError");
   const toastContainer = $("toastContainer");
 
   init();
@@ -38,12 +42,24 @@ document.addEventListener("DOMContentLoaded", () => {
     $("openUploadPanelBtn")?.addEventListener("click", openUploadPanel);
     $("closeUploadPanelBtn")?.addEventListener("click", closeUploadPanel);
     $("clearUploadBtn")?.addEventListener("click", clearForm);
-    $("addFolderBtn")?.addEventListener("click", addFolder);
+    $("addFolderBtn")?.addEventListener("click", openFolderModal);
+    $("closeFolderModalBtn")?.addEventListener("click", closeFolderModal);
+    $("cancelFolderModalBtn")?.addEventListener("click", closeFolderModal);
 
     $("searchInput")?.addEventListener("input", renderDocuments);
     $("folderFilter")?.addEventListener("change", renderDocuments);
 
     uploadForm?.addEventListener("submit", saveDocument);
+    folderForm?.addEventListener("submit", addFolder);
+    folderModal?.addEventListener("click", (event) => {
+      if (event.target === folderModal) closeFolderModal();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !folderModal?.classList.contains("hidden")) {
+        closeFolderModal();
+      }
+    });
   }
 
   function loadFolders() {
@@ -178,19 +194,47 @@ document.addEventListener("DOMContentLoaded", () => {
     renderDocuments();
   }
 
-  function addFolder() {
-    const name = prompt("Enter folder name:");
+  function openFolderModal() {
+    if (!folderModal) return;
 
-    if (!name) return;
+    folderForm?.reset();
+    setFolderModalError("");
+    folderModal.classList.remove("hidden");
+    folderModal.classList.add("flex");
+    folderModal.setAttribute("aria-hidden", "false");
+    setTimeout(() => folderNameInput?.focus(), 0);
+  }
 
-    const cleanName = name.trim();
+  function closeFolderModal() {
+    if (!folderModal) return;
 
-    if (!cleanName) return;
+    folderModal.classList.add("hidden");
+    folderModal.classList.remove("flex");
+    folderModal.setAttribute("aria-hidden", "true");
+    setFolderModalError("");
+  }
+
+  function setFolderModalError(message) {
+    if (!folderModalError) return;
+
+    folderModalError.textContent = message || "";
+    folderModalError.classList.toggle("hidden", !message);
+  }
+
+  function addFolder(event) {
+    event.preventDefault();
+
+    const cleanName = folderNameInput?.value?.trim() || "";
+
+    if (!cleanName) {
+      setFolderModalError("Please enter a folder name.");
+      return;
+    }
 
     const exists = folders.some((folder) => folder.toLowerCase() === cleanName.toLowerCase());
 
     if (exists) {
-      toast("Folder already exists.", "error");
+      setFolderModalError("Folder already exists.");
       return;
     }
 
@@ -198,6 +242,7 @@ document.addEventListener("DOMContentLoaded", () => {
     saveFolders();
     renderFolders();
     renderFolderOptions();
+    closeFolderModal();
     toast("Folder added.");
   }
 

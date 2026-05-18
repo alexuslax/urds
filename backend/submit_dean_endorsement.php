@@ -38,9 +38,9 @@ if (!$proposalId || !$comments || !$decision) {
 
 // Map decision to status and action label
 $statusMap = [
-    'endorse' => 'For URDS Review',
-    'return' => 'Returned for Revision',
-    'minor' => 'For Minor Revision'
+    'endorse' => 'for URDS review',
+    'return' => 'returned for revision',
+    'minor' => 'returned for revision'
 ];
 
 $actionMap = [
@@ -49,7 +49,7 @@ $actionMap = [
     'minor' => 'Requested Minor Revision'
 ];
 
-$newStatus = $statusMap[$decision] ?? 'For URDS Review';
+$newStatus = $statusMap[$decision] ?? 'for URDS review';
 $actionLabel = $actionMap[$decision] ?? 'Endorsed';
 
 try {

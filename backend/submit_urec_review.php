@@ -68,7 +68,7 @@ try {
     } else if (strpos($dec, 'revision') !== false || strpos($dec, 'return') !== false || strpos($dec, 'returned') !== false) {
         $newStatus = 'returned for revision';
     } else if (strpos($dec, 'disapprove') !== false || strpos($dec, 'disapproved') !== false || strpos($dec, 'reject') !== false || strpos($dec, 'rejected') !== false) {
-        $newStatus = 'UREC Disapproved';
+        $newStatus = 'rejected';
     }
 
     if ($newStatus !== null) {

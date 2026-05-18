@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>View Completed Research Incentive | UEP-URDS</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            urds: {
+              950: "#0f172a",
+              900: "#172033",
+              800: "#1f2b3a",
+              700: "#2f3f55",
+              accent: "#0ea5a4"
+            }
+          },
+          boxShadow: {
+            card: "0 6px 20px rgba(18,26,40,0.06)",
+            soft: "0 10px 30px rgba(15,23,42,0.08)"
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .input {
+      width: 100%;
+      border: 1px solid #e5e7eb;
+      background: #f9fafb;
+      padding: 0.75rem 0.875rem;
+      border-radius: 0.75rem;
+      font-size: 0.875rem;
+      transition: all 0.15s ease;
+    }
+
+    .input:focus {
+      outline: none;
+      border-color: #0ea5a4;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(14,165,164,0.18);
+    }
+
+    .panel {
+      background: #ffffff;
+      border: 1px solid #f1f5f9;
+      border-radius: 1rem;
+      box-shadow: 0 6px 20px rgba(18,26,40,0.06);
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      border-radius: 999px;
+      padding: 0.3rem 0.7rem;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .status-complete {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .status-incomplete {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .status-pending {
+      background: #e0f2fe;
+      color: #075985;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-900 antialiased h-screen overflow-hidden">
+  <div class="h-screen flex overflow-hidden">
+    <aside id="sidebar" class="w-72 h-screen bg-urds-900 text-white shrink-0 overflow-y-auto"></aside>
+
+    <div class="flex-1 min-w-0 h-screen overflow-y-auto">
+      <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-30">
+        <div class="flex items-center gap-4 min-w-0">
+          <button
+            id="hamburger"
+            type="button"
+            class="md:hidden w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center transition"
+            aria-label="Open sidebar"
+          >
+            ☰
+          </button>
+
+          <div>
+            <div class="text-xs text-gray-500">UEP-URDS / Incentives</div>
+            <h1 class="text-xl font-semibold mt-1">View Completed Research Incentive</h1>
+            <p class="hidden sm:block text-xs text-gray-500 mt-0.5">
+              Review submitted completed research incentive requirements.
+            </p>
+          </div>
+        </div>
+
+        <a href="profile.html" class="flex items-center gap-3 rounded-xl hover:bg-gray-50 p-2 transition">
+          <div class="text-right hidden sm:block">
+            <div class="text-sm font-semibold user-name">User</div>
+            <div class="text-xs text-gray-500 user-role">Role</div>
+          </div>
+          <div class="w-10 h-10 rounded-full bg-urds-accent text-white flex items-center justify-center font-bold user-initials">
+            U
+          </div>
+        </a>
+      </header>
+
+      <main class="p-6 max-w-7xl mx-auto space-y-6">
+        <section class="bg-gradient-to-r from-urds-900 to-urds-700 text-white p-6 rounded-2xl shadow-soft">
+          <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5">
+            <div>
+              <div class="text-sm text-white/70">Completed Research Incentive</div>
+              <h2 class="text-2xl font-bold mt-1">Incentive Records</h2>
+              <p class="text-sm text-white/75 mt-2 max-w-2xl">
+                Track completed research claims, submitted documents, and checklist completion in one view.
+              </p>
+            </div>
+
+            <a
+              href="completed-research-incentive.html"
+              class="inline-flex items-center justify-center px-5 py-3 rounded-xl bg-emerald-600 text-white text-sm font-bold hover:bg-emerald-700 active:bg-emerald-800 active:scale-95 transition"
+            >
+              New Checklist
+            </a>
+          </div>
+        </section>
+
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="panel p-5">
+            <div class="text-xs font-bold uppercase tracking-wide text-gray-500">Total Records</div>
+            <div id="totalRecords" class="text-3xl font-bold mt-2">0</div>
+          </div>
+
+          <div class="panel p-5">
+            <div class="text-xs font-bold uppercase tracking-wide text-gray-500">Complete</div>
+            <div id="completeRecords" class="text-3xl font-bold text-green-700 mt-2">0</div>
+          </div>
+
+          <div class="panel p-5">
+            <div class="text-xs font-bold uppercase tracking-wide text-gray-500">Pending Requirements</div>
+            <div id="pendingRecords" class="text-3xl font-bold text-amber-700 mt-2">0</div>
+          </div>
+        </section>
+
+        <section class="panel p-5">
+          <div class="flex flex-col xl:flex-row xl:items-end gap-4">
+            <div class="flex-1">
+              <label for="searchInput" class="block text-sm font-semibold text-gray-700">Search</label>
+              <input
+                id="searchInput"
+                type="search"
+                class="input mt-1"
+                placeholder="Search research title, claimant, college, or status"
+              />
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 xl:w-[34rem]">
+              <div>
+                <label for="statusFilter" class="block text-sm font-semibold text-gray-700">Checklist Status</label>
+                <select id="statusFilter" class="input mt-1">
+                  <option value="all">All statuses</option>
+                  <option value="complete">Complete</option>
+                  <option value="incomplete">Pending requirements</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="claimTypeFilter" class="block text-sm font-semibold text-gray-700">Claim Category</label>
+                <select id="claimTypeFilter" class="input mt-1">
+                  <option value="all">All categories</option>
+                  <option value="Completed Research Incentive">Completed Research Incentive</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel overflow-hidden">
+          <div class="px-5 py-4 border-b border-gray-100 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+            <div>
+              <h2 class="text-lg font-semibold">Completed Research Incentive Claims</h2>
+              <p id="recordCountText" class="text-xs text-gray-500 mt-0.5">Showing 0 records</p>
+            </div>
+          </div>
+
+          <div id="claimList" class="divide-y divide-gray-100"></div>
+
+          <div id="emptyState" class="hidden px-5 py-14 text-center">
+            <div class="mx-auto w-14 h-14 rounded-2xl bg-gray-100 flex items-center justify-center text-2xl font-bold text-gray-400">
+              0
+            </div>
+            <h3 class="text-lg font-bold mt-4">No completed research incentive records yet</h3>
+            <p class="text-sm text-gray-500 mt-2 max-w-md mx-auto">
+              Records will appear here after completed research incentive claims are saved.
+            </p>
+            <a
+              href="completed-research-incentive.html"
+              class="inline-flex items-center justify-center mt-5 px-4 py-2 rounded-xl bg-urds-900 text-white text-sm font-bold hover:bg-urds-800 active:scale-95 transition"
+            >
+              Open Checklist
+            </a>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div id="detailsModal" class="hidden fixed inset-0 z-50 bg-slate-950/55 px-4 py-6 overflow-y-auto">
+    <div class="min-h-full flex items-center justify-center">
+      <section class="bg-white rounded-2xl shadow-soft w-full max-w-2xl overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-100 flex items-start justify-between gap-4">
+          <div>
+            <div class="text-xs text-gray-500">Completed Research Incentive</div>
+            <h2 id="modalTitle" class="text-xl font-bold mt-1">Claim Details</h2>
+          </div>
+          <button
+            id="closeModalBtn"
+            type="button"
+            class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 active:scale-95 transition"
+            aria-label="Close details"
+          >
+            x
+          </button>
+        </div>
+
+        <div class="p-6 space-y-5">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <div class="text-xs font-bold uppercase tracking-wide text-gray-500">Claimant</div>
+              <div id="modalClaimant" class="text-sm font-semibold mt-1">-</div>
+            </div>
+            <div>
+              <div class="text-xs font-bold uppercase tracking-wide text-gray-500">College</div>
+              <div id="modalCollege" class="text-sm font-semibold mt-1">-</div>
+            </div>
+            <div>
+              <div class="text-xs font-bold uppercase tracking-wide text-gray-500">Category</div>
+              <div id="modalCategory" class="text-sm font-semibold mt-1">-</div>
+            </div>
+            <div>
+              <div class="text-xs font-bold uppercase tracking-wide text-gray-500">Submitted</div>
+              <div id="modalDate" class="text-sm font-semibold mt-1">-</div>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between gap-3">
+              <h3 class="text-sm font-bold">Required Documents</h3>
+              <span id="modalProgress" class="status-pill status-pending">0/0</span>
+            </div>
+            <div id="modalRequirements" class="mt-3 space-y-2"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    const STORAGE_KEYS = [
+      "urds_completed_research_incentive_claims",
+      "completedResearchIncentiveClaims",
+      "completed_research_incentive_claims"
+    ];
+
+    const REQUIREMENTS = [
+      { key: "letterRequest", label: "Letter Request" },
+      { key: "recommendation", label: "Recommendation from the College Research Coordinator and the Dean" },
+      { key: "completedPaperCopies", label: "3 hard copies of completed paper (URDS Template)" },
+      { key: "terminalReports", label: "2 copies of terminal reports" },
+      { key: "specialOrderCertifiedCopy", label: "1 photocopy of S.O. (Certified true copy)" },
+      { key: "panelEvaluationRecommendation", label: "Panel's Evaluation Recommendation" },
+      { key: "researchActivityMonitoringForm", label: "Research activity monitoring form" }
+    ];
+
+    const state = {
+      claims: [],
+      filtered: []
+    };
+
+    const els = {
+      totalRecords: document.getElementById("totalRecords"),
+      completeRecords: document.getElementById("completeRecords"),
+      pendingRecords: document.getElementById("pendingRecords"),
+      searchInput: document.getElementById("searchInput"),
+      statusFilter: document.getElementById("statusFilter"),
+      claimTypeFilter: document.getElementById("claimTypeFilter"),
+      recordCountText: document.getElementById("recordCountText"),
+      claimList: document.getElementById("claimList"),
+      emptyState: document.getElementById("emptyState"),
+      detailsModal: document.getElementById("detailsModal"),
+      closeModalBtn: document.getElementById("closeModalBtn"),
+      modalTitle: document.getElementById("modalTitle"),
+      modalClaimant: document.getElementById("modalClaimant"),
+      modalCollege: document.getElementById("modalCollege"),
+      modalCategory: document.getElementById("modalCategory"),
+      modalDate: document.getElementById("modalDate"),
+      modalProgress: document.getElementById("modalProgress"),
+      modalRequirements: document.getElementById("modalRequirements")
+    };
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function formatDate(value) {
+      if (!value) return "Not recorded";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return String(value);
+      return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric"
+      });
+    }
+
+    function readStoredClaims() {
+      for (const key of STORAGE_KEYS) {
+        try {
+          const parsed = JSON.parse(localStorage.getItem(key) || "[]");
+          if (Array.isArray(parsed) && parsed.length) {
+            return parsed;
+          }
+        } catch (error) {
+          console.warn("Unable to read completed research incentive records:", error);
+        }
+      }
+
+      return [];
+    }
+
+    function normalizeRequirements(value) {
+      if (Array.isArray(value)) {
+        return REQUIREMENTS.map((requirement) => {
+          const found = value.find((item) => {
+            const itemKey = String(item?.key || item?.id || item?.label || "").toLowerCase();
+            return itemKey === requirement.key.toLowerCase() || itemKey === requirement.label.toLowerCase();
+          });
+
+          return {
+            ...requirement,
+            checked: Boolean(found?.checked || found?.completed || found?.received)
+          };
+        });
+      }
+
+      if (value && typeof value === "object") {
+        return REQUIREMENTS.map((requirement) => ({
+          ...requirement,
+          checked: Boolean(value[requirement.key] || value[requirement.label])
+        }));
+      }
+
+      return REQUIREMENTS.map((requirement) => ({ ...requirement, checked: false }));
+    }
+
+    function normalizeClaim(raw, index) {
+      const requirements = normalizeRequirements(raw.requirements || raw.checklist || raw.documents);
+      const completed = requirements.filter((item) => item.checked).length;
+      const total = requirements.length;
+      const isComplete = total > 0 && completed === total;
+
+      return {
+        id: String(raw.id || raw.claimId || `claim-${index}`),
+        researchTitle: raw.researchTitle || raw.title || raw.research || "Untitled research",
+        claimant: raw.claimant || raw.researcher || raw.proponent || raw.author || "Not recorded",
+        college: raw.college || raw.department || "Not recorded",
+        category: raw.claimCategory || raw.claimType || raw.type || "Completed Research Incentive",
+        status: isComplete ? "complete" : "incomplete",
+        submittedAt: raw.submittedAt || raw.createdAt || raw.date || "",
+        requirements,
+        completed,
+        total
+      };
+    }
+
+    function loadClaims() {
+      state.claims = readStoredClaims().map(normalizeClaim);
+      applyFilters();
+    }
+
+    function applyFilters() {
+      const query = els.searchInput.value.trim().toLowerCase();
+      const status = els.statusFilter.value;
+      const category = els.claimTypeFilter.value;
+
+      state.filtered = state.claims.filter((claim) => {
+        const matchesQuery = !query || [
+          claim.researchTitle,
+          claim.claimant,
+          claim.college,
+          claim.category
+        ].some((value) => String(value).toLowerCase().includes(query));
+
+        const matchesStatus = status === "all" || claim.status === status;
+        const matchesCategory = category === "all" || claim.category === category;
+
+        return matchesQuery && matchesStatus && matchesCategory;
+      });
+
+      render();
+    }
+
+    function renderStats() {
+      const complete = state.claims.filter((claim) => claim.status === "complete").length;
+      const pending = state.claims.length - complete;
+
+      els.totalRecords.textContent = state.claims.length;
+      els.completeRecords.textContent = complete;
+      els.pendingRecords.textContent = pending;
+    }
+
+    function renderClaims() {
+      els.recordCountText.textContent = `Showing ${state.filtered.length} record${state.filtered.length === 1 ? "" : "s"}`;
+      els.emptyState.classList.toggle("hidden", state.filtered.length > 0);
+
+      els.claimList.innerHTML = state.filtered.map((claim) => {
+        const pillClass = claim.status === "complete" ? "status-complete" : "status-incomplete";
+        const statusLabel = claim.status === "complete" ? "Complete" : "Pending requirements";
+
+        return `
+          <article class="px-5 py-4 hover:bg-gray-50 transition">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+              <div class="min-w-0">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="status-pill ${pillClass}">${statusLabel}</span>
+                  <span class="text-xs text-gray-500">${escapeHtml(formatDate(claim.submittedAt))}</span>
+                </div>
+                <h3 class="text-base font-bold mt-2">${escapeHtml(claim.researchTitle)}</h3>
+                <p class="text-sm text-gray-600 mt-1">
+                  ${escapeHtml(claim.claimant)} - ${escapeHtml(claim.college)} - ${escapeHtml(claim.category)}
+                </p>
+              </div>
+
+              <div class="flex items-center gap-3 shrink-0">
+                <div class="text-right">
+                  <div class="text-sm font-bold">${claim.completed}/${claim.total}</div>
+                  <div class="text-xs text-gray-500">documents</div>
+                </div>
+                <button
+                  type="button"
+                  class="view-details-btn px-4 py-2 rounded-xl bg-urds-900 text-white text-sm font-bold hover:bg-urds-800 active:scale-95 transition"
+                  data-id="${escapeHtml(claim.id)}"
+                >
+                  View
+                </button>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function render() {
+      renderStats();
+      renderClaims();
+    }
+
+    function openDetails(claimId) {
+      const claim = state.claims.find((item) => item.id === claimId);
+      if (!claim) return;
+
+      const pillClass = claim.status === "complete" ? "status-complete" : "status-incomplete";
+      const statusLabel = claim.status === "complete" ? "Complete" : "Pending requirements";
+
+      els.modalTitle.textContent = claim.researchTitle;
+      els.modalClaimant.textContent = claim.claimant;
+      els.modalCollege.textContent = claim.college;
+      els.modalCategory.textContent = claim.category;
+      els.modalDate.textContent = formatDate(claim.submittedAt);
+      els.modalProgress.className = `status-pill ${pillClass}`;
+      els.modalProgress.textContent = `${claim.completed}/${claim.total} ${statusLabel}`;
+      els.modalRequirements.innerHTML = claim.requirements.map((requirement) => `
+        <div class="flex items-start gap-3 rounded-xl border border-gray-100 bg-gray-50 px-4 py-3">
+          <div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${requirement.checked ? "bg-green-100 text-green-700" : "bg-amber-100 text-amber-700"}">
+            ${requirement.checked ? "✓" : "!"}
+          </div>
+          <div class="text-sm font-semibold text-gray-800">${escapeHtml(requirement.label)}</div>
+        </div>
+      `).join("");
+
+      els.detailsModal.classList.remove("hidden");
+    }
+
+    function closeDetails() {
+      els.detailsModal.classList.add("hidden");
+    }
+
+    els.searchInput.addEventListener("input", applyFilters);
+    els.statusFilter.addEventListener("change", applyFilters);
+    els.claimTypeFilter.addEventListener("change", applyFilters);
+    els.closeModalBtn.addEventListener("click", closeDetails);
+    els.detailsModal.addEventListener("click", (event) => {
+      if (event.target === els.detailsModal) closeDetails();
+    });
+
+    els.claimList.addEventListener("click", (event) => {
+      const button = event.target.closest(".view-details-btn");
+      if (!button) return;
+      openDetails(button.dataset.id);
+    });
+
+    loadClaims();
+  </script>
+</body>
+</html>

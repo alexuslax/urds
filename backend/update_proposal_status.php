@@ -1,7 +1,18 @@
 <?php
 session_start();
-require "db.php";
 header("Content-Type: application/json");
+
+try {
+    require __DIR__ . "/db.php";
+} catch (Exception $e) {
+    echo json_encode(["status" => "error", "message" => "Database connection failed"]);
+    exit;
+}
+
+if (!isset($conn) || !($conn instanceof mysqli)) {
+    echo json_encode(["status" => "error", "message" => "Database connection unavailable"]);
+    exit;
+}
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
@@ -24,10 +35,53 @@ if (!$proposal_id || !$new_status) {
     exit;
 }
 
-// Start transaction
-$conn->begin_transaction();
+$allowed_statuses = [
+    'draft',
+    'for screening',
+    'for dean endorsement',
+    'for URDS review',
+    'for TWG evaluation',
+    'for evaluator review',
+    'for director review',
+    'returned for revision',
+    'rejected',
+    'approved',
+    'for implementation',
+    'completed'
+];
+
+$status_aliases = [
+    'submitted' => 'for screening',
+    'pending' => 'for screening',
+    'for urds review' => 'for URDS review',
+    'for twg evaluation' => 'for TWG evaluation',
+    'for in-house review' => 'for URDS review',
+    'for inhouse review' => 'for URDS review',
+    'for urec review' => 'for evaluator review',
+    'urec disapproved' => 'rejected',
+    'for dean review' => 'for dean endorsement',
+    'for minor revision' => 'returned for revision',
+    'ongoing' => 'for implementation',
+    'monitoring' => 'for implementation',
+    'special order issued' => 'approved',
+    'notice to proceed issued' => 'for implementation'
+];
+
+$normalized_status = strtolower(trim($new_status));
+$new_status = $status_aliases[$normalized_status] ?? $new_status;
+
+if (!in_array($new_status, $allowed_statuses, true)) {
+    echo json_encode([
+        "status" => "error",
+        "message" => "Invalid proposal status for current workflow: " . $new_status
+    ]);
+    exit;
+}
 
 try {
+    // Start transaction
+    $conn->begin_transaction();
+
     // Update proposal status and cluster
     if ($cluster !== null) {
         $stmt = $conn->prepare("UPDATE researchproposals SET status=?, research_cluster=? WHERE proposal_id=?");
@@ -60,9 +114,13 @@ try {
     ]);
     
 } catch (Exception $e) {
-    $conn->rollback();
+    if (isset($conn) && $conn instanceof mysqli) {
+        $conn->rollback();
+    }
     echo json_encode(["status" => "error", "message" => $e->getMessage()]);
 }
 
-$conn->close();
+if (isset($conn) && $conn instanceof mysqli) {
+    $conn->close();
+}
 ?>
