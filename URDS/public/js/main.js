@@ -326,8 +326,16 @@ function sidebarSeenStorageKey(role) {
   return `urds_seen_sidebar_notifications_${normalizeSidebarRole(role).replace(/\W+/g, "_").toLowerCase()}`;
 }
 
+function sidebarPendingStorageKey(role) {
+  return `urds_pending_sidebar_notifications_${normalizeSidebarRole(role).replace(/\W+/g, "_").toLowerCase()}`;
+}
+
 function announcementSeenStorageKey(role) {
   return `urds_seen_announcement_notifications_${normalizeSidebarRole(role).replace(/\W+/g, "_").toLowerCase()}`;
+}
+
+function announcementPendingStorageKey(role) {
+  return `urds_pending_announcement_notifications_${normalizeSidebarRole(role).replace(/\W+/g, "_").toLowerCase()}`;
 }
 
 function getSeenSidebarNotifications(role) {
@@ -343,6 +351,19 @@ function saveSeenSidebarNotifications(role, ids) {
   localStorage.setItem(sidebarSeenStorageKey(role), JSON.stringify([...ids]));
 }
 
+function savePendingSidebarNotifications(role, ids) {
+  localStorage.setItem(sidebarPendingStorageKey(role), JSON.stringify([...ids]));
+}
+
+function getPendingSidebarNotifications(role) {
+  try {
+    const saved = JSON.parse(localStorage.getItem(sidebarPendingStorageKey(role)) || "[]");
+    return new Set(Array.isArray(saved) ? saved.map(String) : []);
+  } catch {
+    return new Set();
+  }
+}
+
 function getSeenAnnouncementNotifications(role) {
   try {
     const saved = JSON.parse(localStorage.getItem(announcementSeenStorageKey(role)) || "[]");
@@ -354,6 +375,19 @@ function getSeenAnnouncementNotifications(role) {
 
 function saveSeenAnnouncementNotifications(role, ids) {
   localStorage.setItem(announcementSeenStorageKey(role), JSON.stringify([...ids]));
+}
+
+function savePendingAnnouncementNotifications(role, ids) {
+  localStorage.setItem(announcementPendingStorageKey(role), JSON.stringify([...ids]));
+}
+
+function getPendingAnnouncementNotifications(role) {
+  try {
+    const saved = JSON.parse(localStorage.getItem(announcementPendingStorageKey(role)) || "[]");
+    return new Set(Array.isArray(saved) ? saved.map(String) : []);
+  } catch {
+    return new Set();
+  }
 }
 
 function getAnnouncementId(announcement) {
@@ -439,12 +473,18 @@ async function updateSidebarNotifications() {
     const result = await fetchSidebarJson(endpoint);
     const proposals = extractSidebarProposals(result);
     const seenIds = getSeenSidebarNotifications(userRole);
-    const count = proposals.filter((proposal) => {
+    const pendingIds = proposals.reduce((ids, proposal) => {
       const id = getSidebarProposalId(proposal);
-      return id && sidebarProposalNeedsAttention(proposal, userRole) && !seenIds.has(id);
-    }).length;
 
-    setSidebarBadge("proposalAttention", count);
+      if (id && sidebarProposalNeedsAttention(proposal, userRole) && !seenIds.has(id)) {
+        ids.push(id);
+      }
+
+      return ids;
+    }, []);
+
+    savePendingSidebarNotifications(userRole, pendingIds);
+    setSidebarBadge("proposalAttention", pendingIds.length);
   } catch (error) {
     console.warn("Unable to update sidebar notifications:", error);
   }
@@ -457,18 +497,30 @@ function updateAnnouncementNotifications() {
 
   const announcements = loadSidebarAnnouncements();
   const seenIds = getSeenAnnouncementNotifications(userRole);
-  const count = announcements.filter((announcement) => {
+  const pendingIds = announcements.reduce((ids, announcement) => {
     const id = getAnnouncementId(announcement);
-    return id && announcementVisibleToRole(announcement, userRole) && !seenIds.has(id);
-  }).length;
 
-  setSidebarBadge("announcementAttention", count);
+    if (id && announcementVisibleToRole(announcement, userRole) && !seenIds.has(id)) {
+      ids.push(id);
+    }
+
+    return ids;
+  }, []);
+
+  savePendingAnnouncementNotifications(userRole, pendingIds);
+  setSidebarBadge("announcementAttention", pendingIds.length);
 }
 
 async function markSidebarNotificationsSeen() {
   if (userRole === "Administrator" || userRole === "Evaluator") return;
 
   try {
+    const seenIds = getSeenSidebarNotifications(userRole);
+    getPendingSidebarNotifications(userRole).forEach((id) => seenIds.add(id));
+    saveSeenSidebarNotifications(userRole, seenIds);
+    savePendingSidebarNotifications(userRole, []);
+    setSidebarBadge("proposalAttention", 0);
+
     const endpoint =
       userRole === "Faculty Researcher"
         ? "../../backend/get_my_proposals.php"
@@ -476,7 +528,6 @@ async function markSidebarNotificationsSeen() {
 
     const result = await fetchSidebarJson(endpoint);
     const proposals = extractSidebarProposals(result);
-    const seenIds = getSeenSidebarNotifications(userRole);
 
     proposals.forEach((proposal) => {
       const id = getSidebarProposalId(proposal);
@@ -495,20 +546,31 @@ async function markSidebarNotificationsSeen() {
 
 function setupSidebarNotificationClicks() {
   document.querySelectorAll('.sidebar-link[data-badge-key="proposalAttention"]').forEach((link) => {
-    link.addEventListener("click", () => {
-      markSidebarNotificationsSeen();
+    link.addEventListener("click", async (event) => {
+      if (event.ctrlKey || event.metaKey || event.shiftKey || event.button !== 0) return;
+
+      event.preventDefault();
+      setSidebarBadge("proposalAttention", 0);
+      await markSidebarNotificationsSeen();
+      window.location.href = link.getAttribute("href");
     });
   });
 
   document.querySelectorAll('.sidebar-link[data-badge-key="announcementAttention"]').forEach((link) => {
-    link.addEventListener("click", () => {
+    link.addEventListener("click", (event) => {
+      if (event.ctrlKey || event.metaKey || event.shiftKey || event.button !== 0) return;
+
+      event.preventDefault();
       markAnnouncementNotificationsSeen();
+      window.location.href = link.getAttribute("href");
     });
   });
 }
 
 function markAnnouncementNotificationsSeen() {
   const seenIds = getSeenAnnouncementNotifications(userRole);
+
+  getPendingAnnouncementNotifications(userRole).forEach((id) => seenIds.add(id));
 
   loadSidebarAnnouncements().forEach((announcement) => {
     const id = getAnnouncementId(announcement);
@@ -519,5 +581,6 @@ function markAnnouncementNotificationsSeen() {
   });
 
   saveSeenAnnouncementNotifications(userRole, seenIds);
+  savePendingAnnouncementNotifications(userRole, []);
   setSidebarBadge("announcementAttention", 0);
 }
